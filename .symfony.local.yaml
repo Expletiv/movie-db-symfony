@@ -1,0 +1,9 @@
+workers:
+  npm_encore_watch:
+    cmd: [ 'npx', 'encore', 'dev', '--watch' ]
+
+  docker_compose:
+    cmd: [ 'docker-compose', 'up']
+
+  typescript:
+    cmd: [ 'symfony', 'console', 'typescript:build', '--watch' ]
