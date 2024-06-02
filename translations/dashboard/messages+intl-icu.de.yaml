@@ -1,2 +1,5 @@
 dashboard:
-  title: Willkommen!
+  title: 'Willkommen!'
+  menu:
+    section:
+      movies: 'Filme'
