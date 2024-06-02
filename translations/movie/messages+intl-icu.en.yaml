@@ -1,0 +1,7 @@
+movie:
+  label:
+    singular: 'Movie'
+    plural: 'Movies'
+  attributes:
+    title: 'Title'
+    release_date: 'Release date'
