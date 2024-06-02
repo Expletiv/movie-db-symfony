@@ -29,9 +29,9 @@ class MovieCrudController extends AbstractCrudController
         return [
             IdField::new('id')
                 ->hideOnForm(),
-            TextField::new('name')
+            TextField::new('title')
                 ->setLabel('movie.attributes.title'),
-            DateField::new('releasedAt')
+            DateField::new('releaseDate')
                 ->setLabel('movie.attributes.release_date'),
         ];
     }

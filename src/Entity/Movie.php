@@ -14,10 +14,10 @@ class Movie
     private int $id;
 
     #[ORM\Column(length: 255)]
-    private string $name;
+    private string $title;
 
     #[ORM\Column]
-    private \DateTimeImmutable $releasedAt;
+    private \DateTimeImmutable $releaseDate;
 
     public function getId(): int
     {
@@ -31,26 +31,26 @@ class Movie
         return $this;
     }
 
-    public function getName(): string
+    public function getTitle(): string
     {
-        return $this->name;
+        return $this->title;
     }
 
-    public function setName(string $name): static
+    public function setTitle(string $title): static
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
 
-    public function getReleasedAt(): \DateTimeImmutable
+    public function getReleaseDate(): \DateTimeImmutable
     {
-        return $this->releasedAt;
+        return $this->releaseDate;
     }
 
-    public function setReleasedAt(\DateTimeImmutable $releasedAt): static
+    public function setReleaseDate(\DateTimeImmutable $releaseDate): static
     {
-        $this->releasedAt = $releasedAt;
+        $this->releaseDate = $releaseDate;
 
         return $this;
     }
