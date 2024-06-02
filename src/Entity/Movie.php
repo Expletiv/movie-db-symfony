@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\MovieRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MovieRepository::class)]
 class Movie
@@ -18,6 +19,10 @@ class Movie
 
     #[ORM\Column]
     private \DateTimeImmutable $releaseDate;
+
+    #[ORM\Column]
+    #[Assert\PositiveOrZero]
+    private int $likes = 0;
 
     public function getId(): int
     {
@@ -51,6 +56,18 @@ class Movie
     public function setReleaseDate(\DateTimeImmutable $releaseDate): static
     {
         $this->releaseDate = $releaseDate;
+
+        return $this;
+    }
+
+    public function getLikes(): ?int
+    {
+        return $this->likes;
+    }
+
+    public function setLikes(int $likes): static
+    {
+        $this->likes = $likes;
 
         return $this;
     }

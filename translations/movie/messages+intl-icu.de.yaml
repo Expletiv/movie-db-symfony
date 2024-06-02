@@ -5,3 +5,4 @@ movie:
   attributes:
     title: 'Titel'
     release_date: 'Erscheinungsdatum'
+    likes: 'Gefällt mir'

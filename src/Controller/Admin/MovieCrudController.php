@@ -7,6 +7,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class MovieCrudController extends AbstractCrudController
@@ -26,13 +27,17 @@ class MovieCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        return [
-            IdField::new('id')
-                ->hideOnForm(),
-            TextField::new('title')
-                ->setLabel('movie.attributes.title'),
-            DateField::new('releaseDate')
-                ->setLabel('movie.attributes.release_date'),
-        ];
+        yield IdField::new('id')
+            ->hideOnForm();
+
+        yield TextField::new('title')
+            ->setLabel('movie.attributes.title');
+
+        yield DateField::new('releaseDate')
+            ->setLabel('movie.attributes.release_date');
+
+        yield IntegerField::new('likes')
+            ->setLabel('movie.attributes.likes')
+            ->setRequired(false);
     }
 }
