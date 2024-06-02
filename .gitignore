@@ -36,3 +36,7 @@ yarn-error.log
 
 ### PhpStorm ###
 .idea
+
+###> phpstan/phpstan ###
+phpstan.neon
+###< phpstan/phpstan ###
