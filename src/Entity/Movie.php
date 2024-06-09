@@ -14,6 +14,10 @@ class Movie
     #[ORM\Column]
     private int $id;
 
+    #[ORM\Column(unique: true)]
+    #[Assert\Positive]
+    private int $tmdbId;
+
     #[ORM\Column(length: 255)]
     private string $title;
 
@@ -32,6 +36,18 @@ class Movie
     public function setId(int $id): static
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+    public function getTmdbId(): int
+    {
+        return $this->tmdbId;
+    }
+
+    public function setTmdbId(int $tmdbId): static
+    {
+        $this->tmdbId = $tmdbId;
 
         return $this;
     }
@@ -60,7 +76,7 @@ class Movie
         return $this;
     }
 
-    public function getLikes(): ?int
+    public function getLikes(): int
     {
         return $this->likes;
     }

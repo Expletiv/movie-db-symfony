@@ -25,10 +25,15 @@ class MovieCrudController extends AbstractCrudController
             ->renderContentMaximized();
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
     public function configureFields(string $pageName): iterable
     {
         yield IdField::new('id')
             ->hideOnForm();
+
+        yield IdField::new('tmdbId');
 
         yield TextField::new('title')
             ->setLabel('movie.attributes.title');
