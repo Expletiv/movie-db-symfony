@@ -1,0 +1,40 @@
+<!-- movie preview -->
+<div class="card my-auto">
+    <img id="poster" class="card-img rounded mx-auto position-relative">
+    <svg class="card-img rounded mx-auto" viewBox="0 0 254.4 377.017"
+         xmlns="http://www.w3.org/2000/svg">
+        <rect width="100%" height="100%" fill="grey"/>
+        <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#333">{{ movie.title }}</text>
+    </svg>
+    <div class="card-img-overlay text-light" id="card-description">
+        <h5 class="card-title text-truncate">{{ movie.title }}</h5>
+{#        <p class="card-text overflow-scroll h-50">{{ movie.overview }}</p>#}
+        <p class="card-text">
+            <small class="text-white-50">Erscheinungsdatum: {{ movie.releaseDate|date('d.m.Y') }}</small>
+        </p>
+        <div class="row">
+            <p class="col-auto card-text my-auto">
+                <small class="text-white-50">Hinzugefügt von </small>
+            </p>
+            <div class="col-2">
+                <!-- avatar -->
+            </div>
+        </div>
+        <div class="d-flex flex-column mt-2">
+            <button class="btn btn-primary mb-2 px-0" type="button">
+                Zur Watchlist hinzufügen
+{#                <ng-container *ngIf="isProcessingRequest">#}
+{#                    <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>#}
+{#                    <span class="visually-hidden" role="status">Loading...</span>#}
+{#                </ng-container>#}
+            </button>
+            <button class="btn btn-danger mb-2" type="button">
+                Entferne von Watchlist
+{#                <ng-container *ngIf="isProcessingRequest">#}
+{#                    <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>#}
+{#                    <span class="visually-hidden" role="status">Loading...</span>#}
+{#                </ng-container>#}
+            </button>
+        </div>
+    </div>
+</div>
