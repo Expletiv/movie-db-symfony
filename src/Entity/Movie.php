@@ -3,10 +3,13 @@
 namespace App\Entity;
 
 use App\Repository\MovieRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MovieRepository::class)]
+#[UniqueEntity(['id', 'tmdbId'])]
 class Movie
 {
     #[ORM\Id]
@@ -27,6 +30,18 @@ class Movie
     #[ORM\Column]
     #[Assert\PositiveOrZero]
     private int $likes = 0;
+
+    /**
+     * @var array<string, mixed>
+     */
+    #[ORM\Column(type: Types::JSON)]
+    private array $tmdbData;
+
+    /**
+     * @var array<string, mixed>
+     */
+    #[ORM\Column(type: Types::JSON)]
+    private array $tmdbDetailsData;
 
     public function getId(): int
     {
@@ -86,5 +101,45 @@ class Movie
         $this->likes = $likes;
 
         return $this;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getTmdbDetailsData(): array
+    {
+        return $this->tmdbDetailsData;
+    }
+
+    public function setTmdbDetailsData(mixed $tmdbDetailsData): static
+    {
+        $this->tmdbDetailsData = $tmdbDetailsData;
+
+        return $this;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getTmdbData(): array
+    {
+        return $this->tmdbData;
+    }
+
+    public function setTmdbData(mixed $tmdbData): static
+    {
+        $this->tmdbData = $tmdbData;
+
+        return $this;
+    }
+
+    public function getTmdbDataJson(): string
+    {
+        return json_encode($this->tmdbData);
+    }
+
+    public function getTmdbDetailsDataJson(): string
+    {
+        return json_encode($this->tmdbDetailsData, JSON_PRETTY_PRINT);
     }
 }

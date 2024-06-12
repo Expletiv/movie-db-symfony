@@ -117,6 +117,9 @@
         "post-update-cmd": [
             "@auto-scripts"
         ],
+        "fix": [
+            "@format:php"
+        ],
         "format:php": "vendor/bin/php-cs-fixer fix src",
         "test": [
             "@test:phpcsfixer",
