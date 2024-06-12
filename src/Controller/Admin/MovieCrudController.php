@@ -25,7 +25,8 @@ class MovieCrudController extends AbstractCrudController
         return $crud
             ->setEntityLabelInSingular('movie.label.singular')
             ->setEntityLabelInPlural('movie.label.plural')
-            ->renderContentMaximized();
+            ->renderContentMaximized()
+            ->setDateTimeFormat('d.m.Y');
     }
 
     /**
@@ -39,10 +40,12 @@ class MovieCrudController extends AbstractCrudController
         yield IdField::new('tmdbId');
 
         yield TextField::new('title')
-            ->setLabel('movie.attributes.title');
+            ->setLabel('movie.attributes.title')
+            ->setDisabled();
 
         yield DateField::new('releaseDate')
-            ->setLabel('movie.attributes.release_date');
+            ->setLabel('movie.attributes.release_date')
+            ->setDisabled();
 
         yield IntegerField::new('likes')
             ->setLabel('movie.attributes.likes')

@@ -15,11 +15,20 @@ readonly class MovieHydrator
     ) {
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
     public function hydrate(Movie $movie): Movie
     {
         try {
             $tmdbDetailsData = $this->tmdbClient->getMoviesApi()->getMovie($movie->getTmdbId());
             $movie->setTmdbDetailsData($tmdbDetailsData);
+            $movie->setTitle($tmdbDetailsData['title']);
+            $releaseDate = \DateTimeImmutable::createFromFormat('Y-m-d', $tmdbDetailsData['release_date']);
+            if (!$releaseDate) {
+                $this->logger->error(sprintf('could not parse release date %s with format Y-m-d', $tmdbDetailsData['release_date']));
+            }
+            $movie->setReleaseDate($releaseDate);
         } catch (TmdbApiException $e) {
             $this->logger->error(sprintf(
                 'unable to fetch tmdb data for id %s, error message: %s',
