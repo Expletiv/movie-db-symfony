@@ -3,23 +3,22 @@
 namespace App\Listener\Movie;
 
 use App\Entity\Movie;
-use App\Hydrator\Movie\MovieHydrator;
+use App\Message\MovieMessage;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
-use Doctrine\ORM\Event\PrePersistEventArgs;
+use Doctrine\ORM\Event\PostPersistEventArgs;
 use Doctrine\ORM\Events;
+use Symfony\Component\Messenger\MessageBusInterface;
 
-#[AsEntityListener(event: Events::prePersist, entity: Movie::class)]
+#[AsEntityListener(event: Events::postPersist, entity: Movie::class)]
 readonly class MoviePersistListener
 {
     public function __construct(
-        private MovieHydrator $hydrator,
+        private MessageBusInterface $messageBus,
     ) {
     }
 
-    public function __invoke(Movie $movie, PrePersistEventArgs $eventArgs): void
+    public function __invoke(Movie $movie, PostPersistEventArgs $eventArgs): void
     {
-        $movie->setTmdbData([]);
-        $movie->setTmdbDetailsData([]);
-        $this->hydrator->hydrate($movie);
+        $this->messageBus->dispatch(new MovieMessage($movie->getId()));
     }
 }

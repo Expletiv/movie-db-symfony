@@ -7,3 +7,8 @@ workers:
 
   typescript:
     cmd: [ 'symfony', 'console', 'typescript:build', '--watch' ]
+
+  # Only works when *not* starting the local web server as a daemon
+  messenger_consume_async:
+    cmd: ['symfony', 'console', 'messenger:consume', 'async']
+    watch: ['config', 'src', 'templates', 'vendor']

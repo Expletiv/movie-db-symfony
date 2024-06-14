@@ -8,20 +8,15 @@ use App\Repository\MovieRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Tmdb\Client;
 
 class HomeController extends AbstractController
 {
     #[Route('/')]
-    public function index(MovieRepository $movieRepository, Client $tmdbClient): Response
+    public function index(MovieRepository $movieRepository): Response
     {
         $movies = $movieRepository->findAll();
 
-        $movieIds = array_map(fn ($movie) => $movie->getTmdbId(), $movies);
-        $tmdbMovies = [];
-        foreach ($movieIds as $movieId) {
-            $tmdbMovies[] = $tmdbClient->getMoviesApi()->getMovie($movieId);
-        }
+        $tmdbMovies = array_map(fn ($movie) => $movie->getTmdbDetailsData(), $movies);
 
         return $this->render('home/index.html.twig', [
             'movies' => $tmdbMovies,

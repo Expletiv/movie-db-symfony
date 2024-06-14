@@ -21,11 +21,11 @@ class Movie
     #[Assert\Positive]
     private int $tmdbId;
 
-    #[ORM\Column(length: 255)]
-    private string $title;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $title;
 
-    #[ORM\Column]
-    private \DateTimeImmutable $releaseDate;
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $releaseDate;
 
     #[ORM\Column]
     #[Assert\PositiveOrZero]
@@ -42,6 +42,12 @@ class Movie
      */
     #[ORM\Column(type: Types::JSON)]
     private array $tmdbDetailsData;
+
+    public function __construct()
+    {
+        $this->tmdbData = [];
+        $this->tmdbDetailsData = [];
+    }
 
     public function getId(): int
     {
@@ -67,7 +73,7 @@ class Movie
         return $this;
     }
 
-    public function getTitle(): string
+    public function getTitle(): ?string
     {
         return $this->title;
     }
@@ -79,7 +85,7 @@ class Movie
         return $this;
     }
 
-    public function getReleaseDate(): \DateTimeImmutable
+    public function getReleaseDate(): ?\DateTimeImmutable
     {
         return $this->releaseDate;
     }

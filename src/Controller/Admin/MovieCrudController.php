@@ -41,10 +41,12 @@ class MovieCrudController extends AbstractCrudController
 
         yield TextField::new('title')
             ->setLabel('movie.attributes.title')
+            ->setRequired(false)
             ->setDisabled();
 
         yield DateField::new('releaseDate')
             ->setLabel('movie.attributes.release_date')
+            ->setRequired(false)
             ->setDisabled();
 
         yield IntegerField::new('likes')
