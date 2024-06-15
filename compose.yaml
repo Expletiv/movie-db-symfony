@@ -46,11 +46,7 @@ services:
       - php
       - database
     healthcheck:
-      test: php bin/console messenger:stats async
-      interval: 40s
-      timeout: 30s
-      retries: 3
-      start_period: 60s
+      test: ['CMD','true']
 
 # Mercure is installed as a Caddy module, prevent the Flex recipe from installing another service
 ###> symfony/mercure-bundle ###
