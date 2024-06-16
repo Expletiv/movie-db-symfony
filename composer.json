@@ -130,7 +130,7 @@
             "@test:phpmd",
             "@test:phpunit"
         ],
-        "test:phpstan": "vendor/bin/phpstan analyse src tests",
+        "test:phpstan": "vendor/bin/phpstan analyse",
         "test:phpcsfixer": "vendor/bin/php-cs-fixer check src",
         "test:phpmd": "vendor/bin/phpmd src ansi cleancode",
         "test:phpunit": "bin/phpunit"

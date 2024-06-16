@@ -54,6 +54,15 @@ jobs:
       -
         name: Run PHPUnit
         run: docker compose exec -T php bin/phpunit
+      -  
+        name: Run PHP-CS-Fixer
+        uses: docker compose exec -T vendor/bin/php-cs-fixer check src
+      -        
+        name: Run PHPStan
+        uses: docker compose exec -T vendor/bin/phpstan analyse
+      -        
+        name: Run PHPMD
+        uses: docker compose exec -T vendor/bin/phpmd src ansi cleancode
       -
         name: Doctrine Schema Validator
         if: false
@@ -68,6 +77,3 @@ jobs:
       -
         name: Lint Dockerfile
         uses: hadolint/hadolint-action@v3.1.0
-      -  
-        name: PHP-CS-Fixer
-        uses: docker://oskarstark/php-cs-fixer-ga
