@@ -56,13 +56,13 @@ jobs:
         run: docker compose exec -T php bin/phpunit
       -  
         name: Run PHP-CS-Fixer
-        uses: docker compose exec -T php vendor/bin/php-cs-fixer check src
+        run: docker compose exec -T php vendor/bin/php-cs-fixer check src
       -        
         name: Run PHPStan
-        uses: docker compose exec -T php vendor/bin/phpstan analyse
+        run: docker compose exec -T php vendor/bin/phpstan analyse
       -        
         name: Run PHPMD
-        uses: docker compose exec -T php vendor/bin/phpmd src ansi cleancode
+        run: docker compose exec -T php vendor/bin/phpmd src ansi cleancode
       -
         name: Doctrine Schema Validator
         if: false
