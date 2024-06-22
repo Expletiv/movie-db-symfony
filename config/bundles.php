@@ -13,7 +13,6 @@ return [
     Symfony\Bundle\MonologBundle\MonologBundle::class => ['all' => true],
     Symfony\Bundle\MakerBundle\MakerBundle::class => ['dev' => true],
     Symfony\WebpackEncoreBundle\WebpackEncoreBundle::class => ['all' => true],
-    Sensiolabs\TypeScriptBundle\SensiolabsTypeScriptBundle::class => ['all' => true],
     EasyCorp\Bundle\EasyAdminBundle\EasyAdminBundle::class => ['all' => true],
     Tmdb\SymfonyBundle\TmdbSymfonyBundle::class => ['all' => true],
 ];
