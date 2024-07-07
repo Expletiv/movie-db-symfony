@@ -1,0 +1,96 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    {{ movie.title }}
+{% endblock %}
+
+{% block body %}
+    {% include 'components/navbar.html.twig' %}
+
+    <div id="image-backdrop">
+        <img class="object-fit-cover position-fixed z-n1" src="{{ movie.backdrop_path|tmdb_image_url }}"
+             width="100%" height="100%" alt="backdrop movie image">
+    </div>
+    <div class="container">
+        <div class="position-relative z-0">
+            <div class="row mt-5">
+                <div class="col-md-4">
+                    {% if movie.poster_path %}
+                        <img class="object-fit-lg-scale object-fit-cover rounded position-relative p-5 p-md-0"
+                             width="100%" height="100%"
+                             src="{{ movie.poster_path|tmdb_image_url }}"
+                             alt="{{ movie.title ~ ' poster' }}">
+                    {% else %}
+                        <svg class="rounded" viewBox="0 0 254.4 377.017" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="100%" height="100%" fill="grey"></rect>
+                            <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#333">
+                                Bild nicht gefunden
+                            </text>
+                        </svg>
+                    {% endif %}
+                </div>
+                <div class="col-md-8 mt-2 my-md-auto d-flex flex-column placeholder-glow">
+                    <div class="bg-body-tertiary rounded bg-opacity-75 p-2">
+                        <h2>{{ movie.title }}</h2>
+                        <blockquote class="blockquote text-body-secondary fst-italic">{{ movie.tagline }}</blockquote>
+                        <p>{{ movie.overview }}</p>
+                    </div>
+                    <div class="d-flex mt-2">
+                        <h5>
+                            {% for category in movie.genres %}
+                                <span
+                                    class="badge rounded-pill bg-body-secondary text-body me-2">{{ category.name }}</span>
+                            {% endfor %}
+                        </h5>
+                    </div>
+                    <table
+                        class="table table-hover table-sm table-borderless table-striped rounded overflow-hidden mt-2">
+                        <tbody>
+                        <tr>
+                            <td>Dauer</td>
+                            <td>{{ movie.runtime }} Minuten</td>
+                        </tr>
+                        <tr>
+                            <td>Erscheinungsdatum</td>
+                            <td>{{ movie.release_date|date('d.M.Y') }}</td>
+                        </tr>
+                        <tr>
+                            <td>Status</td>
+                            <td>{{ movie.status }}</td>
+                        </tr>
+                        <tr>
+                            <td>Budget</td>
+                            <td>{{ movie.budget|format_currency('USD') }}</td>
+                        </tr>
+                        <tr>
+                            <td>Einnahmen</td>
+                            <td>{{ movie.revenue|format_currency('USD') }}</td>
+                        </tr>
+                        <tr>
+                            <td>Tmdb-ID</td>
+                            <td>{{ movie.id }}</td>
+                        </tr>
+                        <tr>
+                            <td>Imdb-ID</td>
+                            <td>{{ movie.imdb_id }}</td>
+                        </tr>
+                        <tr>
+                            <td>Tmdb-Bewertung</td>
+                            {# TODO: add coloring of ratings #}
+                            <td><span class="bg-dark">{{ movie.vote_average|number_format(2) }}</span></td>
+                        </tr>
+                        <tr>
+                            <td>Anzahl Bewertungen</td>
+                            <td>{{ movie.vote_count }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+

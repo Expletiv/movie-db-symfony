@@ -1,13 +1,14 @@
 <!-- movie preview -->
 <div class="card my-auto">
     {% if movie.poster_path %}
-        <img id="poster" class="card-img rounded mx-auto position-relative" src="{{ movie.poster_path|tmdb_image_url }}">
+        <img id="poster" class="card-img rounded mx-auto position-relative"
+             src="{{ movie.poster_path|tmdb_image_url }}">
     {% else %}
-    <svg class="card-img rounded mx-auto" viewBox="0 0 254.4 377.017"
-         xmlns="http://www.w3.org/2000/svg">
-        <rect width="100%" height="100%" fill="grey"/>
-        <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#333">{{ movie.title }}</text>
-    </svg>
+        <svg class="card-img rounded mx-auto" viewBox="0 0 254.4 377.017"
+             xmlns="http://www.w3.org/2000/svg">
+            <rect width="100%" height="100%" fill="grey"></rect>
+            <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#333">{{ movie.title }}</text>
+        </svg>
     {% endif %}
     <div class="card-img-overlay text-light" id="card-description">
         <h5 class="card-title text-truncate">{{ movie.title }}</h5>
@@ -26,17 +27,17 @@
         <div class="d-flex flex-column mt-2">
             <button class="btn btn-primary mb-2 px-0" type="button">
                 Zur Watchlist hinzufügen
-{#                <ng-container *ngIf="isProcessingRequest">#}
-{#                    <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>#}
-{#                    <span class="visually-hidden" role="status">Loading...</span>#}
-{#                </ng-container>#}
+                {#                <ng-container *ngIf="isProcessingRequest"> #}
+                {#                    <span class="spinner-border spinner-border-sm" aria-hidden="true"></span> #}
+                {#                    <span class="visually-hidden" role="status">Loading...</span> #}
+                {#                </ng-container> #}
             </button>
             <button class="btn btn-danger mb-2" type="button">
                 Entferne von Watchlist
-{#                <ng-container *ngIf="isProcessingRequest">#}
-{#                    <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>#}
-{#                    <span class="visually-hidden" role="status">Loading...</span>#}
-{#                </ng-container>#}
+                {#                <ng-container *ngIf="isProcessingRequest"> #}
+                {#                    <span class="spinner-border spinner-border-sm" aria-hidden="true"></span> #}
+                {#                    <span class="visually-hidden" role="status">Loading...</span> #}
+                {#                </ng-container> #}
             </button>
         </div>
     </div>
