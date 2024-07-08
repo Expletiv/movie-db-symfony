@@ -6,14 +6,13 @@ use App\Entity\Movie;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CodeEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
-class MovieCrudController extends AbstractCrudController
+class MovieCrudController extends DefaultCrudController
 {
     public static function getEntityFqcn(): string
     {
@@ -25,8 +24,7 @@ class MovieCrudController extends AbstractCrudController
         return $crud
             ->setEntityLabelInSingular('movie.label.singular')
             ->setEntityLabelInPlural('movie.label.plural')
-            ->renderContentMaximized()
-            ->setDateTimeFormat('d.m.Y');
+            ->renderContentMaximized();
     }
 
     /**
@@ -37,7 +35,19 @@ class MovieCrudController extends AbstractCrudController
         yield IdField::new('id')
             ->hideOnForm();
 
-        yield IdField::new('tmdbId');
+        yield IdField::new('tmdbId')
+        ->setFormTypeOptions(
+            [
+                'autocomplete' => 'true',
+                'autocomplete_url' => '/movie-autocomplete',
+                'attr' => [
+                    'data-controller' => 'symfony/ux-autocomplete/autocomplete',
+                ],
+                'tom_select_options' => [
+                    'maxItems' => 1,
+                ],
+            ]
+        );
 
         yield TextField::new('title')
             ->setLabel('movie.attributes.title')
