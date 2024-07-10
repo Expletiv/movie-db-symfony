@@ -76,8 +76,11 @@
                         </tr>
                         <tr>
                             <td>Tmdb-Bewertung</td>
-                            {# TODO: add coloring of ratings #}
-                            <td><span class="bg-dark">{{ movie.vote_average|number_format(2) }}</span></td>
+                            <td>
+                                <span class="bg-dark rounded" style="color: {{ movie.vote_average|rating_to_hsl }}">
+                                    {{ movie.vote_average|number_format(1) }}
+                                </span>
+                            </td>
                         </tr>
                         <tr>
                             <td>Anzahl Bewertungen</td>
