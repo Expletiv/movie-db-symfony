@@ -4,6 +4,8 @@ export default class extends Controller {
 
   static targets = ['themeSwitch']
 
+  declare readonly themeSwitchTarget: HTMLInputElement;
+
   private DEFAULT_THEME = 'dark';
 
   connect() {
