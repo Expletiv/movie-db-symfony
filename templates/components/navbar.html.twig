@@ -46,8 +46,8 @@
                             <!-- login -->
                         </div>
                         <div class="form-check form-switch ms-auto me-xxl-5 my-auto">
-                            <input class="form-check-input" type="checkbox" role="switch" id="themeSwitch"
-                                   aria-label="theme switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="themeSwitch" aria-label="theme switch"
+                            {{ stimulus_action('theme', 'changeTheme', 'click') }} data-theme-target="themeSwitch">
                             <label class="form-check-label" for="themeSwitch"><i class="bi bi-moon-stars-fill"></i></label>
                         </div>
                     </div>
