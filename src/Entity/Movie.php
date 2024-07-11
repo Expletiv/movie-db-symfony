@@ -10,6 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MovieRepository::class)]
 #[UniqueEntity('tmdbId')]
+#[ORM\Index(name: 'popularity_idx', columns: ['popularity'])]
 class Movie
 {
     #[ORM\Id]
@@ -26,6 +27,9 @@ class Movie
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $releaseDate;
+
+    #[ORM\Column]
+    private float $popularity = -1;
 
     #[ORM\Column]
     #[Assert\PositiveOrZero]
@@ -93,6 +97,18 @@ class Movie
     public function setReleaseDate(\DateTimeImmutable $releaseDate): static
     {
         $this->releaseDate = $releaseDate;
+
+        return $this;
+    }
+
+    public function getPopularity(): float
+    {
+        return $this->popularity;
+    }
+
+    public function setPopularity(float $popularity): Movie
+    {
+        $this->popularity = $popularity;
 
         return $this;
     }

@@ -24,6 +24,7 @@ readonly class MovieHydrator
             $tmdbDetailsData = $this->tmdbClient->getMoviesApi()->getMovie($movie->getTmdbId());
             $movie->setTmdbDetailsData($tmdbDetailsData);
             $movie->setTitle($tmdbDetailsData['title']);
+            $movie->setPopularity($tmdbDetailsData['popularity']);
             $releaseDate = \DateTimeImmutable::createFromFormat('Y-m-d', $tmdbDetailsData['release_date']);
             if (!$releaseDate) {
                 $this->logger->error(sprintf('could not parse release date %s with format Y-m-d', $tmdbDetailsData['release_date']));

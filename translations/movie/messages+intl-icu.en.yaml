@@ -5,4 +5,7 @@ movie:
   attributes:
     title: 'Title'
     release_date: 'Release date'
+    popularity: 'Popularity'
     likes: 'Likes'
+  actions:
+      movie_hydrate: 'Update TMDB data'
