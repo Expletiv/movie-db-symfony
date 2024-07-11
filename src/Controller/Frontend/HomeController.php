@@ -14,7 +14,7 @@ class HomeController extends AbstractController
     #[Route('/')]
     public function index(MovieRepository $movieRepository): Response
     {
-        $movies = $movieRepository->findAll();
+        $movies = $movieRepository->findPageOrderedByPopularity();
 
         $tmdbMovies = array_map(fn ($movie) => $movie->getTmdbDetailsData(), $movies);
 
