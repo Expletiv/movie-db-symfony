@@ -1,4 +1,3 @@
-<!-- movie preview -->
 <div class="card my-auto" {{ stimulus_action('movie', 'linkToDetailsPage', 'click', {'url': movie.id|movie_details_url}) }}>
     {% if movie.poster_path %}
         <img id="poster" class="card-img rounded mx-auto position-relative"

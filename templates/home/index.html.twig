@@ -7,27 +7,5 @@
 {% block body %}
     {% include 'components/navbar.html.twig' %}
 
-    <div class="container mt-1">
-        <div class="row justify-content-center" data-controller="movie">
-            {% for movie in movies %}
-                <div class="col-auto mb-2 px-1">
-                    {% include 'components/movie-preview.html.twig' %}
-                </div>
-            {% endfor %}
-            <div class="filling-empty-space-childs"></div>
-            <div class="filling-empty-space-childs"></div>
-            <div class="filling-empty-space-childs"></div>
-            <div class="filling-empty-space-childs"></div>
-        </div>
-        <div class="text-center mt-3">
-            <div class="btn btn-lg btn-primary" type="button">
-                Mehr Laden
-            </div>
-        </div>
-        <div class="d-flex justify-content-center">
-            <h3 class="text-center text-danger bg-opacity-75 bg-body-secondary p-2 rounded">
-                <i class="bi bi-emoji-frown-fill"></i> Keine Filme gefunden
-            </h3>
-        </div>
-    </div>
+    {% include 'components/movie_preview_container.html.twig' %}
 {% endblock %}

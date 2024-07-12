@@ -32,4 +32,9 @@ class MovieRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    public function getMaxPage(): int
+    {
+        return (int) ceil($this->count() / self::PAGE_SIZE);
+    }
 }
