@@ -3,6 +3,7 @@
 namespace App\Hydrator\Movie;
 
 use App\Entity\Movie;
+use DateTimeImmutable;
 use Psr\Log\LoggerInterface;
 use Tmdb\Client;
 use Tmdb\Exception\TmdbApiException;
@@ -25,7 +26,7 @@ readonly class MovieHydrator
             $movie->setTmdbDetailsData($tmdbDetailsData);
             $movie->setTitle($tmdbDetailsData['title']);
             $movie->setPopularity($tmdbDetailsData['popularity']);
-            $releaseDate = \DateTimeImmutable::createFromFormat('Y-m-d', $tmdbDetailsData['release_date']);
+            $releaseDate = DateTimeImmutable::createFromFormat('Y-m-d', $tmdbDetailsData['release_date']);
             if (!$releaseDate) {
                 $this->logger->error(sprintf('could not parse release date %s with format Y-m-d', $tmdbDetailsData['release_date']));
             }

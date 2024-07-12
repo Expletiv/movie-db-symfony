@@ -1,7 +1,8 @@
 <!-- navbar -->
 <nav class="navbar navbar-expand-xxl bg-body bg-gradient sticky-top">
     <div class="container">
-        <a class="navbar-brand" href="{{ path('app_frontend_home_index') }}"><i class="bi bi-film"></i> Movie-Database</a>
+        <a class="navbar-brand" href="{{ path('app_frontend_home_index') }}"><i class="bi bi-film"></i>
+            Movie-Database</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target=".offcanvas"
                 aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -40,15 +41,17 @@
                     <hr class="d-xxl-none">
                     <div class="d-flex">
                         <div class="my-auto order-xxl-last me-3">
-                            <button class="btn btn-sm btn-outline-primary">Registrieren</button>
+                            <a class="btn btn-sm btn-outline-primary" href="{{ path('app_register') }}">Registrieren</a>
                         </div>
                         <div class="order-xxl-last my-auto">
                             <!-- login -->
                         </div>
                         <div class="form-check form-switch ms-auto me-xxl-5 my-auto">
-                            <input class="form-check-input" type="checkbox" role="switch" id="themeSwitch" aria-label="theme switch"
-                            {{ stimulus_action('theme', 'changeTheme', 'click') }} data-theme-target="themeSwitch">
-                            <label class="form-check-label" for="themeSwitch"><i class="bi bi-moon-stars-fill"></i></label>
+                            <input class="form-check-input" type="checkbox" role="switch" id="themeSwitch"
+                                   aria-label="theme switch" data-theme-target="themeSwitch"
+                                {{ stimulus_action('theme', 'changeTheme', 'click') }}>
+                            <label class="form-check-label" for="themeSwitch"><i
+                                    class="bi bi-moon-stars-fill"></i></label>
                         </div>
                     </div>
                 </ul>

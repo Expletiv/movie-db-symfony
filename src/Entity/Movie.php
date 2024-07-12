@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\MovieRepository;
+use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -26,7 +27,7 @@ class Movie
     private ?string $title;
 
     #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $releaseDate;
+    private ?DateTimeImmutable $releaseDate;
 
     #[ORM\Column]
     private float $popularity = -1;
@@ -89,12 +90,12 @@ class Movie
         return $this;
     }
 
-    public function getReleaseDate(): ?\DateTimeImmutable
+    public function getReleaseDate(): ?DateTimeImmutable
     {
         return $this->releaseDate;
     }
 
-    public function setReleaseDate(\DateTimeImmutable $releaseDate): static
+    public function setReleaseDate(DateTimeImmutable $releaseDate): static
     {
         $this->releaseDate = $releaseDate;
 
