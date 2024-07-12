@@ -1,7 +1,11 @@
-<div class="card my-auto" {{ stimulus_action('movie', 'linkToDetailsPage', 'click', {'url': movie.id|movie_details_url}) }}>
+<div
+    class="card my-auto" {{ stimulus_action('movie', 'linkToDetailsPage', 'click', {'url': movie.id|movie_details_url}) }}>
     {% if movie.poster_path %}
-        <img id="poster" class="card-img rounded mx-auto position-relative"
-             src="{{ movie.poster_path|tmdb_image_url }}">
+        <img id="poster" class="card-img rounded mx-auto position-relative" alt="{{ movie.title }} poster"
+             src="{{ movie.poster_path|tmdb_image_url(size='w92') }}"
+            {{ stimulus_controller('symfony/ux-lazy-image/lazy-image', {
+                src: movie.poster_path|tmdb_image_url
+            }) }}>
     {% else %}
         <svg class="card-img rounded mx-auto" viewBox="0 0 254.4 377.017"
              xmlns="http://www.w3.org/2000/svg">
@@ -12,8 +16,11 @@
     <div class="card-img-overlay" id="card-rating">
         <div class="d-flex d-inline">
             <div class="bg-dark rounded">
-                <img class="me-2" src="{{ asset('build/images/tmdb-icon.svg') }}" height="25" width="50" alt="movie rating">
-                <span style="color: {{ movie.vote_average|rating_to_hsl }}">{{ movie.vote_average|number_format(1)}}</span>
+                <img class="me-2" src="{{ asset('build/images/tmdb-icon.svg') }}" height="25" width="50"
+                     alt="movie rating">
+                <span style="color: {{ movie.vote_average|rating_to_hsl }}">
+                    {{ movie.vote_average|number_format(1) }}
+                </span>
             </div>
         </div>
     </div>
