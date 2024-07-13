@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class HomeController extends AbstractController
 {
-    #[Route('/home')]
+    #[Route(['/', '/home'])]
     public function index(
         MovieRepository $movieRepository,
         #[MapQueryParameter(options: ['min_range' => 1])] int $page = 1,

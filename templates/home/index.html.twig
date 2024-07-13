@@ -5,7 +5,11 @@
 {% endblock %}
 
 {% block body %}
-    {% include 'components/navbar.html.twig' %}
 
-    {% include 'components/movie_preview_container.html.twig' %}
+    {% include('components/navbar.html.twig') %}
+    {% include('components/movie_preview_container.html.twig') %}
+    {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+        {% include('components/login_modal.html.twig') %}
+    {% endif %}
+
 {% endblock %}

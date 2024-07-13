@@ -40,12 +40,20 @@
                     </div>
                     <hr class="d-xxl-none">
                     <div class="d-flex">
-                        <div class="my-auto order-xxl-last me-3">
-                            <a class="btn btn-sm btn-outline-primary" href="{{ path('app_register') }}">Registrieren</a>
-                        </div>
-                        <div class="order-xxl-last my-auto">
-                            <!-- login -->
-                        </div>
+                        {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+                            <div class="my-auto order-xxl-last me-3">
+                                <a class="btn btn-sm btn-outline-primary" href="{{ path('app_register') }}">Registrieren</a>
+                            </div>
+                            <div class="order-xxl-last my-auto">
+                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#loginModal">
+                                    Login
+                                </button>
+                            </div>
+                        {% else %}
+                            <div class="order-xxl-last my-auto">
+                                <a class="btn btn-sm btn-outline-primary" href="{{ path('app_logout') }}">Logout</a>
+                            </div>
+                        {% endif %}
                         <div class="form-check form-switch ms-auto me-xxl-5 my-auto">
                             <input class="form-check-input" type="checkbox" role="switch" id="themeSwitch"
                                    aria-label="theme switch" data-theme-target="themeSwitch"
