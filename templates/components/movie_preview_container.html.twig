@@ -1,6 +1,6 @@
 <div class="container mt-3">
     {% if movies is not empty %}
-        <div class="row justify-content-center">
+        <div class="row justify-content-center" data-turbo-prefetch="false">
             {% for movie in movies %}
                 <div class="col-auto mb-2 px-1">
                     {% include 'components/movie-preview.html.twig' %}

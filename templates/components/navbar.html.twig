@@ -44,11 +44,13 @@
                             <div class="my-auto order-xxl-last me-3">
                                 <a class="btn btn-sm btn-outline-primary" href="{{ path('app_register') }}">Registrieren</a>
                             </div>
-                            <div class="order-xxl-last my-auto">
-                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#loginModal">
-                                    Login
-                                </button>
-                            </div>
+                            {% if app.current_route is not same as 'app_login' %}
+                                <div class="order-xxl-last my-auto">
+                                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#loginModal">
+                                        Sign in
+                                    </button>
+                                </div>
+                            {% endif %}
                         {% else %}
                             <div class="order-xxl-last my-auto">
                                 <a class="btn btn-sm btn-outline-primary" href="{{ path('app_logout') }}">Logout</a>

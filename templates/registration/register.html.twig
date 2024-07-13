@@ -3,7 +3,6 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
-    {% include 'components/navbar.html.twig' %}
 
     <div class="container">
         {% for flash_error in app.flashes('verify_email_error') %}
