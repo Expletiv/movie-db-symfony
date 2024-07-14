@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Registration complete!{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <h1 class="mt-1">Registration complete!</h1>
+
+        <turbo-frame id="registration_form">
+            <p>Please confirm your email address by clicking the link in the email you just received!</p>
+        </turbo-frame>
+    </div>
+
+{% endblock %}

@@ -15,9 +15,6 @@
     </head>
     <body data-controller="theme helper">
     {% include 'components/navbar.html.twig' %}
-    {% if not is_granted('IS_AUTHENTICATED_FULLY') and app.current_route is not same as 'app_login' %}
-        {% include('components/login_modal.html.twig') %}
-    {% endif %}
     {% block body %}{% endblock %}
     </body>
 </html>

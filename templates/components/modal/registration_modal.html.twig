@@ -1,12 +1,12 @@
-<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="modelLabel" aria-hidden="true">
+<div class="modal fade" id="registrationModal" tabindex="-1" aria-labelledby="registrationModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="modalLabel">Sign in</h1>
+                <h1 class="modal-title fs-5" id="registrationModalLabel">Register</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <turbo-frame id="login_form" src="{{ path('app_login') }}"></turbo-frame>
+                <turbo-frame id="registration_form" src="{{ path('app_register') }}"></turbo-frame>
             </div>
         </div>
     </div>

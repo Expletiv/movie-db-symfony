@@ -1,4 +1,11 @@
-<!-- navbar -->
+{% if not is_granted('IS_AUTHENTICATED_FULLY')%}
+    {% if app.current_route is not same as 'app_login' %}
+        {% include('components/modal/login_modal.html.twig') %}
+    {% endif %}
+    {% if app.current_route is not same as 'app_register' %}
+        {% include('components/modal/registration_modal.html.twig') %}
+    {% endif %}
+{% endif %}
 <nav class="navbar navbar-expand-xxl bg-body bg-gradient sticky-top">
     <div class="container">
         <a class="navbar-brand" href="{{ path('app_frontend_home_index') }}"><i class="bi bi-film"></i>
@@ -42,11 +49,15 @@
                     <div class="d-flex">
                         {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
                             <div class="my-auto order-xxl-last me-3">
-                                <a class="btn btn-sm btn-outline-primary" href="{{ path('app_register') }}">Registrieren</a>
+                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
+                                        data-bs-target="#registrationModal">
+                                    Register
+                                </button>
                             </div>
                             {% if app.current_route is not same as 'app_login' %}
                                 <div class="order-xxl-last my-auto">
-                                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#loginModal">
+                                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
+                                            data-bs-target="#loginModal">
                                         Sign in
                                     </button>
                                 </div>
