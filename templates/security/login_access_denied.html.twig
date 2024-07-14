@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Access denied{% endblock %}
+
+{% block body %}
+    <div class="container mt-2">
+        <h1 class="h3 mb-3 font-weight-normal">Access denied</h1>
+        <turbo-frame id="login_form">
+            <p>You do not have permissions to access this page.</p>
+        </turbo-frame>
+    </div>
+{% endblock %}

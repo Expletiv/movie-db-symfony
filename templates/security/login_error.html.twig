@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Login failed{% endblock %}
+
+{% block body %}
+    <div class="container mt-2">
+        <h1 class="h3 mb-3 font-weight-normal">Error</h1>
+        <turbo-frame id="login_form">
+            <p>An error occurred! Please try to sign in again or wait until the error is resolved.
+                Thank you for your understanding.</p>
+        </turbo-frame>
+    </div>
+{% endblock %}
