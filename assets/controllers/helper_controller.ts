@@ -4,9 +4,11 @@ import {FrameElement, TurboBeforeFetchResponseEvent, visit} from '@hotwired/turb
 export default class extends Controller {
 
   connect() {
-    document.addEventListener('turbo:before-fetch-response', (event) => {
-      this.beforeFetchResponse(event);
-    });
+    document.addEventListener('turbo:before-fetch-response', this.beforeFetchResponse);
+  }
+
+  disconnect() {
+    document.removeEventListener('turbo:before-fetch-response', this.beforeFetchResponse)
   }
 
   linkToDetailsPage(event: { params: { url: string; }; }) {
