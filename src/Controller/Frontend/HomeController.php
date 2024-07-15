@@ -6,13 +6,14 @@ namespace App\Controller\Frontend;
 
 use App\Repository\MovieRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 
 class HomeController extends AbstractController
 {
-    #[Route(['/', '/home'])]
+    #[Route(['/{_locale<%app.supported_locales%>}/home'])]
     public function index(
         MovieRepository $movieRepository,
         #[MapQueryParameter(options: ['min_range' => 1])] int $page = 1,
@@ -30,5 +31,11 @@ class HomeController extends AbstractController
             'page' => $page,
             'maxPage' => $movieRepository->getMaxPage(),
         ]);
+    }
+
+    #[Route(['/'])]
+    public function indexNoLocale(): RedirectResponse
+    {
+        return $this->redirectToRoute('app_frontend_home_index', ['_locale' => 'en']);
     }
 }

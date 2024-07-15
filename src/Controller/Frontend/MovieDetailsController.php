@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class MovieDetailsController extends AbstractController
 {
-    #[Route('/movie/{tmdbId}/details')]
+    #[Route('/{_locale<%app.supported_locales%>}/movie/{tmdbId}/details')]
     public function index(Movie $movie): Response
     {
         if (empty($movie->getTmdbDetailsData())) {
