@@ -2,4 +2,7 @@ templates:
     register:
         title: 'Registrieren'
         action: 'Registrieren'
+        email: 'Email'
+        password: 'Passwort'
+        agree_terms: 'Ich stimme den Bedingungen zu'
             

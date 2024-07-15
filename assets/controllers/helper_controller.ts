@@ -26,11 +26,11 @@ export default class extends Controller {
       return;
     }
     const frame: string = event.target.id;
-    if (response.status === 403) {
+    if (response.status === 403 && frame === 'login_form') {
       event.detail.visit('/login/access-denied', {action: "replace", frame: frame});
       event.preventDefault();
     }
-    if (response.status >= 500) {
+    if (response.status >= 500 && frame === 'login_form') {
       event.detail.visit('/login/access-denied', {action: "replace", frame: frame});
       event.preventDefault();
     }

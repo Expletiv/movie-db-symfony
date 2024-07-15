@@ -1,0 +1,4 @@
+entity:
+    user:
+        validators:
+            email_validation: 'There is already an account with this email'

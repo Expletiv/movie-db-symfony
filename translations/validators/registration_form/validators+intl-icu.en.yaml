@@ -1,0 +1,5 @@
+validators:
+    registration_form:
+        agree_terms: 'You should agree to our terms.'
+        password_required: 'Please enter a password'
+        password_length: 'Your password should be at least {limit} characters'

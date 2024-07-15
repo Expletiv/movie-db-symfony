@@ -137,11 +137,13 @@
             "@test:phpcsfixer",
             "@test:phpstan",
             "@test:phpmd",
-            "@test:phpunit"
+            "@test:phpunit",
+            "@test:translations"
         ],
         "test:phpstan": "vendor/bin/phpstan analyse",
         "test:phpcsfixer": "vendor/bin/php-cs-fixer check src",
         "test:phpmd": "vendor/bin/phpmd src ansi cleancode",
-        "test:phpunit": "bin/phpunit"
+        "test:phpunit": "bin/phpunit",
+        "test:translations": "bin/console lint:yaml translations"
     }
 }

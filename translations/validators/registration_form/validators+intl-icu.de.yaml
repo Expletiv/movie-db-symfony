@@ -1,0 +1,5 @@
+validators:
+    registration_form:
+        agree_terms: 'Bitte stimme den Bedingungen zu.'
+        password_required: 'Bitte gebe ein Passwort ein'
+        password_min_length: 'Dein Passwort sollte mindestens {limit} Zeichen beinhalten'

@@ -2,4 +2,6 @@ templates:
     register:
         title: 'Register'
         action: 'Register'
-            
+        email: 'Email'
+        password: 'Password'
+        agree_terms: 'Agree terms'
