@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}{{ 'templates.login_form.title'|trans }}{% endblock %}
 
 {% block body %}
     <div class="container mt-2">
-        <h1 class="h3 mb-3 font-weight-normal">Sign in</h1>
+        <h1 class="h3 mb-3 font-weight-normal">{{ 'templates.login_form.title'|trans }}</h1>
         <turbo-frame id="login_form">
             <form method="post" action="{{ path('app_login') }}">
                 {% if error %}
@@ -13,13 +13,13 @@
 
                 {% if app.user %}
                     <div class="mb-3">
-                        You are logged in as {{ app.user.userIdentifier }}
+                        {{ 'templates.login_form.logged_in_as'|trans }} {{ app.user.userIdentifier }}
                     </div>
                 {% else %}
-                <label for="username">Email</label>
+                <label for="username">{{ 'templates.login_form.fields.email'|trans }}</label>
                 <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control mb-2"
                        autocomplete="email" required autofocus>
-                <label for="password">Password</label>
+                <label for="password">{{ 'templates.login_form.fields.password'|trans }}</label>
                 <input type="password" name="_password" id="password" class="form-control mb-3"
                        autocomplete="current-password"
                        required>
@@ -28,11 +28,11 @@
 
                 <div class="checkbox mb-3">
                     <input type="checkbox" name="_remember_me" id="_remember_me">
-                    <label for="_remember_me">Remember me</label>
+                    <label for="_remember_me">{{ 'templates.login_form.remember_me'|trans }}</label>
                 </div>
 
                 <button class="btn btn-primary" type="submit">
-                    Sign in
+                    {{ 'templates.login_form.btn_sign_in'|trans }}
                 </button>
                 {% endif %}
             </form>

@@ -1,0 +1,5 @@
+templates:
+    register:
+        title: 'Registrieren'
+        action: 'Registrieren'
+            

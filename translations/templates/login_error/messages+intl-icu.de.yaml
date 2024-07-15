@@ -1,0 +1,5 @@
+templates:
+    login_error:
+        title: 'Anmelden fehlgeschlagen'
+        info: 'Ein Fehler ist aufgetreten! Bitte versuche erneut dich anzumelden oder warte bist der Fehler behoben ist. Vielen Dank für dein Verständnis.'
+            

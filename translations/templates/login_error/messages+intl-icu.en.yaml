@@ -1,0 +1,5 @@
+templates:
+    login_error:
+        title: 'Login failed'
+        info: 'An error occurred! Please try to sign in again or wait until the error is resolved. Thank you for your understanding.'
+            

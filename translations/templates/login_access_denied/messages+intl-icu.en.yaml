@@ -1,0 +1,5 @@
+templates:
+    login_access_denied:
+        title: 'Access denied'
+        info: 'Du hast keine Zugriffsberechtigung für diese Seite.'
+            

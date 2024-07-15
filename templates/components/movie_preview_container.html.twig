@@ -3,7 +3,7 @@
         <div class="row justify-content-center" data-turbo-prefetch="false">
             {% for movie in movies %}
                 <div class="col-auto mb-2 px-1">
-                    {% include 'components/movie-preview.html.twig' %}
+                    {% include 'components/movie_preview.html.twig' %}
                 </div>
             {% endfor %}
             <div class="filling-empty-space-childs"></div>
@@ -43,7 +43,7 @@
     {% else %}
         <div class="d-flex justify-content-center">
             <h3 class="text-center text-danger bg-opacity-75 bg-body-secondary p-2 rounded">
-                <i class="bi bi-emoji-frown-fill"></i> Keine Filme gefunden
+                <i class="bi bi-emoji-frown-fill"></i> {{ 'templates.movie_preview_container.no_movies_found'|trans }}
             </h3>
         </div>
     {% endif %}

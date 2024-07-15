@@ -28,11 +28,12 @@
         <h5 class="card-title text-truncate">{{ movie.title }}</h5>
         <p class="card-text overflow-scroll h-50">{{ movie.overview }}</p>
         <p class="card-text">
-            <small class="text-white-50">Erscheinungsdatum: {{ movie.release_date|date('d.m.Y') }}</small>
+            <small class="text-white-50">{{ 'templates.movie_preview.release_date'|trans }}
+                {{ movie.release_date|date('d.m.Y') }}</small>
         </p>
         <div class="row">
             <p class="col-auto card-text my-auto">
-                <small class="text-white-50">Hinzugefügt von </small>
+                <small class="text-white-50">{{ 'templates.movie_preview.added_by'|trans }} </small>
             </p>
             <div class="col-2">
                 <!-- avatar -->
@@ -40,10 +41,10 @@
         </div>
         <div class="d-flex flex-column mt-2">
             <button class="btn btn-primary mb-2 px-0" type="button">
-                Zur Watchlist hinzufügen
+                {{ 'templates.movie_preview.add_to_watchlist'|trans }}
             </button>
             <button class="btn btn-danger mb-2" type="button">
-                Entferne von Watchlist
+                {{ 'templates.movie_preview.remove_from_watchlist'|trans }}
             </button>
         </div>
     </div>

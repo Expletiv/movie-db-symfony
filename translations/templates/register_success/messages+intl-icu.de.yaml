@@ -1,0 +1,5 @@
+templates:
+    register_success:
+        title: 'Registrierung abgeschlossen!'
+        info: 'Bitte bestätige deine E-Mail-Addresse, indem du auf den Link in der E-Mail klickst, die du gerade erhalten hast!'
+            

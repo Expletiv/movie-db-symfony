@@ -1,0 +1,3 @@
+templates:
+    movie_preview_container:
+        no_movies_found: 'Keine Filme gefunden'

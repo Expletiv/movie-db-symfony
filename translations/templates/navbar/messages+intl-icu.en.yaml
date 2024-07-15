@@ -1,0 +1,11 @@
+templates:
+    navbar:
+        website_title: 'Movie-Database'
+        section:
+            popular: 'Popular'
+            discover: 'Discover'
+            highest_rating: 'Highest rating'
+            watchlist: 'Watchlist'
+        login: 'Sign in'
+        logout: 'Sign out'
+        register: 'Register'

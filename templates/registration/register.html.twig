@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}{{ 'templates.register.title'|trans }}{% endblock %}
 
 {% block body %}
 
     <div class="container">
-        <h1 class="mt-1">Register</h1>
+        <h1 class="mt-1">{{ 'templates.register.title'|trans }}</h1>
 
         <turbo-frame id="registration_form">
             {% for flash_error in app.flashes('verify_email_error') %}
@@ -20,7 +20,7 @@
             }) }}
             {{ form_row(registrationForm.agreeTerms) }}
 
-            <button type="submit" class="btn btn-primary">Register</button>
+            <button type="submit" class="btn btn-primary">{{ 'templates.register.action'|trans }}</button>
             {{ form_end(registrationForm) }}
         </turbo-frame>
     </div>

@@ -1,0 +1,9 @@
+templates:
+    login_form:
+        title: 'Sign in'
+        logged_in_as: 'You are logged in as'
+        remember_me: 'Remember me'
+        btn_sign_in: 'Sign in'
+        fields:
+            email: 'Email'
+            password: 'Password'

@@ -1,0 +1,4 @@
+templates:
+    login_modal:
+        title: 'Anmelden'
+        

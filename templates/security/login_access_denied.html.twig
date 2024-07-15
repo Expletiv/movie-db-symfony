@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Access denied{% endblock %}
+{% block title %}{{ 'templates.login_access_denied.title'|trans }}{% endblock %}
 
 {% block body %}
     <div class="container mt-2">
-        <h1 class="h3 mb-3 font-weight-normal">Access denied</h1>
+        <h1 class="h3 mb-3 font-weight-normal">{{ 'templates.login_access_denied.title'|trans }}</h1>
         <turbo-frame id="login_form">
-            <p>You do not have permissions to access this page.</p>
+            <p>{{ 'templates.login_access_denied.info'|trans }}</p>
         </turbo-frame>
     </div>
 {% endblock %}

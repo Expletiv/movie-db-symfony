@@ -1,0 +1,14 @@
+templates:
+    movie_details:
+        image_not_found: 'Bild nicht gefunden'
+        fields:
+            runtime: 'Dauer'
+            release_date: 'Erscheinungsdatum'
+            status: 'Status'
+            budget: 'Budget'
+            revenue: 'Einnahmen'
+            tmdb_id: 'TMDB-ID'
+            imdb_id: 'IMDb-ID'
+            vote_average: 'Bewertung (TMDB)'
+            vote_count: 'Anzahl der Bewertungen (TMDB)'
+            

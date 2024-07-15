@@ -1,0 +1,6 @@
+templates:
+    movie_preview:
+        release_date: 'Erscheinungsdatum'
+        added_by: 'Hinzugefügt von'
+        add_to_watchlist: 'Zur Watchlist hinzufügen'
+        remove_from_watchlist: 'Entferne von Watchlist'

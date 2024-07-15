@@ -1,0 +1,9 @@
+templates:
+    mail:
+        confirmation_email:
+            title: 'Hallo! Bitte bestätige deine E-Mail-Addresse!'
+            text: 'Bitte bestätige deine E-Mail-Addresse durch klicken dieses Links:'
+            confirm: 'E-Mail bestätigen'
+            expiration: 'Dieser Link läuft ab in'
+            thank_you: 'Danke!'
+            
