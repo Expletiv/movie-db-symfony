@@ -1,4 +1,4 @@
-{% if not is_granted('IS_AUTHENTICATED_FULLY')%}
+{% if not is_granted('IS_AUTHENTICATED')%}
     {% if app.current_route is not same as 'app_login' %}
         {% include('components/modal/login_modal.html.twig') %}
     {% endif %}
@@ -47,7 +47,7 @@
                     </div>
                     <hr class="d-xxl-none">
                     <div class="d-flex">
-                        {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+                        {% if not is_granted('IS_AUTHENTICATED') %}
                             <div class="my-auto order-xxl-last me-3">
                                 <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
                                         data-bs-target="#registrationModal">
