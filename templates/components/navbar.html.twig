@@ -1,4 +1,4 @@
-{% if not is_granted('IS_AUTHENTICATED')%}
+{% if not is_granted('IS_AUTHENTICATED') %}
     {% if app.current_route is not same as 'app_login' %}
         {% include('components/modal/login_modal.html.twig') %}
     {% endif %}
@@ -69,7 +69,25 @@
                                 </a>
                             </div>
                         {% endif %}
-                        <div class="form-check form-switch ms-auto me-xxl-5 my-auto">
+                        <div class="dropdown ms-auto me-2 me-xxl-3 my-auto">
+                            <a class="btn btn-outline-secondary btn-sm dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                               aria-expanded="false">
+                                {{ app.request.locale|locale_name(app.request.locale)|u.title }}
+                            </a>
+                            {% set locales = ['en', 'de'] %}
+                            <ul class="dropdown-menu dropdown-menu-sm">
+                                {% for locale in locales%}
+                                    {% if locale != app.request.locale %}
+                                        <li>
+                                            <a class="dropdown-item" href="{{ path(app.current_route, app.current_route_parameters|merge({_locale: locale})) }}">
+                                                {{ locale|locale_name(app.request.locale)|u.title }}
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="form-check form-switch me-xxl-5 my-auto">
                             <input class="form-check-input" type="checkbox" role="switch" id="themeSwitch"
                                    aria-label="theme switch" data-theme-target="themeSwitch"
                                 {{ stimulus_action('theme', 'changeTheme', 'click') }}>
