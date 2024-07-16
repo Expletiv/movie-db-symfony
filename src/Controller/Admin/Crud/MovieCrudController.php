@@ -56,7 +56,7 @@ class MovieCrudController extends DefaultCrudController
             ->setFormTypeOptions(
                 [
                     'autocomplete' => 'true',
-                    'autocomplete_url' => '/movie-autocomplete',
+                    'autocomplete_url' => $this->generateUrl('app_movie_autocomplete'),
                     'attr' => [
                         'data-controller' => 'symfony/ux-autocomplete/autocomplete',
                     ],
