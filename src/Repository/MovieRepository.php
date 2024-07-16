@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Movie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\ParameterType;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -21,14 +22,16 @@ class MovieRepository extends ServiceEntityRepository
     /**
      * @return Movie[]
      */
-    public function findPageOrderedByPopularity(int $page = 1): array
+    public function findPageOrderedByPopularity(int $page = 1, string $locale = 'en'): array
     {
         $offset = ($page - 1) * self::PAGE_SIZE;
 
         $qb = $this->createQueryBuilder('m')
             ->orderBy('m.popularity', 'DESC')
+            ->where('m.locale = :locale')
             ->setFirstResult($offset)
-            ->setMaxResults(self::PAGE_SIZE);
+            ->setMaxResults(self::PAGE_SIZE)
+            ->setParameter('locale', $locale, ParameterType::STRING);
 
         return $qb->getQuery()->getResult();
     }
