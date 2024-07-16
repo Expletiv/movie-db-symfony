@@ -7,3 +7,5 @@ templates:
         fields:
             email: 'Email'
             password: 'Passwort'
+        unauthorized: 'Du musst dich anmelden, um Zugriff auf diese Seite zu erhalten.'
+        access_denied: 'Du hast keine Zugriffsberechtigung für diese Seite.'

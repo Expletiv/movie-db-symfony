@@ -21,6 +21,7 @@ security:
                 check_path: app_login
                 enable_csrf: true
                 use_referer: true
+            entry_point: App\Security\AuthenticationEntryPoint
             login_throttling: null
             logout:
                 path: app_logout
@@ -29,6 +30,7 @@ security:
             remember_me:
                 secret: '%kernel.secret%'
                 lifetime: 1209600 # 2 weeks in seconds
+            access_denied_handler: App\Security\AccessDeniedHandler
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall

@@ -1,5 +1,0 @@
-templates:
-    login_access_denied:
-        title: 'Zugriff verweigert'
-        info: 'You do not have permissions to access this page.'
-            

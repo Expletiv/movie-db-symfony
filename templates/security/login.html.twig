@@ -11,6 +11,10 @@
                     <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                 {% endif %}
 
+                {% for flash_error in app.flashes('login_error') %}
+                    <div class="alert alert-danger" role="alert">{{ flash_error|trans }}</div>
+                {% endfor %}
+
                 {% if app.user %}
                     <div class="mb-3">
                         {{ 'templates.login_form.logged_in_as'|trans }} {{ app.user.userIdentifier }}
