@@ -13,7 +13,7 @@ use Tmdb\Client;
 
 class MovieAutocompleteController extends AbstractController
 {
-    #[Route('/admin/{_locale<%app.supported_locales%>}/movie-autocomplete', name: 'app_movie_autocomplete')]
+    #[Route('/admin/{_locale}/movie-autocomplete', name: 'app_movie_autocomplete')]
     public function index(#[MapQueryParameter] string $query, Client $client, Request $request): JsonResponse
     {
         $response = $client->getSearchApi()->searchMovies($query, ['language' => $request->getLocale()]);

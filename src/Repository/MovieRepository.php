@@ -36,8 +36,16 @@ class MovieRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function getMaxPage(): int
+    public function getMaxPage(string $locale = 'en'): int
     {
-        return (int) ceil($this->count() / self::PAGE_SIZE);
+        /** @var int $count */
+        $count = $this->createQueryBuilder('m')
+            ->where('m.locale = :locale')
+            ->select('COUNT(m.id)')
+            ->setParameter('locale', $locale, ParameterType::STRING)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return (int) ceil($count / self::PAGE_SIZE);
     }
 }

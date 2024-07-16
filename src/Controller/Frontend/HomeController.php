@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class HomeController extends AbstractController
 {
-    #[Route(['/{_locale<%app.supported_locales%>}/home'])]
+    #[Route(['/{_locale}/home'])]
     public function index(
         Request $request,
         MovieRepository $movieRepository,
@@ -31,7 +31,7 @@ class HomeController extends AbstractController
         return $this->render('home/index.html.twig', [
             'movies' => $tmdbMovies,
             'page' => $page,
-            'maxPage' => $movieRepository->getMaxPage(),
+            'maxPage' => $movieRepository->getMaxPage($request->getLocale()),
         ]);
     }
 

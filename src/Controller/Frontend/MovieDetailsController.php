@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class MovieDetailsController extends AbstractController
 {
-    #[Route('/{_locale<%app.supported_locales%>}/movie/{tmdbId}/details')]
+    #[Route('/{_locale}/movie/{tmdbId}/details')]
     public function index(Request $request, int $tmdbId, MovieRepository $movieRepository): Response
     {
         $movie = $movieRepository->findOneBy(['tmdbId' => $tmdbId, 'locale' => $request->getLocale()]);
