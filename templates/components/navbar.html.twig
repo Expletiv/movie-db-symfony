@@ -74,9 +74,8 @@
                                aria-expanded="false">
                                 {{ app.request.locale|locale_name(app.request.locale)|u.title }}
                             </a>
-                            {% set locales = ['en', 'de'] %}
                             <ul class="dropdown-menu dropdown-menu-sm">
-                                {% for locale in locales%}
+                                {% for locale in app.enabled_locales %}
                                     {% if locale != app.request.locale %}
                                         <li>
                                             <a class="dropdown-item" href="{{ path(app.current_route, app.current_route_parameters|merge({_locale: locale})) }}">
