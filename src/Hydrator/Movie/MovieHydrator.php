@@ -22,7 +22,7 @@ readonly class MovieHydrator
     public function hydrate(Movie $movie): Movie
     {
         try {
-            $tmdbDetailsData = $this->tmdbClient->getMoviesApi()->getMovie($movie->getTmdbId());
+            $tmdbDetailsData = $this->tmdbClient->getMoviesApi()->getMovie($movie->getTmdbId(), ['language' => $movie->getLocale()]);
             $movie->setTmdbDetailsData($tmdbDetailsData);
             $movie->setTitle($tmdbDetailsData['title']);
             $movie->setPopularity($tmdbDetailsData['popularity']);

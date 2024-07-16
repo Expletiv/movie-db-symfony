@@ -10,8 +10,9 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MovieRepository::class)]
-#[UniqueEntity('tmdbId')]
+#[ORM\UniqueConstraint(name: 'movie_unique_idx', columns: ['tmdb_id', 'locale'])]
 #[ORM\Index(name: 'popularity_idx', columns: ['popularity'])]
+#[UniqueEntity(['tmdbId', 'locale'])]
 class Movie
 {
     #[ORM\Id]
@@ -19,9 +20,13 @@ class Movie
     #[ORM\Column]
     private int $id;
 
-    #[ORM\Column(unique: true)]
+    #[ORM\Column]
     #[Assert\Positive]
     private int $tmdbId;
+
+    #[ORM\Column(length: 2)]
+    #[Assert\Locale]
+    private string $locale;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $title;
@@ -74,6 +79,18 @@ class Movie
     public function setTmdbId(int $tmdbId): static
     {
         $this->tmdbId = $tmdbId;
+
+        return $this;
+    }
+
+    public function getLocale(): string
+    {
+        return $this->locale;
+    }
+
+    public function setLocale(string $locale): static
+    {
+        $this->locale = $locale;
 
         return $this;
     }

@@ -4,6 +4,7 @@ movie:
     plural: 'Filme'
   attributes:
     title: 'Titel'
+    locale: 'Locale'
     release_date: 'Erscheinungsdatum'
     popularity: 'Beliebtheitswert'
     likes: 'Gefällt mir'

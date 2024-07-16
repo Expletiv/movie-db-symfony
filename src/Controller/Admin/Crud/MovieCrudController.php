@@ -9,13 +9,16 @@ use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CodeEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\LocaleField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class MovieCrudController extends DefaultCrudController
@@ -25,6 +28,11 @@ class MovieCrudController extends DefaultCrudController
         private readonly MovieHydrator $hydrator,
         private readonly EntityManagerInterface $entityManager,
         private readonly AdminUrlGenerator $adminUrlGenerator,
+        /**
+         * @var array<int, string>
+         */
+        #[Autowire(param: 'kernel.enabled_locales')]
+        private readonly array $enabledLocales,
     ) {
     }
 
@@ -65,6 +73,10 @@ class MovieCrudController extends DefaultCrudController
                     ],
                 ]
             );
+
+        yield LocaleField::new('locale')
+            ->setLabel('movie.attributes.locale')
+            ->includeOnly($this->enabledLocales);
 
         yield TextField::new('title')
             ->setLabel('movie.attributes.title')
@@ -119,5 +131,15 @@ class MovieCrudController extends DefaultCrudController
                 ->setAction(Action::INDEX)
                 ->generateUrl()
         );
+    }
+
+    public function configureFilters(Filters $filters): Filters
+    {
+        return $filters
+            ->add('tmdbId')
+            ->add('locale')
+            ->add('releaseDate')
+            ->add('popularity')
+            ->add('likes');
     }
 }
