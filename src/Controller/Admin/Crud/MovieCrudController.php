@@ -3,13 +3,13 @@
 namespace App\Controller\Admin\Crud;
 
 use App\Entity\Movie;
-use App\Hydrator\Movie\MovieHydrator;
+use App\Message\MovieMessage;
 use App\Repository\MovieRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
+use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CodeEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
@@ -20,14 +20,14 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Messenger\MessageBusInterface;
 
-class MovieCrudController extends DefaultCrudController
+class MovieCrudController extends AbstractCrudController
 {
     public function __construct(
         private readonly MovieRepository $movieRepository,
-        private readonly MovieHydrator $hydrator,
-        private readonly EntityManagerInterface $entityManager,
         private readonly AdminUrlGenerator $adminUrlGenerator,
+        private readonly MessageBusInterface $messageBus,
         /**
          * @var array<int, string>
          */
@@ -111,7 +111,7 @@ class MovieCrudController extends DefaultCrudController
             ->add(Crud::PAGE_EDIT, Action::DELETE)
             ->add(
                 Crud::PAGE_INDEX,
-                Action::new('movie_hydrate', 'movie.actions.movie_hydrate')
+                Action::new('movieHydrate', 'movie.actions.movie_hydrate')
                     ->linkToCrudAction('movieHydrate')
                     ->createAsGlobalAction()
             );
@@ -119,12 +119,17 @@ class MovieCrudController extends DefaultCrudController
 
     public function movieHydrate(): RedirectResponse
     {
-        foreach ($this->movieRepository->findAll() as $movie) {
-            $this->hydrator->hydrate($movie);
-            $this->entityManager->persist($movie);
-        }
-        $this->entityManager->flush();
+        $ids = $this->movieRepository->findAllIds();
 
+        foreach ($ids as $id) {
+            $this->messageBus->dispatch(new MovieMessage($id));
+        }
+
+        return $this->redirectToIndex();
+    }
+
+    private function redirectToIndex(): RedirectResponse
+    {
         return $this->redirect(
             $this->adminUrlGenerator
                 ->setController(self::class)

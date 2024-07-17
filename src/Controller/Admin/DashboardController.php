@@ -3,6 +3,8 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Movie;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -29,6 +31,17 @@ class DashboardController extends AbstractDashboardController
         return Dashboard::new()
             ->setTitle('Backend CMS')
             ->setLocales(['de', 'en']);
+    }
+
+    public function configureCrud(): Crud
+    {
+        return Crud::new()->setDateFormat('d.m.Y');
+    }
+
+    public function configureAssets(): Assets
+    {
+        return Assets::new()
+            ->addWebpackEncoreEntry('admin');
     }
 
     /**
