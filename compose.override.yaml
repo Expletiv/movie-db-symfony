@@ -19,7 +19,7 @@ services:
       # Ensure that host.docker.internal is correctly defined on Linux
       - host.docker.internal:host-gateway
     tty: true
-    
+  
   php-worker:
     build:
       context: .
@@ -29,17 +29,28 @@ services:
       # If you develop on Mac or Windows you can remove the vendor/ directory
       #  from the bind-mount for better performance by enabling the next line:
       - /app/vendor
-
-###> symfony/mercure-bundle ###
-###< symfony/mercure-bundle ###
-
-###> doctrine/doctrine-bundle ###
+  
+  node:
+    image: node:lts-alpine
+    tty: true
+    working_dir: /app
+    depends_on:
+      - php
+    volumes:
+      - ./:/app
+    environment:
+      NODE_ENV: development
+  
+  ###> symfony/mercure-bundle ###
+  ###< symfony/mercure-bundle ###
+  
+  ###> doctrine/doctrine-bundle ###
   database:
     ports:
       - "5432"
-###< doctrine/doctrine-bundle ###
-
-###> symfony/mailer ###
+  ###< doctrine/doctrine-bundle ###
+  
+  ###> symfony/mailer ###
   mailer:
     image: axllent/mailpit
     ports:

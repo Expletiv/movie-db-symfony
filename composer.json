@@ -128,6 +128,8 @@
         "dev:setup": [
             "docker compose down",
             "docker compose --env-file .env.local up -d --wait",
+            "docker exec -it symfony-project-node-1 npm install",
+            "docker exec -it symfony-project-node-1 npm run dev",
             "echo 'Visit the application under https://localhost:4443'"
         ],
         "fix": [
