@@ -20,6 +20,18 @@ class MovieRepository extends ServiceEntityRepository
     }
 
     /**
+     * @return int[]
+     */
+    public function findAllIds(): array
+    {
+        return $this->createQueryBuilder('m')
+            ->select('m.id')
+            ->distinct()
+            ->getQuery()
+            ->getSingleColumnResult();
+    }
+
+    /**
      * @return Movie[]
      */
     public function findPageOrderedByPopularity(int $page = 1, string $locale = 'en'): array

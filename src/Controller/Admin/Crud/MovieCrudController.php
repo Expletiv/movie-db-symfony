@@ -3,8 +3,7 @@
 namespace App\Controller\Admin\Crud;
 
 use App\Entity\Movie;
-use App\Message\MovieMessage;
-use App\Repository\MovieRepository;
+use App\Message\MovieBatchHydrationMessage;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -25,7 +24,6 @@ use Symfony\Component\Messenger\MessageBusInterface;
 class MovieCrudController extends AbstractCrudController
 {
     public function __construct(
-        private readonly MovieRepository $movieRepository,
         private readonly AdminUrlGenerator $adminUrlGenerator,
         private readonly MessageBusInterface $messageBus,
         /**
@@ -49,7 +47,8 @@ class MovieCrudController extends AbstractCrudController
             ->setDefaultSort(
                 ['id' => 'ASC']
             )
-            ->renderContentMaximized();
+            ->renderContentMaximized()
+            ->overrideTemplate('crud/index', '/admin/crud/index.html.twig');
     }
 
     /**
@@ -114,16 +113,25 @@ class MovieCrudController extends AbstractCrudController
                 Action::new('movieHydrate', 'movie.actions.movie_hydrate')
                     ->linkToCrudAction('movieHydrate')
                     ->createAsGlobalAction()
+            )
+            ->add(
+                Crud::PAGE_INDEX,
+                Action::new('syncLocales', 'movie.actions.sync_locales')
+                    ->linkToCrudAction('syncLocales')
+                    ->createAsGlobalAction()
             );
     }
 
     public function movieHydrate(): RedirectResponse
     {
-        $ids = $this->movieRepository->findAllIds();
+        $this->messageBus->dispatch(new MovieBatchHydrationMessage());
 
-        foreach ($ids as $id) {
-            $this->messageBus->dispatch(new MovieMessage($id));
-        }
+        return $this->redirectToIndex();
+    }
+
+    public function syncLocales(): RedirectResponse
+    {
+        $this->addFlash('success', 'Hallo');
 
         return $this->redirectToIndex();
     }

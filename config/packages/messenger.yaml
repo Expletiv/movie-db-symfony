@@ -27,3 +27,4 @@ framework:
 
             # Route your messages to the transports
             App\Message\MovieMessage: async
+            App\Message\MovieBatchHydrationMessage: async

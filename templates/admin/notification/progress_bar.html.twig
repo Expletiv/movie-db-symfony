@@ -1,0 +1,16 @@
+<turbo-stream action="replace" targets="#progress">
+    <template>
+        {% if percentage == 0 %}
+            <div id="progress"></div>
+        {% else %}
+        <div id="progress" class="progress fixed-top position-fixed" role="progressbar"
+             aria-valuenow="{{ percentage }}"
+             aria-valuemin="0"
+             aria-valuemax="100">
+            <div class="progress-bar progress-bar-striped progress-bar-animated"
+                 style="width: {{ percentage }}%">{{ message|trans }} ({{ percentage }})%
+            </div>
+        </div>
+        {% endif %}
+    </template>
+</turbo-stream>

@@ -1,0 +1,12 @@
+{# @var ea \EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext #}
+{% extends '@EasyAdmin/crud/index.html.twig' %}
+
+{% block main %}
+    {{ parent() }}
+    <div {{ turbo_stream_listen('hydrationProgress') }}>
+        <div id="progress"></div>
+    </div>
+{% endblock %}
+
+
+

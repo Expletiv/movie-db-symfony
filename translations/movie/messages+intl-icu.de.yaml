@@ -1,12 +1,13 @@
 movie:
-  label:
-    singular: 'Film'
-    plural: 'Filme'
-  attributes:
-    title: 'Titel'
-    locale: 'Locale'
-    release_date: 'Erscheinungsdatum'
-    popularity: 'Beliebtheitswert'
-    likes: 'Gefällt mir'
-  actions:
-    movie_hydrate: 'Aktualisiere TMDB-Daten'
+    label:
+        singular: 'Film'
+        plural: 'Filme'
+    attributes:
+        title: 'Titel'
+        locale: 'Locale'
+        release_date: 'Erscheinungsdatum'
+        popularity: 'Beliebtheitswert'
+        likes: 'Gefällt mir'
+    actions:
+        movie_hydrate: 'Aktualisiere TMDB-Daten'
+        sync_locales: 'Synchronisiere Locales'

@@ -34,6 +34,7 @@
         "symfony/http-client": "6.4.*",
         "symfony/intl": "6.4.*",
         "symfony/mailer": "6.4.*",
+        "symfony/mercure-bundle": "^0.3.9",
         "symfony/messenger": "6.4.*",
         "symfony/mime": "6.4.*",
         "symfony/monolog-bundle": "^3.0",
@@ -127,7 +128,7 @@
         ],
         "dev:setup": [
             "docker compose down",
-            "docker compose --env-file .env.local up -d --wait",
+            "docker compose --env-file .env.dev up -d --wait",
             "docker exec -it symfony-project-node-1 npm install",
             "docker exec -it symfony-project-node-1 npm run dev",
             "echo 'Visit the application under https://localhost:4443'"
@@ -135,7 +136,7 @@
         "fix": [
             "@format:php"
         ],
-        "format:php": "vendor/bin/php-cs-fixer fix src",
+        "format:php": "docker exec -it symfony-project-php-1 vendor/bin/php-cs-fixer fix src",
         "test": [
             "@test:phpcsfixer",
             "@test:phpstan",

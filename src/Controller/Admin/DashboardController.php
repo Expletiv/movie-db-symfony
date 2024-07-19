@@ -35,7 +35,8 @@ class DashboardController extends AbstractDashboardController
 
     public function configureCrud(): Crud
     {
-        return Crud::new()->setDateFormat('d.m.Y');
+        return Crud::new()
+            ->setDateFormat('d.m.Y');
     }
 
     public function configureAssets(): Assets
@@ -50,7 +51,7 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        yield MenuItem::section('dashboard.menu.section.movies');
+        yield MenuItem::section('admin.dashboard.menu.section.movies');
         yield MenuItem::linkToCrud('movie.label.plural', 'fa fa-solid fa-film', Movie::class);
     }
 }
