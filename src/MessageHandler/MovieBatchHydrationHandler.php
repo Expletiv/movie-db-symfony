@@ -41,7 +41,6 @@ readonly class MovieBatchHydrationHandler
         }
 
         $this->entityManager->flush();
-        $this->publishProgress(0);
     }
 
     private function publishProgress(int $percentage): void
@@ -53,6 +52,7 @@ readonly class MovieBatchHydrationHandler
                     $this->twig->render('admin/notification/progress_bar.html.twig', [
                         'percentage' => $percentage,
                         'message' => t('movie.actions.movie_hydrate'),
+                        'target' => 'hydrationProgress',
                     ])
                 )
             );

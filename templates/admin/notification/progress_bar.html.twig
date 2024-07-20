@@ -1,16 +1,37 @@
-<turbo-stream action="replace" targets="#progress">
+<turbo-stream action="replace" targets="#{{ target }}">
     <template>
-        {% if percentage == 0 %}
-            <div id="progress"></div>
-        {% else %}
-        <div id="progress" class="progress fixed-top position-fixed" role="progressbar"
-             aria-valuenow="{{ percentage }}"
-             aria-valuemin="0"
-             aria-valuemax="100">
-            <div class="progress-bar progress-bar-striped progress-bar-animated"
-                 style="width: {{ percentage }}%">{{ message|trans }} ({{ percentage }})%
-            </div>
+        <div id="{{ target }}" class="alert alert-secondary p-3" role="alert">
+            {% if percentage == 100 %}
+                <div class="d-flex flex-row">
+                    <div class="progress flex-fill h-auto me-2" role="progressbar"
+                         aria-valuenow="{{ percentage }}"
+                         aria-valuemin="0"
+                         aria-valuemax="100">
+                        <div class="progress-bar bg-success" style="width: {{ percentage }}%">
+                            <div>
+                                <i class="fa-solid fa-circle-check"></i>
+                                {{ message|trans }}
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% else %}
+                <div class="d-flex flex-row">
+                    <div class="progress flex-fill h-auto me-2" role="progressbar"
+                         aria-valuenow="{{ percentage }}"
+                         aria-valuemin="0"
+                         aria-valuemax="100">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated"
+                             style="width: {{ percentage }}%">
+                            <div>
+                                <i class="fa-solid fa-hourglass-half"></i>
+                                {{ message|trans }} ({{ percentage }}%)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
         </div>
-        {% endif %}
     </template>
 </turbo-stream>
