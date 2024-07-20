@@ -3,7 +3,7 @@
 namespace App\Listener\Movie;
 
 use App\Entity\Movie;
-use App\Message\MovieMessage;
+use App\Message\Movie\MovieUpdateMessage;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Events;
@@ -20,7 +20,7 @@ readonly class MovieUpdateListener
     public function __invoke(Movie $movie, PreUpdateEventArgs $eventArgs): void
     {
         if ($eventArgs->hasChangedField('tmdbId')) {
-            $this->messageBus->dispatch(new MovieMessage($movie->getId()));
+            $this->messageBus->dispatch(new MovieUpdateMessage($movie->getId()));
         }
     }
 }

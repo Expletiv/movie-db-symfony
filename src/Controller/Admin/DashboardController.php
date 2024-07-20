@@ -36,7 +36,7 @@ class DashboardController extends AbstractDashboardController
     public function configureCrud(): Crud
     {
         return Crud::new()
-            ->setDateFormat('d.m.Y');
+            ->setDateFormat('d.M.Y');
     }
 
     public function configureAssets(): Assets

@@ -3,7 +3,9 @@
 namespace App\Controller\Admin\Crud;
 
 use App\Entity\Movie;
-use App\Message\MovieBatchHydrationMessage;
+use App\Message\Movie\MovieBatchHydrationMessage;
+use App\Repository\MovieRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -25,6 +27,8 @@ class MovieCrudController extends AbstractCrudController
 {
     public function __construct(
         private readonly AdminUrlGenerator $adminUrlGenerator,
+        private readonly MovieRepository $movieRepository,
+        private readonly EntityManagerInterface $entityManager,
         private readonly MessageBusInterface $messageBus,
         /**
          * @var array<int, string>
@@ -131,7 +135,15 @@ class MovieCrudController extends AbstractCrudController
 
     public function syncLocales(): RedirectResponse
     {
-        $this->addFlash('success', 'Hallo');
+        $movies = $this->movieRepository->findMoviesWhereLocalesAreMissing();
+
+        foreach ($movies as $movie) {
+            $m = (new Movie())
+                ->setTmdbId($movie->getTmdbId())
+                ->setLocale('en' === $movie->getLocale() ? 'de' : 'en');
+            $this->entityManager->persist($m);
+        }
+        $this->entityManager->flush();
 
         return $this->redirectToIndex();
     }

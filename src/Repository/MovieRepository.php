@@ -20,15 +20,22 @@ class MovieRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return int[]
+     * @return Movie[]
      */
-    public function findAllIds(): array
+    public function findMoviesWhereLocalesAreMissing(): array
     {
-        return $this->createQueryBuilder('m')
-            ->select('m.id')
-            ->distinct()
-            ->getQuery()
-            ->getSingleColumnResult();
+        $subquery = $this->createQueryBuilder('mv')
+            ->select('mv.tmdbId')
+            ->groupBy('mv.tmdbId')
+            ->having('COUNT(mv.locale) = 1');
+
+        $qb = $this->createQueryBuilder('m');
+        $qb->where($qb->expr()->in(
+            'm.tmdbId',
+            $subquery->getDQL()
+        ));
+
+        return $qb->getQuery()->getResult();
     }
 
     /**

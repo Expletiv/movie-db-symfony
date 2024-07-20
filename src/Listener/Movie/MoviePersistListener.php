@@ -3,7 +3,7 @@
 namespace App\Listener\Movie;
 
 use App\Entity\Movie;
-use App\Message\MovieMessage;
+use App\Message\Movie\MovieUpdateMessage;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Event\PostPersistEventArgs;
 use Doctrine\ORM\Events;
@@ -19,6 +19,6 @@ readonly class MoviePersistListener
 
     public function __invoke(Movie $movie, PostPersistEventArgs $eventArgs): void
     {
-        $this->messageBus->dispatch(new MovieMessage($movie->getId()));
+        $this->messageBus->dispatch(new MovieUpdateMessage($movie->getId()));
     }
 }

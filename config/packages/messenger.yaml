@@ -26,5 +26,5 @@ framework:
             Symfony\Component\Notifier\Message\SmsMessage: async
 
             # Route your messages to the transports
-            App\Message\MovieMessage: async
-            App\Message\MovieBatchHydrationMessage: async
+            App\Message\Movie\MovieUpdateMessage: async
+            App\Message\Movie\MovieBatchHydrationMessage: async

@@ -149,6 +149,7 @@
         "test:phpmd": "vendor/bin/phpmd src ansi cleancode",
         "test:phpunit": "bin/phpunit",
         "test:translations": "bin/console lint:yaml translations",
-        "webpack:run": "docker exec -it symfony-project-node-1 npm run dev"
+        "webpack:run": "docker exec -it symfony-project-node-1 npm run dev",
+        "worker:restart": "docker compose restart php-worker"
     }
 }

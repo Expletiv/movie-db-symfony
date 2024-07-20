@@ -1,15 +1,15 @@
 <?php
 
-namespace App\MessageHandler;
+namespace App\MessageHandler\Movie;
 
 use App\Hydrator\Movie\MovieHydrator;
-use App\Message\MovieMessage;
+use App\Message\Movie\MovieUpdateMessage;
 use App\Repository\MovieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-readonly class MovieMessageHandler
+readonly class MovieUpdateHandler
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
@@ -18,7 +18,7 @@ readonly class MovieMessageHandler
     ) {
     }
 
-    public function __invoke(MovieMessage $message): void
+    public function __invoke(MovieUpdateMessage $message): void
     {
         $movie = $this->movieRepository->find($message->getId());
 

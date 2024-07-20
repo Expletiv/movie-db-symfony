@@ -1,9 +1,9 @@
 <?php
 
-namespace App\MessageHandler;
+namespace App\MessageHandler\Movie;
 
 use App\Hydrator\Movie\MovieHydrator;
-use App\Message\MovieBatchHydrationMessage;
+use App\Message\Movie\MovieBatchHydrationMessage;
 use App\Repository\MovieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;

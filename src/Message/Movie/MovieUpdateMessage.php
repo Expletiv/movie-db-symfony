@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Message;
+namespace App\Message\Movie;
 
-readonly class MovieMessage
+readonly class MovieUpdateMessage
 {
     public function __construct(
         private int $id,
