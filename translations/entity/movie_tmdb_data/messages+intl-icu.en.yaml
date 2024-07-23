@@ -1,0 +1,8 @@
+entity:
+    movie_tmdb_data:
+        label:
+            singular: 'TMDB-Movie-Data'
+            plural: 'TMDB-Movie-Data'
+        attributes:
+            title: 'Translated title'
+            locale: 'Locale'

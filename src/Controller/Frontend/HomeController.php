@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Frontend;
 
-use App\Repository\MovieRepository;
+use App\Repository\MovieTmdbDataRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,7 +17,7 @@ class HomeController extends AbstractController
     #[Route(['/{_locale}/home'])]
     public function index(
         Request $request,
-        MovieRepository $movieRepository,
+        MovieTmdbDataRepository $movieRepository,
         #[MapQueryParameter(options: ['min_range' => 1])] int $page = 1,
     ): Response {
         $movies = $movieRepository->findPageOrderedByPopularity($page, $request->getLocale());

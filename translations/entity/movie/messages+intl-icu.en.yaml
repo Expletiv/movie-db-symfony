@@ -1,0 +1,15 @@
+entity:
+    movie:
+        label:
+            singular: 'Movie'
+            plural: 'Movies'
+        attributes:
+            title: 'Original title'
+            tmdb_id: 'TMDB-ID'
+            locale: 'Locale'
+            release_date: 'Release date'
+            popularity: 'Popularity'
+            likes: 'Likes'
+        actions:
+            movie_hydrate: 'Update TMDB data'
+            sync_locales: 'Sync Locales'

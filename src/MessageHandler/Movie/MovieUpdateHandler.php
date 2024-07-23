@@ -25,7 +25,7 @@ readonly class MovieUpdateHandler
         if (!$movie) {
             return;
         }
-        $this->movieHydrator->hydrate($movie);
+        $this->movieHydrator->hydrateWithEnabledLocales($movie);
 
         $this->entityManager->persist($movie);
         $this->entityManager->flush();

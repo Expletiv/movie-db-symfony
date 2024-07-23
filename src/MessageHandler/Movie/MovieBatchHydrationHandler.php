@@ -51,7 +51,7 @@ readonly class MovieBatchHydrationHandler
                     'hydrationProgress',
                     $this->twig->render('admin/notification/progress_bar.html.twig', [
                         'percentage' => $percentage,
-                        'message' => t('movie.actions.movie_hydrate'),
+                        'message' => t('entity.movie.actions.movie_hydrate'),
                         'target' => 'hydrationProgress',
                     ])
                 )
