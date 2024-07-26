@@ -27,7 +27,7 @@ readonly class MovieHydrator
     {
         foreach ($this->enabledLocales as $locale) {
             $tmdbData = (new MovieTmdbData())->setLocale($locale);
-            $movie->addTmdbData($tmdbData);
+            $movie->addTmdbDatum($tmdbData);
         }
 
         $this->hydrate($movie);

@@ -45,7 +45,8 @@ class Movie
         targetEntity: MovieTmdbData::class,
         mappedBy: 'movie',
         cascade: ['persist'],
-        orphanRemoval: true)
+        orphanRemoval: true
+    )
     ]
     private Collection $tmdbData;
 
@@ -134,12 +135,24 @@ class Movie
         return $this->tmdbData;
     }
 
-    public function addTmdbData(MovieTmdbData $tmdbData): static
+    public function addTmdbDatum(MovieTmdbData $tmdbData): static
     {
-        if (!$this->tmdbData->contains($tmdbData)) {
+        if (!$this->hasLocale($tmdbData)) {
             $this->tmdbData->add($tmdbData);
             $tmdbData->setMovie($this);
         }
+
+        return $this;
+    }
+
+    public function hasLocale(string $locale): bool
+    {
+        return null !== $this->getTmdbDataForLocale($locale);
+    }
+
+    public function removeTmdbDatum(MovieTmdbData $tmdbData): static
+    {
+        $this->tmdbData->removeElement($tmdbData);
 
         return $this;
     }

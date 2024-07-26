@@ -8,6 +8,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
@@ -74,6 +75,12 @@ class MovieCrudController extends AbstractCrudController
         yield IntegerField::new('likes')
             ->setLabel('entity.movie.attributes.likes')
             ->setRequired(false);
+
+        yield CollectionField::new('tmdbData')
+            ->allowDelete()
+            ->renderExpanded()
+            ->setEntryIsComplex()
+            ->useEntryCrudForm(MovieTmdbDataCrudController::class);
     }
 
     public function configureActions(Actions $actions): Actions
