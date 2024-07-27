@@ -12,6 +12,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CodeEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\LocaleField;
@@ -49,7 +50,10 @@ class MovieTmdbDataCrudController extends AbstractCrudController
                 ['id' => 'ASC']
             )
             ->renderContentMaximized()
-            ->overrideTemplate('crud/index', '/admin/crud/index.html.twig');
+            ->overrideTemplates([
+                'crud/index' => '/admin/crud/movie/index.html.twig',
+                'crud/detail' => '/admin/crud/movie/tmdb_detail.html.twig',
+            ]);
     }
 
     /**
@@ -57,6 +61,9 @@ class MovieTmdbDataCrudController extends AbstractCrudController
      */
     public function configureFields(string $pageName): iterable
     {
+        yield FormField::addTab('entity.movie_tmdb_data.tabs.main')
+            ->hideOnForm();
+
         yield IdField::new('id')
             ->hideOnForm();
 
@@ -86,10 +93,15 @@ class MovieTmdbDataCrudController extends AbstractCrudController
             ->setLabel('entity.movie.attributes.likes')
             ->onlyOnDetail();
 
+        yield FormField::addTab('entity.movie_tmdb_data.tabs.json_data')
+            ->onlyOnDetail();
+
         yield CodeEditorField::new('tmdbDataJson')
+            ->setLabel('entity.movie_tmdb_data.attributes.tmdb_data_json')
             ->onlyOnDetail();
 
         yield CodeEditorField::new('tmdbDetailsDataJson')
+            ->setLabel('entity.movie_tmdb_data.attributes.tmdb_details_data_json')
             ->onlyOnDetail();
     }
 

@@ -6,6 +6,7 @@ use App\Repository\MovieTmdbDataRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Intl\Languages;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MovieTmdbDataRepository::class)]
@@ -134,8 +135,11 @@ class MovieTmdbData
         return $this;
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
     public function __toString(): string
     {
-        return $this->locale;
+        return Languages::getName($this->locale);
     }
 }

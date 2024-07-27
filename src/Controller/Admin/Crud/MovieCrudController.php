@@ -27,11 +27,13 @@ class MovieCrudController extends AbstractCrudController
         return $crud
             ->setEntityLabelInSingular('entity.movie.label.singular')
             ->setEntityLabelInPlural('entity.movie.label.plural')
-            ->setDefaultSort(
-                ['id' => 'ASC']
-            )
+            ->setDefaultSort([
+                'id' => 'ASC',
+            ])
             ->renderContentMaximized()
-            ->overrideTemplate('crud/index', '/admin/crud/index.html.twig');
+            ->overrideTemplates([
+                'crud/index' => '/admin/crud/movie/index.html.twig',
+            ]);
     }
 
     /**
@@ -77,6 +79,12 @@ class MovieCrudController extends AbstractCrudController
             ->setRequired(false);
 
         yield CollectionField::new('tmdbData')
+            ->setLabel('entity.movie.attributes.tmdb_data')
+            ->setTemplatePath('admin/util/linked_collection.html.twig')
+            ->setCustomOptions([
+                'collectionCrudControllerFqcn' => MovieTmdbDataCrudController::class,
+            ])
+            ->allowAdd()
             ->allowDelete()
             ->renderExpanded()
             ->setEntryIsComplex()

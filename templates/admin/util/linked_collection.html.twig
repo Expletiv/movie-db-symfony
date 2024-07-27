@@ -1,0 +1,13 @@
+{% if field.value is not empty %}
+    <div class="d-flex flex-column">
+        {% for value in field.value %}
+            {% set detail_url = ea_url()
+                .setController(field.customOptions.get('collectionCrudControllerFqcn'))
+                .setAction(constant('EasyCorp\\Bundle\\EasyAdminBundle\\Config\\Action::DETAIL'))
+                .setEntityId(value.id) %}
+            <a href="{{ detail_url }}">
+                {{ value }}
+            </a>
+        {% endfor %}
+    </div>
+{% endif %}

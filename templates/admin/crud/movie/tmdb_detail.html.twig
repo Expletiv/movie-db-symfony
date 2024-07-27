@@ -1,0 +1,27 @@
+{# @var ea \EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext #}
+{# @var entity \EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto #}
+
+{% extends '@EasyAdmin/crud/detail.html.twig' %}
+
+{% block main %}
+    {% set tmdb_details_data = entity.instance.tmdbDetailsData %}
+
+    {% if tmdb_details_data is null or tmdb_details_data.poster_path is null %}
+        {{ parent() }}
+    {% else %}
+        <div class="row">
+            <div class="col-md-9 col-sm-7">
+                {{ parent() }}
+            </div>
+            <div class="w-100 d-sm-none d-inline-block"></div>
+            <div class="col-md-3 col-sm-5">
+                <img class="object-fit-cover rounded position-relative"
+                     alt="movie poster" width="100%"
+                     src="{{ tmdb_details_data.poster_path|tmdb_image_url }}">
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+
+

@@ -49,7 +49,7 @@ readonly class MovieBatchHydrationHandler
             $this->hub->publish(
                 new Update(
                     'hydrationProgress',
-                    $this->twig->render('admin/notification/progress_bar.html.twig', [
+                    $this->twig->render('admin/util/progress_bar.html.twig', [
                         'percentage' => $percentage,
                         'message' => t('entity.movie.actions.movie_hydrate'),
                         'target' => 'hydrationProgress',

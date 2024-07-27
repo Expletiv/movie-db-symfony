@@ -6,3 +6,9 @@ entity:
         attributes:
             title: 'Übersetzter Titel'
             locale: 'Locale'
+            tmdb_data_json: 'JSON-Daten'
+            tmdb_details_data_json: 'JSON-Detailseite-Daten'
+        tabs:
+            main: 'Überblick'
+            json_data: 'JSON-Daten'
+

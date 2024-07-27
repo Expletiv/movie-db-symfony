@@ -10,6 +10,7 @@ entity:
             release_date: 'Erscheinungsdatum'
             popularity: 'Beliebtheitswert'
             likes: 'Gefällt mir'
+            tmdb_data: 'TMDB-Daten'
         actions:
             movie_hydrate: 'Aktualisiere TMDB-Daten'
             sync_locales: 'Synchronisiere Locales'
