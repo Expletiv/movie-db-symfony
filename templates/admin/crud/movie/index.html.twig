@@ -2,6 +2,9 @@
 {% extends '@EasyAdmin/crud/index.html.twig' %}
 
 {% block main %}
+    {#  Has to be used in order to subscribe to private updates, see here: https://github.com/symfony/symfony/discussions/47718  #}
+    {% do mercure('hydrationProgress', {'subscribe': ['hydrationProgress']}) %}
+
     <div {{ turbo_stream_listen('hydrationProgress') }}>
         <div id="hydrationProgress"></div>
     </div>

@@ -53,7 +53,8 @@ readonly class MovieBatchHydrationHandler
                         'percentage' => $percentage,
                         'message' => t('entity.movie.actions.movie_hydrate'),
                         'target' => 'hydrationProgress',
-                    ])
+                    ]),
+                    private: true
                 )
             );
         } catch (Exception $e) {
