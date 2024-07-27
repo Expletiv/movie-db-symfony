@@ -1,0 +1,5 @@
+templates:
+    movies:
+        popular: 'Beliebte Filme'
+        discover: 'Entdecke Filme'
+        highest_rating: 'Am besten bewertete Filme'

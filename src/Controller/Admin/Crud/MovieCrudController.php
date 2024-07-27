@@ -32,7 +32,7 @@ class MovieCrudController extends AbstractCrudController
             ])
             ->renderContentMaximized()
             ->overrideTemplates([
-                'crud/index' => '/admin/crud/movie/index.html.twig',
+                'crud/index' => '/admin/crud/movie/popular.html.twig',
             ]);
     }
 

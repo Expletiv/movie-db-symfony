@@ -51,7 +51,7 @@ class MovieTmdbDataCrudController extends AbstractCrudController
             )
             ->renderContentMaximized()
             ->overrideTemplates([
-                'crud/index' => '/admin/crud/movie/index.html.twig',
+                'crud/index' => '/admin/crud/movie/popular.html.twig',
                 'crud/detail' => '/admin/crud/movie/tmdb_detail.html.twig',
             ]);
     }
