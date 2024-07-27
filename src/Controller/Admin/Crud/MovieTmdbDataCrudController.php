@@ -71,7 +71,8 @@ class MovieTmdbDataCrudController extends AbstractCrudController
             ->setLabel('entity.movie.attributes.tmdb_id')
             ->hideOnForm();
 
-        yield AssociationField::new('movie');
+        yield AssociationField::new('movie')
+            ->setLabel('entity.movie.label.singular');
 
         yield LocaleField::new('locale')
             ->setLabel('entity.movie_tmdb_data.attributes.locale')
