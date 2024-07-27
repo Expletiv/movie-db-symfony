@@ -47,8 +47,8 @@ services:
       STABILITY: ${STABILITY:-stable}
     command: php bin/console messenger:consume async -vv --limit=10000
     depends_on:
-      - php
-      - database
+      php:
+        condition: service_healthy
     healthcheck:
       test: ['CMD','true']
 
