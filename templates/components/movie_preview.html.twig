@@ -13,24 +13,28 @@
             <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#333">{{ movie.title }}</text>
         </svg>
     {% endif %}
-    <div class="card-img-overlay" id="card-rating">
-        <div class="d-flex d-inline">
-            <div class="bg-dark rounded">
-                <img class="me-2" src="{{ asset('build/images/tmdb-icon.svg') }}" height="25" width="50"
-                     alt="movie rating">
-                <span style="color: {{ movie.vote_average|rating_to_hsl }}">
+    {% if movie.vote_average is defined %}
+        <div class="card-img-overlay" id="card-rating">
+            <div class="d-flex d-inline">
+                <div class="bg-dark rounded">
+                    <img class="me-2" src="{{ asset('build/images/tmdb-icon.svg') }}" height="25" width="50"
+                         alt="movie rating">
+                    <span style="color: {{ movie.vote_average|rating_to_hsl }}">
                     {{ movie.vote_average|number_format(1) }}
                 </span>
+                </div>
             </div>
         </div>
-    </div>
+    {% endif %}
     <div class="card-img-overlay text-light" id="card-description">
         <h5 class="card-title text-truncate">{{ movie.title }}</h5>
         <p class="card-text overflow-scroll h-50">{{ movie.overview }}</p>
-        <p class="card-text">
-            <small class="text-white-50">{{ 'templates.movie_preview.release_date'|trans }}
-                {{ movie.release_date|date('d.m.Y') }}</small>
-        </p>
+        {% if movie.release_date is defined %}
+            <p class="card-text">
+                <small class="text-white-50">{{ 'templates.movie_preview.release_date'|trans }}
+                    {{ movie.release_date|date('d.m.Y') }}</small>
+            </p>
+        {% endif %}
         <div class="row">
             <p class="col-auto card-text my-auto">
                 <small class="text-white-50">{{ 'templates.movie_preview.added_by'|trans }} </small>

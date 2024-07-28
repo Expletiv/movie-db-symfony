@@ -1,0 +1,19 @@
+forms:
+    movie:
+        discover:
+            sort:
+                label:
+                    direction: 'Search direction'
+                    category: 'Search category'
+                    primary_release_year: 'Release year'
+                direction:
+                    asc: 'Ascending'
+                    desc: 'Descending'
+                category:
+                    popularity: 'Popularity'
+                    revenue: 'Revenue'
+                    vote_average: 'Average rating'
+                    vote_count: 'Ratings count'
+                    primary_release_date: 'Release date'
+                    title: 'Title'
+                button: 'Search'

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Frontend;
 
+use App\Form\MovieDiscoverFilterType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,17 +41,26 @@ class MoviesController extends AbstractController
         Request $request,
         #[MapQueryParameter(options: ['min_range' => 1])] int $page = 1,
     ): Response {
-        // TODO: Add filters for discovery
+        $form = $this->createForm(MovieDiscoverFilterType::class);
+        $form->handleRequest($request);
+        $params = [];
 
-        $moviesResult = $this->tmdbClient->getDiscoverApi()->discoverMovies([
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $params['sort_by'] = $data['sortCategory'].'.'.$data['sortDirection'];
+            $params['primary_release_year'] = $data['primaryReleaseYear'];
+        }
+
+        $moviesResult = $this->tmdbClient->getDiscoverApi()->discoverMovies(array_merge([
             'language' => $request->getLocale(),
             'page' => $page,
-        ]);
+        ], $params));
 
         return $this->render('movies/discover.html.twig', [
             'movies' => $moviesResult['results'],
             'page' => $page,
             'maxPage' => $moviesResult['total_pages'],
+            'form' => $form,
         ]);
     }
 

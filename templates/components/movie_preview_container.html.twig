@@ -15,24 +15,35 @@
             <ul class="pagination justify-content-center">
                 {% if page > 1 %}
                     <li class="page-item">
-                        <a class="page-link" href="{{ path(app.current_route, {page: page-1}) }}"
+                        <a class="page-link"
+                           href="{{ path(app.current_route, app.request.query|merge({page: page-1})) }}"
                            aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
                     <li class="page-item">
-                        <a class="page-link" href="{{ path(app.current_route, {page: page-1}) }}">{{ page-1 }}</a>
+                        <a class="page-link"
+                           href="{{ path(app.current_route, app.request.query|merge({page: page-1})) }}">
+                            {{ page-1 }}
+                        </a>
                     </li>
                 {% endif %}
                 <li class="page-item active">
-                    <a class="page-link" href="{{ path(app.current_route, {page: page}) }}">{{ page }}</a>
+                    <a class="page-link"
+                       href="{{ path(app.current_route, app.request.query|merge({page: page})) }}">
+                        {{ page }}
+                    </a>
                 </li>
                 {% if page < maxPage %}
                     <li class="page-item">
-                        <a class="page-link" href="{{ path(app.current_route, {page: page+1}) }}">{{ page+1 }}</a>
+                        <a class="page-link"
+                           href="{{ path(app.current_route, app.request.query|merge({page: page+1})) }}">
+                            {{ page+1 }}
+                        </a>
                     </li>
                     <li class="page-item">
-                        <a class="page-link" href="{{ path(app.current_route, {page: page+1}) }}"
+                        <a class="page-link"
+                           href="{{ path(app.current_route, app.request.query|merge({page: page+1})) }}"
                            aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
