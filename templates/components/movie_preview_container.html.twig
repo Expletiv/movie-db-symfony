@@ -84,11 +84,11 @@
             </nav>
             <form class="row g-2 justify-content-center justify-content-sm-end" method="get"
                   action="{{ path(app.current_route, app.request.query.all) }}">
-                <div class="col-3">
-                    <input class="form-control" name="page" aria-label="page">
+                <div class="col-5">
+                    <input class="form-control" name="page" type="number" min="1" max="{{ maxPage }}" aria-label="page">
                 </div>
                 <div class="col-auto">
-                    <button class="btn btn-primary">Go to page</button>
+                    <button class="btn btn-primary">{{ 'templates.movie_preview_container.show_page'|trans }}</button>
                 </div>
             </form>
         </div>

@@ -1,3 +1,5 @@
 templates:
     movie_preview_container:
         no_movies_found: 'No movies found'
+        show_page: 'Show page'
+

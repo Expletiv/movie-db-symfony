@@ -4,6 +4,7 @@ namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -35,7 +36,7 @@ class MovieDiscoverFilterType extends AbstractType
                 'label' => 'forms.movie.discover.sort.label.category',
                 'data' => 'popularity',
             ])
-            ->add('primaryReleaseYear', NumberType::class, [
+            ->add('primaryReleaseYear', IntegerType::class, [
                 'label' => 'forms.movie.discover.sort.label.primary_release_year',
                 'constraints' => [
                     new Range(min: 1800, max: 2100),
