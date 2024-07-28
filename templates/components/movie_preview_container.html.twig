@@ -11,90 +11,87 @@
             <div class="filling-empty-space-childs"></div>
             <div class="filling-empty-space-childs"></div>
         </div>
-        <nav class="mb-4 mt-2" aria-label="Page navigation">
-            <ul class="pagination justify-content-center">
-                {% if page > 1 %}
-                    <li class="page-item">
-                        <a class="page-link"
-                           href="{{ path(app.current_route, app.request.query|merge({page: page-1})) }}"
-                           aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    {% if 1 < page - 1 %}
-                        <li class="page-item">
-                            <a class="page-link"
-                               href="{{ path(app.current_route, app.request.query|merge({page: 1})) }}">
-                                {{ 1 }}
-                            </a>
-                        </li>
-                        {% if 1 == page - 3 %}
+        <div class="d-flex flex-column flex-sm-row mb-4 mt-2">
+            <nav class="me-sm-auto" aria-label="Page navigation">
+                <ul class="pagination justify-content-center justify-content-sm-start">
+                    {% if page > 1 %}
+                        {% if 1 < page - 1 %}
                             <li class="page-item">
                                 <a class="page-link"
-                                   href="{{ path(app.current_route, app.request.query|merge({page: 2})) }}">
-                                    {{ 2 }}
+                                   href="{{ path(app.current_route, app.request.query|merge({page: 1})) }}">
+                                    {{ 1 }}
                                 </a>
                             </li>
-                        {% elseif 1 < page - 3 %}
+                            {% if 1 == page - 3 %}
+                                <li class="page-item">
+                                    <a class="page-link"
+                                       href="{{ path(app.current_route, app.request.query|merge({page: 2})) }}">
+                                        {{ 2 }}
+                                    </a>
+                                </li>
+                            {% elseif 1 < page - 3 %}
+                                <li class="page-item">
+                                    <a class="page-link">
+                                        ...
+                                    </a>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{{ path(app.current_route, app.request.query|merge({page: page-1})) }}">
+                                {{ page-1 }}
+                            </a>
+                        </li>
+                    {% endif %}
+                    <li class="page-item active">
+                        <a class="page-link"
+                           href="{{ path(app.current_route, app.request.query|merge({page: page})) }}">
+                            {{ page }}
+                        </a>
+                    </li>
+                    {% if page < maxPage %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{{ path(app.current_route, app.request.query|merge({page: page+1})) }}">
+                                {{ page+1 }}
+                            </a>
+                        </li>
+                        {% if page < maxPage - 1 %}
+                            {% if page == maxPage - 3 %}
+                                <li class="page-item">
+                                    <a class="page-link"
+                                       href="{{ path(app.current_route, app.request.query|merge({page: maxPage-1})) }}">
+                                        {{ maxPage-1 }}
+                                    </a>
+                                </li>
+                            {% elseif page < maxPage - 3 %}
+                                <li class="page-item">
+                                    <a class="page-link">
+                                        ...
+                                    </a>
+                                </li>
+                            {% endif %}
                             <li class="page-item">
-                                <a class="page-link">
-                                    ...
+                                <a class="page-link"
+                                   href="{{ path(app.current_route, app.request.query|merge({page: maxPage})) }}">
+                                    {{ maxPage }}
                                 </a>
                             </li>
                         {% endif %}
                     {% endif %}
-                    <li class="page-item">
-                        <a class="page-link"
-                           href="{{ path(app.current_route, app.request.query|merge({page: page-1})) }}">
-                            {{ page-1 }}
-                        </a>
-                    </li>
-                {% endif %}
-                <li class="page-item active">
-                    <a class="page-link"
-                       href="{{ path(app.current_route, app.request.query|merge({page: page})) }}">
-                        {{ page }}
-                    </a>
-                </li>
-                {% if page < maxPage %}
-                    <li class="page-item">
-                        <a class="page-link"
-                           href="{{ path(app.current_route, app.request.query|merge({page: page+1})) }}">
-                            {{ page+1 }}
-                        </a>
-                    </li>
-                    {% if page < maxPage - 1 %}
-                        {% if page == maxPage - 3 %}
-                            <li class="page-item">
-                                <a class="page-link"
-                                   href="{{ path(app.current_route, app.request.query|merge({page: maxPage-1})) }}">
-                                    {{ maxPage-1 }}
-                                </a>
-                            </li>
-                        {% elseif page < maxPage - 3 %}
-                            <li class="page-item">
-                                <a class="page-link">
-                                    ...
-                                </a>
-                            </li>
-                        {% endif %}
-                        <li class="page-item">
-                            <a class="page-link"
-                               href="{{ path(app.current_route, app.request.query|merge({page: maxPage})) }}">
-                                {{ maxPage }}
-                            </a>
-                        </li>
-                    {% endif %}
-                    <li class="page-item">
-                        <a class="page-link"
-                           href="{{ path(app.current_route, app.request.query|merge({page: page+1})) }}"
-                           aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                {% endif %}
-            </ul>
-        </nav>
+                </ul>
+            </nav>
+            <form class="row g-2 justify-content-center justify-content-sm-end" method="get"
+                  action="{{ path(app.current_route, app.request.query.all) }}">
+                <div class="col-3">
+                    <input class="form-control" name="page" aria-label="page">
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-primary">Go to page</button>
+                </div>
+            </form>
+        </div>
     {% else %}
         <div class="d-flex justify-content-center">
             <h3 class="text-center text-danger bg-opacity-75 bg-body-secondary p-2 rounded">
