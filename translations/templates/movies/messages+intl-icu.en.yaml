@@ -1,5 +1,5 @@
 templates:
     movies:
-        popular: 'Beliebte Filme'
-        discover: 'Entdecke Filme'
-        highest_rating: 'Am besten bewertete Filme'
+        popular: 'Popular movies'
+        discover: 'Discover movies'
+        highest_rating: 'Highest rated movies'
