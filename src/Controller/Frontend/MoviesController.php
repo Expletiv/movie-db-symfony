@@ -14,6 +14,8 @@ use Tmdb\Client;
 
 class MoviesController extends AbstractController
 {
+    private const int TMDB_MAX_PAGE = 500;
+
     public function __construct(
         private readonly Client $tmdbClient,
     ) {
@@ -22,7 +24,7 @@ class MoviesController extends AbstractController
     #[Route('/{_locale}/popular', name: 'app_movies_popular')]
     public function popular(
         Request $request,
-        #[MapQueryParameter(options: ['min_range' => 1])] int $page = 1,
+        #[MapQueryParameter(options: ['min_range' => 1, 'max_range' => self::TMDB_MAX_PAGE])] int $page = 1,
     ): Response {
         $moviesResult = $this->tmdbClient->getMoviesApi()->getPopular([
             'language' => $request->getLocale(),
@@ -32,14 +34,14 @@ class MoviesController extends AbstractController
         return $this->render('movies/popular.html.twig', [
             'movies' => $moviesResult['results'],
             'page' => $page,
-            'maxPage' => $moviesResult['total_pages'],
+            'maxPage' => min($moviesResult['total_pages'], self::TMDB_MAX_PAGE),
         ]);
     }
 
     #[Route('/{_locale}/discover', name: 'app_movies_discover')]
     public function discover(
         Request $request,
-        #[MapQueryParameter(options: ['min_range' => 1])] int $page = 1,
+        #[MapQueryParameter(options: ['min_range' => 1, 'max_range' => self::TMDB_MAX_PAGE])] int $page = 1,
     ): Response {
         $form = $this->createForm(MovieDiscoverFilterType::class);
         $form->handleRequest($request);
@@ -59,7 +61,7 @@ class MoviesController extends AbstractController
         return $this->render('movies/discover.html.twig', [
             'movies' => $moviesResult['results'],
             'page' => $page,
-            'maxPage' => $moviesResult['total_pages'],
+            'maxPage' => min($moviesResult['total_pages'], self::TMDB_MAX_PAGE),
             'form' => $form,
         ]);
     }
@@ -67,7 +69,7 @@ class MoviesController extends AbstractController
     #[Route('/{_locale}/highest-rating', name: 'app_movies_highest_rating')]
     public function highestRating(
         Request $request,
-        #[MapQueryParameter(options: ['min_range' => 1])] int $page = 1,
+        #[MapQueryParameter(options: ['min_range' => 1, 'max_range' => self::TMDB_MAX_PAGE])] int $page = 1,
     ): Response {
         $moviesResult = $this->tmdbClient->getMoviesApi()->getTopRated([
             'language' => $request->getLocale(),
@@ -77,7 +79,7 @@ class MoviesController extends AbstractController
         return $this->render('movies/highest_rating.html.twig', [
             'movies' => $moviesResult['results'],
             'page' => $page,
-            'maxPage' => $moviesResult['total_pages'],
+            'maxPage' => min($moviesResult['total_pages'], self::TMDB_MAX_PAGE),
         ]);
     }
 }

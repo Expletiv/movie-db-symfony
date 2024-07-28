@@ -21,6 +21,28 @@
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
+                    {% if 1 < page - 1 %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{{ path(app.current_route, app.request.query|merge({page: 1})) }}">
+                                {{ 1 }}
+                            </a>
+                        </li>
+                        {% if 1 == page - 3 %}
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="{{ path(app.current_route, app.request.query|merge({page: 2})) }}">
+                                    {{ 2 }}
+                                </a>
+                            </li>
+                        {% elseif 1 < page - 3 %}
+                            <li class="page-item">
+                                <a class="page-link">
+                                    ...
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endif %}
                     <li class="page-item">
                         <a class="page-link"
                            href="{{ path(app.current_route, app.request.query|merge({page: page-1})) }}">
@@ -41,6 +63,28 @@
                             {{ page+1 }}
                         </a>
                     </li>
+                    {% if page < maxPage - 1 %}
+                        {% if page == maxPage - 3 %}
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="{{ path(app.current_route, app.request.query|merge({page: maxPage-1})) }}">
+                                    {{ maxPage-1 }}
+                                </a>
+                            </li>
+                        {% elseif page < maxPage - 3 %}
+                            <li class="page-item">
+                                <a class="page-link">
+                                    ...
+                                </a>
+                            </li>
+                        {% endif %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="{{ path(app.current_route, app.request.query|merge({page: maxPage})) }}">
+                                {{ maxPage }}
+                            </a>
+                        </li>
+                    {% endif %}
                     <li class="page-item">
                         <a class="page-link"
                            href="{{ path(app.current_route, app.request.query|merge({page: page+1})) }}"
