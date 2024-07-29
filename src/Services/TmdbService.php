@@ -1,0 +1,38 @@
+<?php
+
+namespace App\Services;
+
+use App\Entity\Movie;
+use App\Repository\MovieRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Tmdb\Client;
+
+readonly class TmdbService
+{
+    public function __construct(
+        private Client $tmdbClient,
+        private MovieRepository $movieRepository,
+        private EntityManagerInterface $entityManager,
+    ) {
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function findTmdbDetailsData(int $tmdbId, string $locale): array
+    {
+        $movie = $this->movieRepository->findOneBy(['tmdbId' => $tmdbId]);
+
+        $data = $movie?->getTmdbDataForLocale($locale)?->getTmdbDetailsData();
+
+        if (empty($data)) {
+            $data = $this->tmdbClient->getMoviesApi()->getMovie($tmdbId, ['language' => $locale]);
+
+            $movie ??= (new Movie())->setTmdbId($tmdbId);
+            $this->entityManager->persist($movie);
+            $this->entityManager->flush();
+        }
+
+        return $data;
+    }
+}
