@@ -1,0 +1,10 @@
+entity:
+    user:
+        label:
+            singular: 'User'
+            plural: 'Users'
+        attributes:
+            id: 'Internal ID'
+            email: 'Email'
+            roles: 'Access roles'
+            is_verified: 'Email verified'

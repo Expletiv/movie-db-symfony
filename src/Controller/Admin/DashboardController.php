@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Movie;
 use App\Entity\MovieTmdbData;
+use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -62,6 +63,12 @@ class DashboardController extends AbstractDashboardController
             'entity.movie_tmdb_data.label.plural',
             'fa fa-solid fa-film',
             MovieTmdbData::class
+        );
+        yield MenuItem::section('admin.dashboard.menu.section.users');
+        yield MenuItem::linkToCrud(
+            'entity.user.label.plural',
+            'fa fa-solid fa-users',
+            User::class
         );
     }
 }

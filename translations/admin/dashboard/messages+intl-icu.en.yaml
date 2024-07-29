@@ -4,3 +4,4 @@ admin:
         menu:
             section:
                 movies: 'Movies'
+                users: 'Users'
