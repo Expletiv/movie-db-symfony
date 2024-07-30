@@ -27,8 +27,10 @@ readonly class TmdbService
 
         if (empty($data)) {
             $data = $this->tmdbClient->getMoviesApi()->getMovie($tmdbId, ['language' => $locale]);
+        }
 
-            $movie ??= (new Movie())->setTmdbId($tmdbId);
+        if (null === $movie) {
+            $movie = (new Movie())->setTmdbId($tmdbId);
             $this->entityManager->persist($movie);
             $this->entityManager->flush();
         }
