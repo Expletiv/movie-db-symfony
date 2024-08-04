@@ -1,0 +1,23 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    {{ 'templates.movies.watchlist' }}
+{% endblock %}
+
+{% block body %}
+
+    <div class="container mt-3">
+        <button class="btn btn-primary mb-3" data-bs-toggle="modal"
+                data-bs-target="#addWatchlistModal">
+            {{ 'forms.watchlist.add.title'|trans }}
+        </button>
+        <ul data-turbo="false">
+            {% for watchlist in watchlists %}
+                <li><a href="{{ path('app_movie_watchlist_show', {id: watchlist.id}) }}">{{ watchlist.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% include('components/modal/add_watchlist_modal.html.twig') %}
+
+{% endblock %}

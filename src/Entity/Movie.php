@@ -46,13 +46,19 @@ class Movie
         mappedBy: 'movie',
         cascade: ['persist'],
         orphanRemoval: true
-    )
-    ]
+    )]
     private Collection $tmdbData;
+
+    /**
+     * @var Collection<int, MovieWatchlist>
+     */
+    #[ORM\ManyToMany(targetEntity: MovieWatchlist::class, mappedBy: 'movies')]
+    private Collection $watchlists;
 
     public function __construct()
     {
         $this->tmdbData = new ArrayCollection();
+        $this->watchlists = new ArrayCollection();
     }
 
     public function getId(): int
@@ -162,6 +168,33 @@ class Movie
         return $this->getTmdbData()->findFirst(
             fn ($i, $tmdbData) => $tmdbData->getMovie() === $this && $tmdbData->getLocale() === $locale
         );
+    }
+
+    /**
+     * @return Collection<int, MovieWatchlist>
+     */
+    public function getWatchlists(): Collection
+    {
+        return $this->watchlists;
+    }
+
+    public function addToWatchlist(MovieWatchlist $watchlist): static
+    {
+        if (!$this->watchlists->contains($watchlist)) {
+            $this->watchlists->add($watchlist);
+            $watchlist->addMovie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFromWatchlist(MovieWatchlist $watchlist): static
+    {
+        if ($this->watchlists->removeElement($watchlist)) {
+            $watchlist->removeMovie($this);
+        }
+
+        return $this;
     }
 
     // for EasyAdmin to display on autocomplete forms

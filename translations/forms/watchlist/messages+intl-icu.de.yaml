@@ -1,0 +1,6 @@
+forms:
+    watchlist:
+        add:
+            title: 'Watchlist erstellen'
+            action: 'Erstellen'
+            

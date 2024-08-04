@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'forms.watchlist.add.title'|trans }}{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <h1 class="mt-1">{{ 'forms.watchlist.add.title'|trans }}</h1>
+
+        <turbo-frame id="add_watchlist_form">
+            {{ form(form, {'action': path('app_movie_watchlists_add')}) }}
+        </turbo-frame>
+    </div>
+
+{% endblock %}

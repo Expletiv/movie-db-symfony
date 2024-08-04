@@ -1,0 +1,20 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    {{ 'templates.movies.watchlist_show' }}
+{% endblock %}
+
+{% block body %}
+
+    <turbo-frame id="movieWatchlist">
+        <div class="container">
+            <h1>{{ watchlist.name }}</h1>
+            <ul>
+                {% for movie in watchlist.movies %}
+                    <li>{{ movie.title }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </turbo-frame>
+
+{% endblock %}
