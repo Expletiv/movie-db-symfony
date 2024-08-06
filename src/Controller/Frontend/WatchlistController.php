@@ -7,10 +7,12 @@ namespace App\Controller\Frontend;
 use App\Entity\MovieWatchlist;
 use App\Entity\User;
 use App\Form\AddWatchlistType;
+use App\Repository\MovieTmdbDataRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 
 class WatchlistController extends AbstractController
@@ -56,8 +58,12 @@ class WatchlistController extends AbstractController
     }
 
     #[Route('/{_locale}/watchlists/{id}', name: 'app_movie_watchlist_show')]
-    public function showWatchlist(MovieWatchlist $watchlist): Response
-    {
+    public function showWatchlist(
+        MovieWatchlist $watchlist,
+        MovieTmdbDataRepository $tmdbDataRepository,
+        Request $request,
+        #[MapQueryParameter(options: ['min_range' => 1])] int $page = 1,
+    ): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         /** @var User $user */
         $user = $this->getUser() ?? throw $this->createAccessDeniedException();
@@ -66,8 +72,14 @@ class WatchlistController extends AbstractController
             throw $this->createAccessDeniedException();
         }
 
+        $movies = $tmdbDataRepository->findWatchlistMovies($watchlist->getId(), $page, $request->getLocale());
+        $tmdbMovies = array_map(fn ($movie) => $movie->getTmdbDetailsData(), $movies);
+
         return $this->render('movies/watchlist/show.html.twig', [
             'watchlist' => $watchlist,
+            'movies' => $tmdbMovies,
+            'page' => $page,
+            'maxPage' => $tmdbDataRepository->getMaxWatchlistPage($watchlist->getId(), $request->getLocale()),
         ]);
     }
 }

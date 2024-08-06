@@ -1,0 +1,17 @@
+<div class="modal fade" id="addMovieToWatchlistModal" tabindex="-1" aria-labelledby="addMovieToWatchlistModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="addMovieToWatchlistModalLabel">
+                    {{ 'forms.watchlist.movie.add.title'|trans }}
+                </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <turbo-frame id="add_movie_to_watchlist_form" src="{{ path('app_movie_add_to_watchlist', {tmdbId: movie.id}) }}"
+                             loading="lazy"></turbo-frame>
+            </div>
+        </div>
+    </div>
+</div>

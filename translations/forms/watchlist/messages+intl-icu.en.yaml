@@ -3,4 +3,8 @@ forms:
         add:
             title: 'Create watchlist'
             action: 'Create'
-            
+        movie:
+            add:
+                title: 'Add movie to watchlist'
+                choose_watchlist: 'Choose a watchlist'
+                action: 'Add'

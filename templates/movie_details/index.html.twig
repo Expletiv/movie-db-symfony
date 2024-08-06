@@ -96,6 +96,11 @@
                 </div>
             </div>
         </div>
+        <button class="btn btn-primary" data-bs-toggle="modal"
+                data-bs-target="#addMovieToWatchlistModal">
+            {{ 'templates.navbar.register'|trans }}
+        </button>
+        {% include 'components/modal/add_movie_to_watchlist_modal.html.twig' %}
     </div>
 
 {% endblock %}

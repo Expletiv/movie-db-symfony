@@ -2,11 +2,20 @@
 
 namespace App\Twig\Extension;
 
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
+use Twig\TwigFunction;
 
 class UrlExtension extends AbstractExtension
 {
+    public function __construct(
+        private readonly RequestStack $requestStack,
+        private readonly UrlGeneratorInterface $urlGenerator,
+    ) {
+    }
+
     public function getFilters(): array
     {
         return [
@@ -14,8 +23,32 @@ class UrlExtension extends AbstractExtension
         ];
     }
 
+    public function getFunctions(): array
+    {
+        return [
+            new TwigFunction('current_path_with_params', $this->getCurrentPathWithParams(...)),
+        ];
+    }
+
     public function movieDetails(int $id): string
     {
-        return 'movie/'.$id.'/details';
+        return $this->urlGenerator->generate('app_movie_details', ['tmdbId' => $id]);
+    }
+
+    /**
+     * @param array<string, int|string> $params
+     */
+    public function getCurrentPathWithParams(array $params): string
+    {
+        $request = $this->requestStack->getCurrentRequest();
+
+        return $this->urlGenerator->generate(
+            $request->get('_route'),
+            array_merge(
+                $request->get('_route_params'),
+                $request->query->all(),
+                $params,
+            )
+        );
     }
 }

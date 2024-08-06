@@ -17,15 +17,13 @@
                     {% if page > 1 %}
                         {% if 1 < page - 1 %}
                             <li class="page-item">
-                                <a class="page-link"
-                                   href="{{ path(app.current_route, app.request.query|merge({page: 1})) }}">
+                                <a class="page-link" href="{{ current_path_with_params({page: 1}) }}">
                                     {{ 1 }}
                                 </a>
                             </li>
                             {% if 1 == page - 3 %}
                                 <li class="page-item">
-                                    <a class="page-link"
-                                       href="{{ path(app.current_route, app.request.query|merge({page: 2})) }}">
+                                    <a class="page-link" href="{{ current_path_with_params({page: 2}) }}">
                                         {{ 2 }}
                                     </a>
                                 </li>
@@ -38,30 +36,26 @@
                             {% endif %}
                         {% endif %}
                         <li class="page-item">
-                            <a class="page-link"
-                               href="{{ path(app.current_route, app.request.query|merge({page: page-1})) }}">
+                            <a class="page-link" href="{{ current_path_with_params({page: page-1}) }}">
                                 {{ page-1 }}
                             </a>
                         </li>
                     {% endif %}
                     <li class="page-item active">
-                        <a class="page-link"
-                           href="{{ path(app.current_route, app.request.query|merge({page: page})) }}">
+                        <a class="page-link" href="{{ current_path_with_params({page: page}) }}">
                             {{ page }}
                         </a>
                     </li>
                     {% if page < maxPage %}
                         <li class="page-item">
-                            <a class="page-link"
-                               href="{{ path(app.current_route, app.request.query|merge({page: page+1})) }}">
+                            <a class="page-link" href="{{ current_path_with_params({page: page+1}) }}">
                                 {{ page+1 }}
                             </a>
                         </li>
                         {% if page < maxPage - 1 %}
                             {% if page == maxPage - 3 %}
                                 <li class="page-item">
-                                    <a class="page-link"
-                                       href="{{ path(app.current_route, app.request.query|merge({page: maxPage-1})) }}">
+                                    <a class="page-link" href="{{ current_path_with_params({page: maxPage-1}) }}">
                                         {{ maxPage-1 }}
                                     </a>
                                 </li>
@@ -73,8 +67,7 @@
                                 </li>
                             {% endif %}
                             <li class="page-item">
-                                <a class="page-link"
-                                   href="{{ path(app.current_route, app.request.query|merge({page: maxPage})) }}">
+                                <a class="page-link" href="{{ current_path_with_params({page: maxPage}) }}">
                                     {{ maxPage }}
                                 </a>
                             </li>
@@ -83,7 +76,7 @@
                 </ul>
             </nav>
             <form class="row g-2 justify-content-center justify-content-sm-end" method="get"
-                  action="{{ path(app.current_route, app.request.query.all) }}">
+                  action="{{ current_path_with_params({}) }}">
                 <div class="col-5">
                     <input class="form-control" name="page" type="number" min="1" max="{{ maxPage }}" aria-label="page">
                 </div>

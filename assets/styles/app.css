@@ -1,5 +1,6 @@
 @import '~bootstrap/dist/css/bootstrap.min.css';
 @import '~bootstrap-icons/font/bootstrap-icons.css';
+@import 'tom-select-dark-mode.scss';
 
 .filling-empty-space-childs {
     width: 264px; /*the width of the movie previews (including padding)*/

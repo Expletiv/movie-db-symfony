@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 use Tmdb\Client;
 
-class MoviesController extends AbstractController
+class MovieListsController extends AbstractController
 {
     private const int TMDB_MAX_PAGE = 500;
 

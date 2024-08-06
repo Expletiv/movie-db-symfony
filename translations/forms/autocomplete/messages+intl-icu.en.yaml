@@ -1,0 +1,4 @@
+forms:
+    autocomplete:
+        watchlist:
+            placeholder: 'Choose watchlist'

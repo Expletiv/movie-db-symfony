@@ -22,10 +22,6 @@ class HomeController extends AbstractController
     ): Response {
         $movies = $movieRepository->findPageOrderedByPopularity($page, $request->getLocale());
 
-        if (sizeof($movies) < 1) {
-            $movies = $movieRepository->findPageOrderedByPopularity();
-        }
-
         $tmdbMovies = array_map(fn ($movie) => $movie->getTmdbDetailsData(), $movies);
 
         return $this->render('home/index.html.twig', [

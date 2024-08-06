@@ -9,12 +9,8 @@
     <turbo-frame id="movieWatchlist">
         <div class="container">
             <h1>{{ watchlist.name }}</h1>
-            <ul>
-                {% for movie in watchlist.movies %}
-                    <li>{{ movie.title }}</li>
-                {% endfor %}
-            </ul>
         </div>
+        {% include 'components/movie_preview_container.html.twig' %}
     </turbo-frame>
 
 {% endblock %}
