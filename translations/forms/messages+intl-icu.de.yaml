@@ -4,6 +4,8 @@ forms:
         name: 'Name'
         action: 'Erstellen'
         button: 'Watchlist erstellen'
+    delete_watchlist:
+        title: 'Entfernen'
     add_to_watchlist:
         title: 'Film zur Watchlist hinzufügen'
         choose_watchlist: 'Watchlist auswählen'
