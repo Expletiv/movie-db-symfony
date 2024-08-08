@@ -28,6 +28,7 @@ class WatchlistController extends AbstractController
 
         return $this->render('movies/watchlist/index.html.twig', [
             'watchlists' => $watchlists,
+            'addWatchlistForm' => $this->createForm(AddWatchlistType::class),
         ]);
     }
 
@@ -52,7 +53,7 @@ class WatchlistController extends AbstractController
             return $this->redirectToRoute('app_movie_watchlist_show', ['id' => $movieWatchlist->getId()]);
         }
 
-        return $this->render('forms/add_watchlist.html.twig', [
+        return $this->render('forms/form_page.html.twig', [
             'form' => $form,
         ]);
     }

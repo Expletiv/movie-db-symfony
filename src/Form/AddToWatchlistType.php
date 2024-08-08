@@ -14,10 +14,10 @@ class AddToWatchlistType extends AbstractType
     {
         $builder
             ->add('watchlist', MovieWatchlistAutocompleteField::class, [
-                'label' => 'forms.watchlist.movie.add.choose_watchlist',
+                'label' => 'forms.add_to_watchlist.choose_watchlist',
             ])
             ->add('submit', SubmitType::class, [
-                'label' => 'forms.watchlist.movie.add.action',
+                'label' => 'forms.add_to_watchlist.action',
             ]);
     }
 }

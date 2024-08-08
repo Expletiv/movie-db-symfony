@@ -1,0 +1,21 @@
+<button class="btn btn-primary" data-bs-toggle="modal"
+        data-bs-target="#{{ form.vars.id }}_modal">
+    {{ 'forms.%s.button'|format(form.vars.name)|trans }}
+</button>
+
+<div class="modal fade" id="{{ form.vars.id }}_modal" tabindex="-1" aria-labelledby="{{ form.vars.id }}_label"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="{{ form.vars.id }}_label">
+                    {{ ('forms.%s.title')|format(form.vars.name)|trans }}
+                </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <turbo-frame id="{{ form.vars.id }}_frame" src="{{ formPath }}" loading="lazy"></turbo-frame>
+            </div>
+        </div>
+    </div>
+</div>

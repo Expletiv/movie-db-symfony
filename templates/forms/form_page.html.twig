@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ ('forms.%s.title')|format(form.vars.name)|trans }}{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <h1 class="mt-1">{{ ('forms.%s.title')|format(form.vars.name)|trans }}</h1>
+
+        <turbo-frame id="{{ form.vars.id }}_frame">
+            {{ form(form, {'action': current_path_with_params({}) }) }}
+        </turbo-frame>
+    </div>
+
+{% endblock %}

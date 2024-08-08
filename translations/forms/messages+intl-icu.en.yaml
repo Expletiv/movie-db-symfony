@@ -1,0 +1,11 @@
+forms:
+    add_watchlist:
+        title: 'Create watchlist'
+        name: 'Name'
+        action: 'Create'
+        button: 'Create watchlist'
+    add_to_watchlist:
+        title: 'Add movie to watchlist'
+        choose_watchlist: 'Choose a watchlist'
+        action: 'Add'
+        button: 'Add to watchlist'

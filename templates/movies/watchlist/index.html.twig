@@ -7,10 +7,10 @@
 {% block body %}
 
     <div class="container mt-3">
-        <button class="btn btn-primary mb-3" data-bs-toggle="modal"
-                data-bs-target="#addWatchlistModal">
-            {{ 'forms.watchlist.add.title'|trans }}
-        </button>
+        {% include 'components/modal/default.html.twig'with {
+                'form': addWatchlistForm,
+                'formPath': path('app_movie_watchlists_add')
+        } %}
         <ul data-turbo="false">
             {% for watchlist in watchlists %}
                 <li><a href="{{ path('app_movie_watchlist_show', {id: watchlist.id}) }}">{{ watchlist.name }}</a>
@@ -18,6 +18,5 @@
             {% endfor %}
         </ul>
     </div>
-    {% include('components/modal/add_watchlist_modal.html.twig') %}
 
 {% endblock %}

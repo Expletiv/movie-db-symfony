@@ -96,11 +96,10 @@
                 </div>
             </div>
         </div>
-        <button class="btn btn-primary" data-bs-toggle="modal"
-                data-bs-target="#addMovieToWatchlistModal">
-            {{ 'templates.navbar.register'|trans }}
-        </button>
-        {% include 'components/modal/add_movie_to_watchlist_modal.html.twig' %}
+        {% include 'components/modal/default.html.twig'with {
+            'form': addToWatchlistForm,
+            'formPath': path('app_movie_add_to_watchlist', {tmdbId: movie.id})
+        } %}
     </div>
 
 {% endblock %}

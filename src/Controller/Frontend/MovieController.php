@@ -42,9 +42,8 @@ class MovieController extends AbstractController
         $form->handleRequest($request);
 
         if (!$form->isSubmitted() || !$form->isValid()) {
-            return $this->render('forms/add_movie_to_watchlist.html.twig', [
+            return $this->render('forms/form_page.html.twig', [
                 'form' => $form,
-                'tmdbId' => $tmdbId,
             ]);
         }
 

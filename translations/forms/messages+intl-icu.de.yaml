@@ -1,0 +1,12 @@
+forms:
+    add_watchlist:
+        title: 'Watchlist erstellen'
+        name: 'Name'
+        action: 'Erstellen'
+        button: 'Watchlist erstellen'
+    add_to_watchlist:
+        title: 'Film zur Watchlist hinzufügen'
+        choose_watchlist: 'Watchlist auswählen'
+        action: 'Hinzufügen'
+        button: 'Zur Watchlist hinzufügen'
+            
