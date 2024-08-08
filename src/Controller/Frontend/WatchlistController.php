@@ -5,25 +5,31 @@ declare(strict_types=1);
 namespace App\Controller\Frontend;
 
 use App\Entity\MovieWatchlist;
-use App\Entity\User;
 use App\Form\Watchlist\AddWatchlistType;
 use App\Repository\MovieTmdbDataRepository;
 use App\Repository\MovieWatchlistRepository;
+use App\Services\UserProvider;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('IS_AUTHENTICATED')]
 class WatchlistController extends AbstractController
 {
+    public function __construct(
+        private readonly UserProvider $userProvider,
+        private readonly EntityManagerInterface $entityManager,
+    ) {
+    }
+
     #[Route('/{_locale}/watchlists', name: 'app_movie_watchlists')]
     public function index(MovieWatchlistRepository $watchlistRepository, Request $request): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
-        /** @var User $user */
-        $user = $this->getUser() ?? throw $this->createAccessDeniedException();
+        $user = $this->userProvider->authenticateUser();
 
         /** @var MovieWatchlist[] $watchlists */
         $watchlists = $user->getMovieWatchlists();
@@ -37,11 +43,9 @@ class WatchlistController extends AbstractController
     }
 
     #[Route('/{_locale}/watchlists/add', name: 'app_movie_watchlists_add')]
-    public function addWatchlist(Request $request, EntityManagerInterface $entityManager): Response
+    public function addWatchlist(Request $request): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
-        /** @var User $user */
-        $user = $this->getUser() ?? throw $this->createAccessDeniedException();
+        $user = $this->userProvider->authenticateUser();
 
         $form = $this->createForm(AddWatchlistType::class);
         $form->handleRequest($request);
@@ -51,10 +55,10 @@ class WatchlistController extends AbstractController
             $movieWatchlist = $form->getData();
             $movieWatchlist->setOwner($user);
 
-            $entityManager->persist($movieWatchlist);
-            $entityManager->flush();
+            $this->entityManager->persist($movieWatchlist);
+            $this->entityManager->flush();
 
-            return $this->redirectToRoute('app_movie_watchlist_show', ['id' => $movieWatchlist->getId()]);
+            return $this->redirectToRoute('app_movie_watchlists_show', ['id' => $movieWatchlist->getId()]);
         }
 
         return $this->render('forms/form_page.html.twig', [
@@ -62,18 +66,16 @@ class WatchlistController extends AbstractController
         ]);
     }
 
-    #[Route('/{_locale}/watchlists/{id}', name: 'app_movie_watchlist_show')]
+    #[Route('/{_locale}/watchlists/{id}', name: 'app_movie_watchlists_show')]
     public function showWatchlist(
         MovieWatchlist $watchlist,
         MovieTmdbDataRepository $tmdbDataRepository,
         Request $request,
         #[MapQueryParameter(options: ['min_range' => 1])] int $page = 1,
     ): Response {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
-        /** @var User $user */
-        $user = $this->getUser() ?? throw $this->createAccessDeniedException();
+        $user = $this->userProvider->authenticateUser();
 
-        if ($watchlist->getOwner()->getId() !== $user->getId()) {
+        if (!$watchlist->hasOwner($user)) {
             throw $this->createAccessDeniedException();
         }
 
@@ -86,5 +88,20 @@ class WatchlistController extends AbstractController
             'page' => $page,
             'maxPage' => $tmdbDataRepository->getMaxWatchlistPage($watchlist->getId(), $request->getLocale()),
         ]);
+    }
+
+    #[Route('/{_locale}/watchlists/{id}/delete', name: 'app_movie_watchlists_delete', methods: ['POST'])]
+    public function deleteWatchlist(MovieWatchlist $watchlist): Response
+    {
+        $user = $this->userProvider->authenticateUser();
+
+        if (!$watchlist->hasOwner($user)) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $this->entityManager->remove($watchlist);
+        $this->entityManager->flush();
+
+        return $this->redirectToRoute('app_movie_watchlists');
     }
 }

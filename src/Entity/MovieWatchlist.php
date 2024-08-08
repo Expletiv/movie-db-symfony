@@ -58,6 +58,11 @@ class MovieWatchlist
         return $this;
     }
 
+    public function hasOwner(User $user): bool
+    {
+        return $this->getOwner()->getId() === $user->getId();
+    }
+
     public function getName(): ?string
     {
         return $this->name;

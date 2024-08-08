@@ -15,6 +15,10 @@ export default class extends Controller {
     Turbo.visit(event.params.url);
   }
 
+  preventClick(event: Event) {
+    event.stopImmediatePropagation();
+  }
+
   onFrameMissing(event: TurboFrameMissingEvent) {
     const response: Response = event.detail.response;
     if (response.redirected) {
