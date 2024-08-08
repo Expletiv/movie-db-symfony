@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Form;
+namespace App\Form\Watchlist;
 
 use App\Entity\MovieWatchlist;
 use Symfony\Component\Form\AbstractType;
@@ -17,6 +17,7 @@ class MovieWatchlistAutocompleteField extends AbstractType
             'class' => MovieWatchlist::class,
             'placeholder' => 'forms.autocomplete.watchlist.placeholder',
             'searchable_fields' => ['name'],
+            'multiple' => true,
         ]);
     }
 

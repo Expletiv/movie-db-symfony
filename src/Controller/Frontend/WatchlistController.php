@@ -6,7 +6,7 @@ namespace App\Controller\Frontend;
 
 use App\Entity\MovieWatchlist;
 use App\Entity\User;
-use App\Form\AddWatchlistType;
+use App\Form\Watchlist\AddWatchlistType;
 use App\Repository\MovieTmdbDataRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Form;
+namespace App\Form\Watchlist;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -13,7 +13,7 @@ class AddToWatchlistType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('watchlist', MovieWatchlistAutocompleteField::class, [
+            ->add('watchlists', MovieWatchlistAutocompleteField::class, [
                 'label' => 'forms.add_to_watchlist.choose_watchlist',
             ])
             ->add('submit', SubmitType::class, [

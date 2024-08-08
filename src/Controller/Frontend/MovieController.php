@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace App\Controller\Frontend;
 
-use App\Entity\Movie;
 use App\Entity\MovieWatchlist;
-use App\Form\AddToWatchlistType;
-use App\Repository\MovieRepository;
+use App\Form\Watchlist\AddToWatchlistType;
 use App\Services\TmdbService;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Services\WatchlistService;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,8 +34,7 @@ class MovieController extends AbstractController
     public function addToWatchlist(
         int $tmdbId,
         Request $request,
-        MovieRepository $movieRepository,
-        EntityManagerInterface $entityManager
+        WatchlistService $watchlistService,
     ): Response {
         $form = $this->createForm(AddToWatchlistType::class);
         $form->handleRequest($request);
@@ -46,19 +44,11 @@ class MovieController extends AbstractController
                 'form' => $form,
             ]);
         }
-
         $data = $form->getData();
-        /** @var MovieWatchlist $watchlist */
-        $watchlist = $data['watchlist'];
+        /** @var ArrayCollection<int, MovieWatchlist> $watchlists */
+        $watchlists = $data['watchlists'];
 
-        $movie = $movieRepository->findOneBy(['tmdbId' => $tmdbId]);
-        if (null === $movie) {
-            $movie = (new Movie())
-                ->setTmdbId($tmdbId);
-        }
-        $movie->addToWatchlist($watchlist);
-        $entityManager->persist($movie);
-        $entityManager->flush();
+        $watchlistService->addMovieToWatchlists($tmdbId, $watchlists->toArray());
 
         return $this->redirectToRoute('app_movie_details', ['tmdbId' => $tmdbId]);
     }

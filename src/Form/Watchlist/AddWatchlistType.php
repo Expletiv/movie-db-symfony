@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Form;
+namespace App\Form\Watchlist;
 
 use App\Entity\MovieWatchlist;
 use Symfony\Component\Form\AbstractType;

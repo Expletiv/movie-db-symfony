@@ -1,0 +1,34 @@
+<?php
+
+namespace App\Services;
+
+use App\Entity\Movie;
+use App\Entity\MovieWatchlist;
+use App\Repository\MovieRepository;
+use Doctrine\ORM\EntityManagerInterface;
+
+readonly class WatchlistService
+{
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+        private MovieRepository $movieRepository,
+    ) {
+    }
+
+    /**
+     * @param MovieWatchlist[] $watchlists
+     */
+    public function addMovieToWatchlists(int $tmdbId, array $watchlists): void
+    {
+        $movie = $this->movieRepository->findOneBy(['tmdbId' => $tmdbId]);
+        if (null === $movie) {
+            $movie = (new Movie())
+                ->setTmdbId($tmdbId);
+        }
+        foreach ($watchlists as $watchlist) {
+            $movie->addToWatchlist($watchlist);
+        }
+        $this->entityManager->persist($movie);
+        $this->entityManager->flush();
+    }
+}
