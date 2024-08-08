@@ -11,7 +11,7 @@ export default class extends Controller {
     document.removeEventListener('turbo:frame-missing', this.onFrameMissing)
   }
 
-  linkToDetailsPage(event: { params: { url: string; }; }) {
+  linkToUrl(event: { params: { url: string; }; }) {
     Turbo.visit(event.params.url);
   }
 

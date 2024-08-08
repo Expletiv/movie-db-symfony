@@ -7,16 +7,13 @@
 {% block body %}
 
     <div class="container mt-3">
-        {% include 'components/modal/default.html.twig'with {
+        <div class="mb-3">
+            {% include 'components/modal/default.html.twig'with {
                 'form': addWatchlistForm,
                 'formPath': path('app_movie_watchlists_add')
-        } %}
-        <ul data-turbo="false">
-            {% for watchlist in watchlists %}
-                <li><a href="{{ path('app_movie_watchlist_show', {id: watchlist.id}) }}">{{ watchlist.name }}</a>
-                </li>
-            {% endfor %}
-        </ul>
+            } %}
+        </div>
+        {% include 'components/watchlist_preview_container.html.twig' %}
     </div>
 
 {% endblock %}

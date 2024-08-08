@@ -1,5 +1,5 @@
 <div
-    class="card my-auto" {{ stimulus_action('helper', 'linkToDetailsPage', 'click', {'url': movie.id|movie_details_url}) }}>
+    class="card my-auto" {{ stimulus_action('helper', 'linkToUrl', 'click', {'url': movie.id|movie_details_url}) }}>
     {% if movie.poster_path %}
         <img id="poster" class="card-img rounded mx-auto position-relative" alt="{{ movie.title }} poster"
              src="{{ movie.poster_path|tmdb_image_url(size='w92') }}"

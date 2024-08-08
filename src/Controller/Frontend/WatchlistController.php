@@ -8,6 +8,7 @@ use App\Entity\MovieWatchlist;
 use App\Entity\User;
 use App\Form\Watchlist\AddWatchlistType;
 use App\Repository\MovieTmdbDataRepository;
+use App\Repository\MovieWatchlistRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,17 +19,20 @@ use Symfony\Component\Routing\Attribute\Route;
 class WatchlistController extends AbstractController
 {
     #[Route('/{_locale}/watchlists', name: 'app_movie_watchlists')]
-    public function index(): Response
+    public function index(MovieWatchlistRepository $watchlistRepository, Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
         /** @var User $user */
         $user = $this->getUser() ?? throw $this->createAccessDeniedException();
 
+        /** @var MovieWatchlist[] $watchlists */
         $watchlists = $user->getMovieWatchlists();
+        $posterPaths = $watchlistRepository->findPosterPathsForUsersWatchlists($user, $request->getLocale());
 
         return $this->render('movies/watchlist/index.html.twig', [
             'watchlists' => $watchlists,
             'addWatchlistForm' => $this->createForm(AddWatchlistType::class),
+            'posterPaths' => $posterPaths,
         ]);
     }
 

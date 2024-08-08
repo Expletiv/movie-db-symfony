@@ -1,0 +1,11 @@
+<div class="row justify-content-center" data-turbo-prefetch="false">
+    {% for watchlist in watchlists %}
+        <div class="col-auto mb-2 px-1">
+            {% include 'components/watchlist_preview.html.twig' %}
+        </div>
+    {% endfor %}
+    <div class="filling-empty-space-childs"></div>
+    <div class="filling-empty-space-childs"></div>
+    <div class="filling-empty-space-childs"></div>
+    <div class="filling-empty-space-childs"></div>
+</div>

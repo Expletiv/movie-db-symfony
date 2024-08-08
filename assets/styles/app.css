@@ -3,7 +3,7 @@
 @import 'tom-select-dark-mode.scss';
 
 .filling-empty-space-childs {
-    width: 264px; /*the width of the movie previews (including padding)*/
+    width: 264px; /*the width of the previews (including padding)*/
     height: 0; /*Important! for the divs to collapse should they fall in a new row*/
 }
 

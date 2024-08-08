@@ -25,25 +25,6 @@ class MovieTmdbDataRepository extends ServiceEntityRepository
     /**
      * @return MovieTmdbData[]
      */
-    public function findMoviesWhereLocalesAreMissing(): array
-    {
-        $subquery = $this->createQueryBuilder('mv')
-            ->select('mv.movie')
-            ->groupBy('mv.movie')
-            ->having('COUNT(mv.locale) = 1');
-
-        $qb = $this->createQueryBuilder('m');
-        $qb->where($qb->expr()->in(
-            'm.movie',
-            $subquery->getDQL()
-        ));
-
-        return $qb->getQuery()->getResult();
-    }
-
-    /**
-     * @return MovieTmdbData[]
-     */
     public function findPageOrderedByPopularity(int $page = 1, string $locale = 'en'): array
     {
         $qb = $this->queryForPageWithLocale($page, $locale)
