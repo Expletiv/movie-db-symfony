@@ -6,6 +6,7 @@ forms:
         button: 'Create watchlist'
     delete_watchlist:
         title: 'Delete'
+        modal_message: 'Your watchlist <b>{watchlistName}</b> has been deleted!'
     add_to_watchlist:
         title: 'Add movie to watchlist'
         choose_watchlist: 'Choose a watchlist'

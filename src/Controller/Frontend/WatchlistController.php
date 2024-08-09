@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace App\Controller\Frontend;
 
 use App\Entity\MovieWatchlist;
+use App\Enum\ToastStyle;
 use App\Form\Watchlist\AddWatchlistType;
+use App\Message\Toast\Toast;
 use App\Repository\MovieTmdbDataRepository;
 use App\Repository\MovieWatchlistRepository;
+use App\Services\ToastService;
 use App\Services\UserProvider;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,6 +19,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+
+use function Symfony\Component\Translation\t;
 
 #[IsGranted('IS_AUTHENTICATED')]
 class WatchlistController extends AbstractController
@@ -91,7 +96,7 @@ class WatchlistController extends AbstractController
     }
 
     #[Route('/{_locale}/watchlists/{id}/delete', name: 'app_movie_watchlists_delete', methods: ['POST'])]
-    public function deleteWatchlist(MovieWatchlist $watchlist): Response
+    public function deleteWatchlist(MovieWatchlist $watchlist, ToastService $toastService): Response
     {
         $user = $this->userProvider->authenticateUser();
 
@@ -101,6 +106,11 @@ class WatchlistController extends AbstractController
 
         $this->entityManager->remove($watchlist);
         $this->entityManager->flush();
+
+        $toastService->addToast(new Toast(
+            t('forms.delete_watchlist.modal_message', ['watchlistName' => $watchlist->getName()]),
+            ToastStyle::SUCCESS
+        ));
 
         return $this->redirectToRoute('app_movie_watchlists');
     }

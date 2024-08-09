@@ -28,7 +28,7 @@ Encore
    * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
    */
   // for public frontend
-  .addEntry('app', './assets/app.js')
+  .addEntry('app', './assets/app.ts')
   // for easy admin
   .addEntry('admin', './assets/admin.js')
 

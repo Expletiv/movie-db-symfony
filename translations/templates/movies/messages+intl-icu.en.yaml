@@ -3,3 +3,5 @@ templates:
         popular: 'Popular movies'
         discover: 'Discover movies'
         highest_rating: 'Highest rated movies'
+        watchlist: 'All watchlists'
+        watchlist_show: 'Your watchlist'
