@@ -1,0 +1,10 @@
+<turbo-stream action="update" targets="#{{ form.vars.id }}_form">
+    <template>
+        {% for flash in app.flashes('form_success') %}
+            <div class="alert alert-success">
+                {{ flash|trans|raw }}
+            </div>
+        {% endfor %}
+        {{ form(form, {'action': current_path_with_params({}) }) }}
+    </template>
+</turbo-stream>

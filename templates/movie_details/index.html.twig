@@ -94,7 +94,7 @@
                         </tbody>
                     </table>
                     <div class="bg-body-tertiary bg-opacity-75 rounded p-3 mt-2">
-                        {% include 'components/modal/default.html.twig' with {
+                        {% include 'components/modal/turbo_frame_modal.html.twig' with {
                             'form': addToWatchlistForm,
                             'formPath': path('app_movie_add_to_watchlist', {tmdbId: movie.id}),
                             'requiredRole': 'IS_AUTHENTICATED'

@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\UX\Turbo\TurboBundle;
 
 use function Symfony\Component\Translation\t;
 
@@ -47,8 +48,8 @@ class WatchlistController extends AbstractController
         ]);
     }
 
-    #[Route('/{_locale}/watchlists/add', name: 'app_movie_watchlists_add')]
-    public function addWatchlist(Request $request): Response
+    #[Route('/{_locale}/watchlists/add', name: 'app_movie_watchlists_add', methods: ['POST'])]
+    public function addWatchlist(Request $request, MovieWatchlistRepository $watchlistRepository): Response
     {
         $user = $this->userProvider->authenticateUser();
 
@@ -68,12 +69,18 @@ class WatchlistController extends AbstractController
                 t('forms.add_watchlist.success_message', ['watchlistName' => $movieWatchlist->getName()])
             );
 
-            return $this->redirectToRoute('app_movie_watchlists');
+            if (TurboBundle::STREAM_FORMAT === $request->getPreferredFormat()) {
+                $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+
+                return $this->render('components/modal/streams/watchlist_success_stream.html.twig', [
+                    'form' => $form,
+                    'watchlist' => $movieWatchlist,
+                    'posterPaths' => $watchlistRepository->findPosterPathsForUsersWatchlists($user, $request->getLocale()),
+                ]);
+            }
         }
 
-        return $this->render('forms/form_page.html.twig', [
-            'form' => $form,
-        ]);
+        return $this->redirectToRoute('app_movie_watchlists');
     }
 
     #[Route('/{_locale}/watchlists/{id}', name: 'app_movie_watchlists_show')]

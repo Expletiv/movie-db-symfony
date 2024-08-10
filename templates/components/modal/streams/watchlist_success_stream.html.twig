@@ -1,0 +1,9 @@
+{% include 'components/modal/streams/base.html.twig' %}
+
+<turbo-stream action="before" targets="#first-empty-watchlist-preview">
+    <template>
+        <div class="col-auto mb-2 px-1">
+            {% include 'components/watchlist_preview.html.twig' %}
+        </div>
+    </template>
+</turbo-stream>
