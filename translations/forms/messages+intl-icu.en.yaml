@@ -13,7 +13,7 @@ forms:
         choose_watchlist: 'Choose a watchlist'
         action: 'Add'
         button: 'Add to watchlist'
-        success_message: '<b>{movieTitle}</b> has been added successfully!'
+        success_message: 'The movie has been successfully added!'
 
     unauthenticated:
         popover: 'You have to login first.'

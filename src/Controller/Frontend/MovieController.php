@@ -57,9 +57,12 @@ class MovieController extends AbstractController
             $this->createAccessDeniedException();
         }
 
-        $movie = $watchlistService->addMovieToWatchlists($tmdbId, $watchlists->toArray());
+        $watchlistService->addMovieToWatchlists($tmdbId, $watchlists->toArray());
 
-        $this->addFlash('form_success', t('forms.add_to_watchlist.success_message', ['movieTitle' => $movie->getTitle()]));
+        $this->addFlash(
+            'form_success',
+            t('forms.add_to_watchlist.success_message')
+        );
 
         return $this->redirectToRoute('app_movie_details', ['tmdbId' => $tmdbId]);
     }

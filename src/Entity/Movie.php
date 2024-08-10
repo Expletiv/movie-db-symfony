@@ -85,9 +85,13 @@ class Movie
         return $this;
     }
 
-    public function getTitle(): ?string
+    public function getTitle(?string $locale = null): ?string
     {
-        return $this->title;
+        if (null === $locale) {
+            return $this->title;
+        }
+
+        return $this->getTmdbDataForLocale($locale)?->getTitle();
     }
 
     public function setTitle(string $title): static
