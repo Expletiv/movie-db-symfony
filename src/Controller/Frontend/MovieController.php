@@ -7,12 +7,15 @@ namespace App\Controller\Frontend;
 use App\Entity\MovieWatchlist;
 use App\Form\Watchlist\AddToWatchlistType;
 use App\Services\TmdbService;
+use App\Services\UserProvider;
 use App\Services\WatchlistService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+
+use function Symfony\Component\Translation\t;
 
 class MovieController extends AbstractController
 {
@@ -35,6 +38,7 @@ class MovieController extends AbstractController
         int $tmdbId,
         Request $request,
         WatchlistService $watchlistService,
+        UserProvider $userProvider,
     ): Response {
         $form = $this->createForm(AddToWatchlistType::class);
         $form->handleRequest($request);
@@ -48,7 +52,14 @@ class MovieController extends AbstractController
         /** @var ArrayCollection<int, MovieWatchlist> $watchlists */
         $watchlists = $data['watchlists'];
 
-        $watchlistService->addMovieToWatchlists($tmdbId, $watchlists->toArray());
+        $user = $userProvider->authenticateUser();
+        if (!$user->ownsWatchlists($watchlists)) {
+            $this->createAccessDeniedException();
+        }
+
+        $movie = $watchlistService->addMovieToWatchlists($tmdbId, $watchlists->toArray());
+
+        $this->addFlash('form_success', t('forms.add_to_watchlist.success_message', ['movieTitle' => $movie->getTitle()]));
 
         return $this->redirectToRoute('app_movie_details', ['tmdbId' => $tmdbId]);
     }

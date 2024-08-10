@@ -4,12 +4,19 @@ forms:
         name: 'Name'
         action: 'Erstellen'
         button: 'Watchlist erstellen'
+        success_message: 'Watchlist <b>{watchlistName}</b> wurde erstellt!'
     delete_watchlist:
         title: 'Entfernen'
-        modal_message: 'Deine Watchlist <b>{watchlistName}</b> wurde entfernt!'
+        success_message: 'Deine Watchlist <b>{watchlistName}</b> wurde entfernt!'
     add_to_watchlist:
         title: 'Film zur Watchlist hinzufügen'
         choose_watchlist: 'Watchlist auswählen'
         action: 'Hinzufügen'
         button: 'Zur Watchlist hinzufügen'
+        success_message: '<b>{movieTitle}</b> wurde erfolgreich hinzugefügt!'
+    
+    unauthenticated:
+        popover: 'Du musst dich zuerst anmelden.'
+    unauthorized:
+        popover: 'Du hast keine Berechtigung dafür.'
             

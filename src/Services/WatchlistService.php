@@ -18,7 +18,7 @@ readonly class WatchlistService
     /**
      * @param MovieWatchlist[] $watchlists
      */
-    public function addMovieToWatchlists(int $tmdbId, array $watchlists): void
+    public function addMovieToWatchlists(int $tmdbId, array $watchlists): Movie
     {
         $movie = $this->movieRepository->findOneBy(['tmdbId' => $tmdbId]);
         if (null === $movie) {
@@ -30,5 +30,7 @@ readonly class WatchlistService
         }
         $this->entityManager->persist($movie);
         $this->entityManager->flush();
+
+        return $movie;
     }
 }

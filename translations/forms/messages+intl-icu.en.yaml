@@ -4,11 +4,18 @@ forms:
         name: 'Name'
         action: 'Create'
         button: 'Create watchlist'
+        success_message: 'Watchlist <b>{watchlistName}</b> has been created!'
     delete_watchlist:
         title: 'Delete'
-        modal_message: 'Your watchlist <b>{watchlistName}</b> has been deleted!'
+        success_message: 'Your watchlist <b>{watchlistName}</b> has been deleted!'
     add_to_watchlist:
         title: 'Add movie to watchlist'
         choose_watchlist: 'Choose a watchlist'
         action: 'Add'
         button: 'Add to watchlist'
+        success_message: '<b>{movieTitle}</b> has been added successfully!'
+
+    unauthenticated:
+        popover: 'You have to login first.'
+    unauthorized:
+        popover: 'You do not have permission.'

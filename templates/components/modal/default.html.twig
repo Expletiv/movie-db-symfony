@@ -1,8 +1,19 @@
-<button class="btn btn-primary" data-bs-toggle="modal"
-        data-bs-target="#{{ form.vars.id }}_modal">
-    {{ 'forms.%s.button'|format(form.vars.name)|trans }}
-</button>
-
+{% if requiredRole is not defined or is_granted(requiredRole) %}
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#{{ form.vars.id }}_modal">
+        {{ 'forms.%s.button'|format(form.vars.name)|trans }}
+    </button>
+{% else %}
+    {% set popover = 'forms.unauthenticated.popover'|trans %}
+    {% if requiredRole != 'IS_AUTHENTICATED' %}
+        {% set popover = 'forms.unauthorized.popover'|trans %}
+    {% endif %}
+    <div class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus"
+         data-bs-content="{{ popover }}" data-bs-placement="bottom">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#{{ form.vars.id }}_modal" disabled>
+            {{ 'forms.%s.button'|format(form.vars.name)|trans }}
+        </button>
+    </div>
+{% endif %}
 <div class="modal fade" id="{{ form.vars.id }}_modal" tabindex="-1" aria-labelledby="{{ form.vars.id }}_label"
      aria-hidden="true">
     <div class="modal-dialog">
@@ -14,7 +25,14 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <turbo-frame id="{{ form.vars.id }}_frame" src="{{ formPath }}" loading="lazy"></turbo-frame>
+                <turbo-frame id="{{ form.vars.id }}_frame" src="{{ formPath }}" loading="lazy">
+                    {% for flash in app.flashes('form_success') %}
+                        <div class="alert alert-success">
+                            {{ flash|trans|raw }}
+                        </div>
+                    {% endfor %}
+                    {{ form(form, {'action': formPath }) }}
+                </turbo-frame>
             </div>
         </div>
     </div>

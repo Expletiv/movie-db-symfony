@@ -168,4 +168,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    /**
+     * @param iterable<MovieWatchlist> $watchlists
+     */
+    public function ownsWatchlists(iterable $watchlists): bool
+    {
+        foreach ($watchlists as $watchlist) {
+            if (!$watchlist->hasOwner($this)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

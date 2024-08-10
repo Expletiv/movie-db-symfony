@@ -63,7 +63,12 @@ class WatchlistController extends AbstractController
             $this->entityManager->persist($movieWatchlist);
             $this->entityManager->flush();
 
-            return $this->redirectToRoute('app_movie_watchlists_show', ['id' => $movieWatchlist->getId()]);
+            $this->addFlash(
+                'form_success',
+                t('forms.add_watchlist.success_message', ['watchlistName' => $movieWatchlist->getName()])
+            );
+
+            return $this->redirectToRoute('app_movie_watchlists');
         }
 
         return $this->render('forms/form_page.html.twig', [
@@ -108,7 +113,7 @@ class WatchlistController extends AbstractController
         $this->entityManager->flush();
 
         $toastService->addToast(new Toast(
-            t('forms.delete_watchlist.modal_message', ['watchlistName' => $watchlist->getName()]),
+            t('forms.delete_watchlist.success_message', ['watchlistName' => $watchlist->getName()]),
             ToastStyle::SUCCESS
         ));
 
