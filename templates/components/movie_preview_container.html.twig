@@ -75,12 +75,12 @@
                     {% endif %}
                 </ul>
             </nav>
-            <form class="row g-2 justify-content-center justify-content-sm-end" method="get"
+            <form class="d-flex justify-content-center justify-content-sm-end" method="get"
                   action="{{ current_path_with_params({}) }}">
-                <div class="col-5">
+                <div class="me-2">
                     <input class="form-control" name="page" type="number" min="1" max="{{ maxPage }}" aria-label="page">
                 </div>
-                <div class="col-auto">
+                <div>
                     <button class="btn btn-primary">{{ 'templates.movie_preview_container.show_page'|trans }}</button>
                 </div>
             </form>
