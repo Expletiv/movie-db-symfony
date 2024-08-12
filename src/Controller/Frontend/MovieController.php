@@ -35,8 +35,8 @@ class MovieController extends AbstractController
 
     #[Route('/{_locale}/movie/{tmdbId}/add-to-watchlist', name: 'app_movie_add_to_watchlist')]
     public function addToWatchlist(
-        int $tmdbId,
         Request $request,
+        int $tmdbId,
         WatchlistService $watchlistService,
         UserProvider $userProvider,
     ): Response {
@@ -57,7 +57,7 @@ class MovieController extends AbstractController
             $this->createAccessDeniedException();
         }
 
-        $watchlistService->addMovieToWatchlists($tmdbId, $watchlists->toArray());
+        $watchlistService->addMovieToWatchlists($tmdbId, $watchlists);
 
         $this->addFlash(
             'form_success',

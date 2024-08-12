@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\Frontend;
 
 use App\Entity\MovieWatchlist;
+use App\Entity\User;
 use App\Enum\ToastStyle;
 use App\Form\Watchlist\AddWatchlistType;
 use App\Message\Toast\Toast;
@@ -12,7 +13,6 @@ use App\Repository\MovieRepository;
 use App\Repository\MovieTmdbDataRepository;
 use App\Repository\MovieWatchlistRepository;
 use App\Services\ToastService;
-use App\Services\UserProvider;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,28 +20,26 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\UX\Turbo\TurboBundle;
 
 use function Symfony\Component\Translation\t;
 
-#[IsGranted('IS_AUTHENTICATED')]
 class WatchlistController extends AbstractController
 {
     public function __construct(
-        private readonly UserProvider $userProvider,
         private readonly EntityManagerInterface $entityManager,
+        private readonly MovieWatchlistRepository $watchlistRepository,
+        private readonly ToastService $toastService,
     ) {
     }
 
     #[Route('/{_locale}/watchlists', name: 'app_movie_watchlists')]
-    public function index(MovieWatchlistRepository $watchlistRepository, Request $request): Response
+    public function index(Request $request, #[CurrentUser] User $user): Response
     {
-        $user = $this->userProvider->authenticateUser();
-
         /** @var MovieWatchlist[] $watchlists */
         $watchlists = $user->getMovieWatchlists();
-        $posterPaths = $watchlistRepository->findPosterPathsForUsersWatchlists($user, $request->getLocale());
+        $posterPaths = $this->watchlistRepository->findPosterPathsForUsersWatchlists($user, $request->getLocale());
 
         return $this->render('movies/watchlist/index.html.twig', [
             'watchlists' => $watchlists,
@@ -51,10 +49,8 @@ class WatchlistController extends AbstractController
     }
 
     #[Route('/{_locale}/watchlists/add', name: 'app_movie_watchlists_add', methods: ['POST'])]
-    public function addWatchlist(Request $request, MovieWatchlistRepository $watchlistRepository): Response
+    public function addWatchlist(Request $request, #[CurrentUser] User $user): Response
     {
-        $user = $this->userProvider->authenticateUser();
-
         $form = $this->createForm(AddWatchlistType::class);
         $form->handleRequest($request);
 
@@ -77,7 +73,7 @@ class WatchlistController extends AbstractController
                 return $this->render('components/modal/streams/add_watchlist_success.stream.html.twig', [
                     'form' => $form,
                     'watchlist' => $movieWatchlist,
-                    'posterPaths' => $watchlistRepository->findPosterPathsForUsersWatchlists($user, $request->getLocale()),
+                    'posterPaths' => $this->watchlistRepository->findPosterPathsForUsersWatchlists($user, $request->getLocale()),
                 ]);
             }
         }
@@ -86,12 +82,11 @@ class WatchlistController extends AbstractController
     }
 
     #[Route('/{_locale}/watchlists/{id}/delete', name: 'app_movie_watchlists_delete', methods: ['POST'])]
-    public function deleteWatchlist(Request $request, MovieWatchlist $watchlist, ToastService $toastService): Response
+    public function deleteWatchlist(Request $request, #[CurrentUser] User $user, MovieWatchlist $watchlist): Response
     {
         if (!$this->isCsrfTokenValid('delete-watchlist-'.$watchlist->getId(), $request->getPayload()->getString('_token'))) {
             throw new BadRequestHttpException('CSRF token invalid');
         }
-        $user = $this->userProvider->authenticateUser();
 
         if (!$watchlist->hasOwner($user)) {
             throw $this->createAccessDeniedException();
@@ -100,7 +95,7 @@ class WatchlistController extends AbstractController
         $this->entityManager->remove($watchlist);
         $this->entityManager->flush();
 
-        $toastService->addToast(new Toast(
+        $this->toastService->addToast(new Toast(
             t('forms.delete_watchlist.success_message', ['watchlistName' => $watchlist->getName()]),
             ToastStyle::SUCCESS
         ));
@@ -110,13 +105,12 @@ class WatchlistController extends AbstractController
 
     #[Route('/{_locale}/watchlists/{id}', name: 'app_movie_watchlists_show')]
     public function showWatchlist(
+        Request $request,
+        #[CurrentUser] User $user,
         MovieWatchlist $watchlist,
         MovieTmdbDataRepository $tmdbDataRepository,
-        Request $request,
         #[MapQueryParameter(options: ['min_range' => 1])] int $page = 1,
     ): Response {
-        $user = $this->userProvider->authenticateUser();
-
         if (!$watchlist->hasOwner($user)) {
             throw $this->createAccessDeniedException();
         }
@@ -135,15 +129,14 @@ class WatchlistController extends AbstractController
     #[Route('/{_locale}/watchlists/{id}/delete-movie/{tmdbId}', name: 'app_movie_watchlists_delete_movie', methods: ['POST'])]
     public function deleteFromWatchlist(
         Request $request,
+        #[CurrentUser] User $user,
         MovieWatchlist $watchlist,
         int $tmdbId,
         MovieRepository $movieRepository,
-        ToastService $toastService
     ): ?Response {
         if (!$this->isCsrfTokenValid('delete-watchlist-movie-'.$tmdbId, $request->getPayload()->getString('_token'))) {
             throw new BadRequestHttpException('CSRF token invalid');
         }
-        $user = $this->userProvider->authenticateUser();
 
         if (!$watchlist->hasOwner($user)) {
             throw $this->createAccessDeniedException();
@@ -154,15 +147,12 @@ class WatchlistController extends AbstractController
         if (null !== $movie) {
             $watchlist->removeMovie($movie);
         }
-
-        $this->entityManager->persist($watchlist);
         $this->entityManager->flush();
 
-        $toastService->addToast(new Toast(
+        $this->toastService->addToast(new Toast(
             t('forms.delete_from_watchlist.success_message'),
             ToastStyle::SUCCESS
         ));
-
         $this->addFlash('watchlist_edit', 1);
 
         return $this->redirectToRoute('app_movie_watchlists_show', ['id' => $watchlist->getId()]);
