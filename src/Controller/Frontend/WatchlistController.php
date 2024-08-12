@@ -29,6 +29,8 @@ class WatchlistController extends AbstractController
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
+        private readonly MovieRepository $movieRepository,
+        private readonly MovieTmdbDataRepository $tmdbDataRepository,
         private readonly MovieWatchlistRepository $watchlistRepository,
         private readonly ToastService $toastService,
     ) {
@@ -108,21 +110,23 @@ class WatchlistController extends AbstractController
         Request $request,
         #[CurrentUser] User $user,
         MovieWatchlist $watchlist,
-        MovieTmdbDataRepository $tmdbDataRepository,
         #[MapQueryParameter(options: ['min_range' => 1])] int $page = 1,
     ): Response {
         if (!$watchlist->hasOwner($user)) {
             throw $this->createAccessDeniedException();
         }
 
-        $movies = $tmdbDataRepository->findWatchlistMovies($watchlist->getId(), $page, $request->getLocale());
+        $maxWatchlistPage = $this->tmdbDataRepository->getMaxWatchlistPage($watchlist->getId(), $request->getLocale());
+        $page = min($page, $maxWatchlistPage);
+
+        $movies = $this->tmdbDataRepository->findWatchlistMovies($watchlist->getId(), $page, $request->getLocale());
         $tmdbMovies = array_map(fn ($movie) => $movie->getTmdbDetailsData(), $movies);
 
         return $this->render('movies/watchlist/show.html.twig', [
             'watchlist' => $watchlist,
             'movies' => $tmdbMovies,
             'page' => $page,
-            'maxPage' => $tmdbDataRepository->getMaxWatchlistPage($watchlist->getId(), $request->getLocale()),
+            'maxPage' => $maxWatchlistPage,
         ]);
     }
 
@@ -132,7 +136,7 @@ class WatchlistController extends AbstractController
         #[CurrentUser] User $user,
         MovieWatchlist $watchlist,
         int $tmdbId,
-        MovieRepository $movieRepository,
+        #[MapQueryParameter(options: ['min_range' => 1])] int $page = 1,
     ): ?Response {
         if (!$this->isCsrfTokenValid('delete-watchlist-movie-'.$tmdbId, $request->getPayload()->getString('_token'))) {
             throw new BadRequestHttpException('CSRF token invalid');
@@ -142,7 +146,7 @@ class WatchlistController extends AbstractController
             throw $this->createAccessDeniedException();
         }
 
-        $movie = $movieRepository->findOneBy(['tmdbId' => $tmdbId]);
+        $movie = $this->movieRepository->findOneBy(['tmdbId' => $tmdbId]);
 
         if (null !== $movie) {
             $watchlist->removeMovie($movie);
@@ -155,6 +159,9 @@ class WatchlistController extends AbstractController
         ));
         $this->addFlash('watchlist_edit', 1);
 
-        return $this->redirectToRoute('app_movie_watchlists_show', ['id' => $watchlist->getId()]);
+        return $this->redirectToRoute('app_movie_watchlists_show', [
+            'id' => $watchlist->getId(),
+            'page' => $page,
+        ]);
     }
 }

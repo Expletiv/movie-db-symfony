@@ -18,6 +18,7 @@ export default class extends Controller {
 
   connect() {
     this.previews = Array.from(document.querySelectorAll('.card'));
+    this.isEditingValueChanged(this.isEditingValue);
   }
 
   edit() {
