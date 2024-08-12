@@ -9,25 +9,28 @@
 
 .card {
     width: 256px;
+}
+
+.card-animated {
     transition: transform 0.3s;
+}
+
+.card-animated:hover {
+    transform: scale(1.05);
+    z-index: 999;
 }
 
 #card-description {
     visibility: hidden;
 }
 
-.card:hover {
-    transform: scale(1.05);
-    z-index: 999;
-}
-
-.card:hover #poster,
-.card:hover #card-rating {
+.card-details-hover:hover #poster,
+.card-details-hover:hover #card-rating {
     transition: filter 0.6s 0.8s;
     filter: blur(5px) brightness(0.5);
 }
 
-.card:hover #card-description {
+.card-details-hover:hover #card-description {
     transition: visibility 0.6s 0.8s;
     visibility: visible;
 }

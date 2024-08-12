@@ -3,7 +3,9 @@
         <div class="row justify-content-center" data-turbo-prefetch="false">
             {% for movie in movies %}
                 <div class="col-auto mb-2 px-1">
-                    {% include 'components/movie_preview.html.twig' %}
+                    {% block previews %}
+                        {% include 'components/movie_preview.html.twig' %}
+                    {% endblock %}
                 </div>
             {% endfor %}
             <div class="filling-empty-space-childs"></div>

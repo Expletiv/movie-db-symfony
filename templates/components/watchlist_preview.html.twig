@@ -1,4 +1,4 @@
-<div class="card my-auto" {{ stimulus_action('helper', 'linkToUrl', 'click', {'url': path('app_movie_watchlists_show', {id: watchlist.id})}) }}>
+<div class="card card-animated my-auto" {{ stimulus_action('helper', 'linkToUrl', 'click', {'url': path('app_movie_watchlists_show', {id: watchlist.id})}) }}>
     {% if posterPaths[watchlist.id.toRfc4122] is defined %}
         <img class="card-img rounded mx-auto position-relative" alt="{{ watchlist.name }} poster"
              src="{{ posterPaths[watchlist.id.toRfc4122]|tmdb_image_url(size='w92') }}"
@@ -12,7 +12,7 @@
         </svg>
     {% endif %}
     <div class="card-img-overlay p-0">
-        <div class="card-title bg-body-tertiary bg-opacity-75 p-2" {{ stimulus_action('helper', 'preventClick', 'click') }}>
+        <div class="card-title bg-body-tertiary bg-opacity-75 p-2" {{ stimulus_action('helper', 'stopEvent', 'click') }}>
             <div class="d-flex">
                 <h5 class="text-truncate my-auto">{{ watchlist.name }}</h5>
                 <div class="dropdown ms-auto my-auto">
@@ -22,6 +22,7 @@
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li>
                             <form method="post" action="{{ path('app_movie_watchlists_delete', {id: watchlist.id})}}">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete-watchlist-' ~ watchlist.id) }}">
                                 <button class="dropdown-item" type="submit">{{ 'forms.delete_watchlist.title'|trans }}</button>
                             </form>
                         </li>

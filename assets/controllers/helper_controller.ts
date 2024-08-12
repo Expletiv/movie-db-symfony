@@ -15,7 +15,7 @@ export default class extends Controller {
     Turbo.visit(event.params.url);
   }
 
-  preventClick(event: Event) {
+  stopEvent(event: Event) {
     event.stopImmediatePropagation();
   }
 

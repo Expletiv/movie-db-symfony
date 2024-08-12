@@ -6,11 +6,40 @@
 
 {% block body %}
 
-    <turbo-frame id="movieWatchlist">
+    {% set isEditing = app.flashes('watchlist_edit') is not empty %}
+    <div {{ stimulus_controller('previews', {'isEditing': isEditing}) }}>
         <div class="container">
             <h1>{{ watchlist.name }}</h1>
+            <button class="btn btn-primary" {{ stimulus_target('previews', 'editButton') }}
+                {{ stimulus_action('previews', 'edit') }} {% if isEditing %} hidden {% endif %}>
+                {{ 'forms.watchlist_edit.title_edit'|trans }}
+            </button>
+            <button class="btn btn-danger" {{ stimulus_target('previews', 'cancelButton') }}
+                {{ stimulus_action('previews', 'cancelEdit') }} {% if not isEditing %} hidden {% endif %}>
+                {{ 'forms.watchlist_edit.title_cancel'|trans }}
+            </button>
         </div>
-        {% include 'components/movie_preview_container.html.twig' %}
-    </turbo-frame>
+
+        {% embed 'components/movie_preview_container.html.twig' %}
+        {% block previews %}
+            {% embed 'components/movie_preview.html.twig' %}
+
+                {% block additional_preview_content %}
+                    <div class="card-footer z-3" {{ stimulus_action('helper', 'stopEvent', 'click') }}
+                    {{ stimulus_target('previews', 'editComponent') }} hidden>
+                        <form method="post"
+                              action="{{ path('app_movie_watchlists_delete_movie', {id: watchlist.id, tmdbId: movie.id}) }}">
+                            <input type="hidden" name="_token"
+                                   value="{{ csrf_token('delete-watchlist-movie-' ~ movie.id) }}">
+                            <button class="btn btn-danger w-100"
+                                    type="submit">{{ 'forms.delete_from_watchlist.title'|trans }}</button>
+                        </form>
+                    </div>
+                {% endblock %}
+
+            {% endembed %}
+        {% endblock %}
+    {% endembed %}
+    </div>
 
 {% endblock %}

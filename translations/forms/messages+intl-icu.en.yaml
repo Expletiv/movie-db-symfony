@@ -14,7 +14,13 @@ forms:
         action: 'Add'
         button: 'Add to watchlist'
         success_message: 'The movie has been successfully added!'
-
+    delete_from_watchlist:
+        title: 'Delete'
+        success_message: 'The movie has been successfully deleted!'
+    watchlist_edit:
+        title_edit: 'Edit'
+        title_cancel: 'Cancel'
+    
     unauthenticated:
         popover: 'You have to login first.'
     unauthorized:
