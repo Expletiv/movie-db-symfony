@@ -2,58 +2,54 @@
 
 namespace App\Controller\Admin\Crud;
 
-use App\Entity\User;
+use App\Entity\MovieWatchlist;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
-class UserCrudController extends AbstractCrudController
+class MovieWatchlistCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
-        return User::class;
+        return MovieWatchlist::class;
     }
 
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setEntityLabelInSingular('entity.user.label.singular')
-            ->setEntityLabelInPlural('entity.user.label.plural');
+            ->setEntityLabelInSingular('entity.movie_watchlist.label.singular')
+            ->setEntityLabelInPlural('entity.movie_watchlist.label.plural');
     }
 
     public function configureFields(string $pageName): iterable
     {
         yield IdField::new('id')
+            ->hideOnIndex()
             ->setDisabled()
-            ->setLabel('entity.user.attributes.id');
+            ->setLabel('entity.movie_watchlist.attributes.id');
 
-        yield EmailField::new('email')
-            ->setLabel('entity.user.attributes.email');
+        yield TextField::new('name')
+            ->setLabel('entity.movie_watchlist.attributes.name');
 
-        yield ArrayField::new('roles')
-            ->setLabel('entity.user.attributes.roles');
+        yield AssociationField::new('owner')
+            ->setLabel('entity.movie_watchlist.attributes.owner');
 
-        yield BooleanField::new('isVerified')
-            ->setLabel('entity.user.attributes.is_verified')
-            ->renderAsSwitch(false);
-
-        yield CollectionField::new('movieWatchlists')
-            ->setLabel('entity.user.attributes.movie_watchlists')
+        yield CollectionField::new('movies')
+            ->setLabel('entity.movie_watchlist.attributes.movies')
             ->hideOnIndex()
             ->setTemplatePath('admin/util/linked_collection.html.twig')
             ->setCustomOptions([
-                'collectionCrudControllerFqcn' => MovieWatchlistCrudController::class,
+                'collectionCrudControllerFqcn' => MovieCrudController::class,
             ])
             ->allowAdd()
             ->allowDelete()
             ->setEntryIsComplex()
-            ->useEntryCrudForm(MovieWatchlistCrudController::class)
+            ->useEntryCrudForm(MovieCrudController::class)
             // by_reference option being set to false causes the entire collection to be replaced
             // which removes all existing entries and adds the new ones
             ->setFormTypeOptions([
@@ -63,9 +59,8 @@ class UserCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
-        return $actions
+        return parent::configureActions($actions)
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
-            ->add(Crud::PAGE_EDIT, Action::DELETE)
-            ->remove(Crud::PAGE_INDEX, Action::NEW);
+            ->add(Crud::PAGE_EDIT, Action::DELETE);
     }
 }

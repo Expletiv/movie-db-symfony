@@ -88,7 +88,12 @@ class MovieCrudController extends AbstractCrudController
             ->allowDelete()
             ->renderExpanded()
             ->setEntryIsComplex()
-            ->useEntryCrudForm(MovieTmdbDataCrudController::class);
+            ->useEntryCrudForm(MovieTmdbDataCrudController::class)
+            // by_reference option being set to false causes the entire collection to be replaced
+            // which removes all existing entries and adds the new ones
+            ->setFormTypeOptions([
+                'by_reference' => true,
+            ]);
     }
 
     public function configureActions(Actions $actions): Actions

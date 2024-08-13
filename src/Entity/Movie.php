@@ -145,6 +145,14 @@ class Movie
         return $this->tmdbData;
     }
 
+    /**
+     * @param Collection<int, MovieTmdbData> $tmdbData
+     */
+    public function setTmdbData(Collection $tmdbData): void
+    {
+        $this->tmdbData = $tmdbData;
+    }
+
     public function addTmdbDatum(MovieTmdbData $tmdbData): static
     {
         if (!$this->hasLocale($tmdbData)) {

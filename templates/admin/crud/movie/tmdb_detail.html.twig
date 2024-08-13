@@ -5,8 +5,7 @@
 
 {% block main %}
     {% set tmdb_details_data = entity.instance.tmdbDetailsData %}
-
-    {% if tmdb_details_data is null or tmdb_details_data.poster_path is null %}
+    {% if tmdb_details_data is empty or tmdb_details_data.poster_path is not defined %}
         {{ parent() }}
     {% else %}
         <div class="row">

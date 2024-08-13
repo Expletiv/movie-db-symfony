@@ -1,0 +1,10 @@
+entity:
+    movie_watchlist:
+        label:
+            singular: "Movie-Watchlist"
+            plural: "Movie-Watchlists"
+        attributes:
+            id: "UUID"
+            name: "Name"
+            owner: "Owner"
+            movies: "Movies"

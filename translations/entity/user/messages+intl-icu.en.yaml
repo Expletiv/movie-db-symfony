@@ -8,3 +8,4 @@ entity:
             email: 'Email'
             roles: 'Access roles'
             is_verified: 'Email verified'
+            movie_watchlists: 'Movie-Watchlists'

@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Movie;
 use App\Entity\MovieTmdbData;
+use App\Entity\MovieWatchlist;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -53,6 +54,7 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+
         yield MenuItem::section('admin.dashboard.menu.section.movies');
         yield MenuItem::linkToCrud(
             'entity.movie.label.plural',
@@ -64,6 +66,12 @@ class DashboardController extends AbstractDashboardController
             'fa fa-solid fa-film',
             MovieTmdbData::class
         );
+        yield MenuItem::linkToCrud(
+            'entity.movie_watchlist.label.plural',
+            'fa fa-solid fa-list',
+            MovieWatchlist::class
+        );
+
         yield MenuItem::section('admin.dashboard.menu.section.users');
         yield MenuItem::linkToCrud(
             'entity.user.label.plural',

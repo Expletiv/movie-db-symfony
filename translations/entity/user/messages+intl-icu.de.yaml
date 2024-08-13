@@ -8,3 +8,4 @@ entity:
             email: 'E-Mail'
             roles: 'Berechtigungsrollen'
             is_verified: 'E-Mail bestätigt'
+            movie_watchlists: 'Film-Watchlists'
