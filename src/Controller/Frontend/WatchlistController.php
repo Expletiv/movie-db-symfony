@@ -15,12 +15,13 @@ use App\Repository\MovieWatchlistRepository;
 use App\Services\ToastService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\Security\Http\Attribute\IsCsrfTokenValid;
 use Symfony\UX\Turbo\TurboBundle;
 
 use function Symfony\Component\Translation\t;
@@ -83,13 +84,10 @@ class WatchlistController extends AbstractController
         return $this->redirectToRoute('app_movie_watchlists');
     }
 
+    #[IsCsrfTokenValid(new Expression('"delete-watchlist-" ~ args["watchlist"].getId()'))]
     #[Route('/{_locale}/watchlists/{id}/delete', name: 'app_movie_watchlists_delete', methods: ['POST'])]
-    public function deleteWatchlist(Request $request, #[CurrentUser] User $user, MovieWatchlist $watchlist): Response
+    public function deleteWatchlist(#[CurrentUser] User $user, MovieWatchlist $watchlist): Response
     {
-        if (!$this->isCsrfTokenValid('delete-watchlist-'.$watchlist->getId(), $request->getPayload()->getString('_token'))) {
-            throw new BadRequestHttpException('CSRF token invalid');
-        }
-
         if (!$watchlist->hasOwner($user)) {
             throw $this->createAccessDeniedException();
         }
@@ -130,18 +128,14 @@ class WatchlistController extends AbstractController
         ]);
     }
 
+    #[IsCsrfTokenValid(new Expression('"delete-watchlist-movie-" ~ args["tmdbId"]'))]
     #[Route('/{_locale}/watchlists/{id}/delete-movie/{tmdbId}', name: 'app_movie_watchlists_delete_movie', methods: ['POST'])]
     public function deleteFromWatchlist(
-        Request $request,
         #[CurrentUser] User $user,
         MovieWatchlist $watchlist,
         int $tmdbId,
         #[MapQueryParameter(options: ['min_range' => 1])] int $page = 1,
     ): ?Response {
-        if (!$this->isCsrfTokenValid('delete-watchlist-movie-'.$tmdbId, $request->getPayload()->getString('_token'))) {
-            throw new BadRequestHttpException('CSRF token invalid');
-        }
-
         if (!$watchlist->hasOwner($user)) {
             throw $this->createAccessDeniedException();
         }
