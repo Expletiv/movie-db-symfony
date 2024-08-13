@@ -3,6 +3,12 @@
     "license": "proprietary",
     "minimum-stability": "stable",
     "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:Expletiv/tmdb-symfony.git"
+        }
+    ],
     "require": {
         "php": "8.3.*",
         "ext-ctype": "*",
@@ -130,8 +136,8 @@
             "@auto-scripts"
         ],
         "dev:setup": [
-            "docker compose down",
-            "docker compose --env-file .env.dev up -d --wait",
+            "docker compose --env-file .env.dev --env-file .env.local down",
+            "docker compose --env-file .env.dev --env-file .env.local up -d --build --wait",
             "docker exec -it movie-db-node-1 npm install",
             "@webpack:run",
             "echo 'Visit the application under https://localhost:4443'"
