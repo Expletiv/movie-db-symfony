@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class HomeController extends AbstractController
 {
-    #[Route(['/{_locale}/home'])]
+    #[Route('/{_locale}/home')]
     public function index(
         Request $request,
         MovieTmdbDataRepository $movieRepository,
@@ -31,7 +31,7 @@ class HomeController extends AbstractController
         ]);
     }
 
-    #[Route(['/'])]
+    #[Route('/')]
     public function indexNoLocale(): RedirectResponse
     {
         return $this->redirectToRoute('app_frontend_home_index', ['_locale' => 'en']);
