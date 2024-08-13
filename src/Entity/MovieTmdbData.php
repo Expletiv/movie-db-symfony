@@ -38,7 +38,7 @@ class MovieTmdbData
     /**
      * @var array<string, mixed>
      */
-    #[ORM\Column(type: Types::JSON)]
+    #[ORM\Column(type: Types::JSON, options: ['jsonb' => true])]
     private array $tmdbDetailsData;
 
     public function __construct()

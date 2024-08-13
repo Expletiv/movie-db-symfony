@@ -80,7 +80,8 @@ class MovieTmdbDataRepository extends ServiceEntityRepository
 
         return $this->queryForLocale($locale)
             ->setFirstResult($offset)
-            ->setMaxResults(self::PAGE_SIZE);
+            ->setMaxResults(self::PAGE_SIZE)
+            ->andWhere('JSONB_EXISTS(d.tmdbDetailsData, \'id\') = TRUE');
     }
 
     private function joinWithWatchlist(QueryBuilder $qb, Uuid $watchlistId): QueryBuilder

@@ -24,6 +24,15 @@ doctrine:
                 alias: App
         controller_resolver:
             auto_mapping: true
+        dql:
+            string_functions:
+                # add the doctrine JSON functions from scienta/doctrine-json-functions
+                JSONB_CONTAINS: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Postgresql\JsonbContains
+                JSONB_EXISTS: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Postgresql\JsonbExists
+                JSONB_EXISTS_ALL: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Postgresql\JsonbExistsAll
+                JSONB_EXISTS_ANY: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Postgresql\JsonbExistsAny
+                JSONB_IS_CONTAINED: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Postgresql\JsonbIsContained
+                JSONB_INSERT: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Postgresql\JsonbInsert
 
 when@test:
     doctrine:
