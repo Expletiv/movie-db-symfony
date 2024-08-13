@@ -21,25 +21,29 @@
         </div>
 
         {% embed 'components/movie_preview_container.html.twig' %}
-        {% block previews %}
-            {% embed 'components/movie_preview.html.twig' %}
 
-                {% block additional_preview_content %}
-                    <div class="card-footer z-3" {{ stimulus_action('helper', 'stopEvent', 'click') }}
-                    {{ stimulus_target('previews', 'editComponent') }} hidden>
-                        <form method="post"
-                              action="{{ path('app_movie_watchlists_delete_movie', {id: watchlist.id, tmdbId: movie.id, page: page}) }}">
-                            <input type="hidden" name="_token"
-                                   value="{{ csrf_token('delete-watchlist-movie-' ~ movie.id) }}">
-                            <button class="btn btn-danger w-100"
-                                    type="submit">{{ 'forms.delete_from_watchlist.title'|trans }}</button>
-                        </form>
-                    </div>
-                {% endblock %}
+            {% block previews %}
+                {% embed 'components/movie_preview.html.twig' %}
+                    {% block additional_preview_content %}
+                        <div class="card-footer z-3" {{ stimulus_action('helper', 'stopEvent', 'click') }}
+                            {{ stimulus_target('previews', 'editComponent') }} hidden>
+                            <form method="post"
+                                  action="{{ path('app_movie_watchlists_delete_movie', {id: watchlist.id, tmdbId: movie.id, page: page}) }}">
+                                <input type="hidden" name="_token"
+                                       value="{{ csrf_token('delete-watchlist-movie-' ~ movie.id) }}">
+                                <button class="btn btn-danger w-100"
+                                        type="submit">{{ 'forms.delete_from_watchlist.title'|trans }}</button>
+                            </form>
+                        </div>
+                    {% endblock %}
+                {% endembed %}
+            {% endblock %}
 
-            {% endembed %}
-        {% endblock %}
-    {% endembed %}
+            {% block previews_pagination  %}
+                {% include 'components/pagination.html.twig' %}
+            {% endblock %}
+
+        {% endembed %}
     </div>
 
 {% endblock %}

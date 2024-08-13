@@ -1,0 +1,74 @@
+<div class="d-flex flex-column flex-sm-row mb-4 mt-2">
+    <nav class="me-sm-auto" aria-label="Page navigation">
+        <ul class="pagination justify-content-center justify-content-sm-start">
+            {% if page > 1 %}
+                {% if 1 < page - 1 %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ current_path_with_params({page: 1}) }}">
+                            {{ 1 }}
+                        </a>
+                    </li>
+                    {% if 1 == page - 3 %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ current_path_with_params({page: 2}) }}">
+                                {{ 2 }}
+                            </a>
+                        </li>
+                    {% elseif 1 < page - 3 %}
+                        <li class="page-item">
+                            <a class="page-link">
+                                ...
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endif %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ current_path_with_params({page: page-1}) }}">
+                        {{ page-1 }}
+                    </a>
+                </li>
+            {% endif %}
+            <li class="page-item active">
+                <a class="page-link" href="{{ current_path_with_params({page: page}) }}">
+                    {{ page }}
+                </a>
+            </li>
+            {% if page < maxPage %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ current_path_with_params({page: page+1}) }}">
+                        {{ page+1 }}
+                    </a>
+                </li>
+                {% if page < maxPage - 1 %}
+                    {% if page == maxPage - 3 %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ current_path_with_params({page: maxPage-1}) }}">
+                                {{ maxPage-1 }}
+                            </a>
+                        </li>
+                    {% elseif page < maxPage - 3 %}
+                        <li class="page-item">
+                            <a class="page-link">
+                                ...
+                            </a>
+                        </li>
+                    {% endif %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ current_path_with_params({page: maxPage}) }}">
+                            {{ maxPage }}
+                        </a>
+                    </li>
+                {% endif %}
+            {% endif %}
+        </ul>
+    </nav>
+    <form class="d-flex justify-content-center justify-content-sm-end" method="get"
+          action="{{ current_path_with_params({}) }}">
+        <div class="me-2">
+            <input class="form-control" name="page" type="number" min="1" max="{{ maxPage }}" aria-label="page">
+        </div>
+        <div>
+            <button class="btn btn-primary">{{ 'templates.movie_preview_container.show_page'|trans }}</button>
+        </div>
+    </form>
+</div>

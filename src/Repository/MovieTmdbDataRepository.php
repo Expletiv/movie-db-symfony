@@ -64,7 +64,7 @@ class MovieTmdbDataRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();
 
-        return (int) ceil($count / self::PAGE_SIZE);
+        return max((int) ceil($count / self::PAGE_SIZE), 1);
     }
 
     private function queryForLocale(string $locale): QueryBuilder
