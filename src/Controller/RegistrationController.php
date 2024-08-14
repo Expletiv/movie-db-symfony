@@ -44,6 +44,7 @@ class RegistrationController extends AbstractController
             // generate a signed url and email it to the user
             $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
                 (new TemplatedEmail())
+                    ->sender('mailer@example.com')
                     ->from(new Address('mailer@example.com', 'MovieDB Mail Bot'))
                     ->to($user->getEmail())
                     ->subject('Please Confirm your Email')

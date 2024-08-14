@@ -1,0 +1,12 @@
+entity:
+    email_log:
+        label:
+            singular: "E-Mail-Log"
+            plural: "E-Mail-Logs"
+        attributes:
+            id: "ID"
+            subject: "Subject"
+            sent_at: "Sent at"
+            sender: "From"
+            receiver: "To"
+            html: "HTML"

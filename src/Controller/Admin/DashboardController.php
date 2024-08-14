@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\EmailLog;
 use App\Entity\Movie;
 use App\Entity\MovieTmdbData;
 use App\Entity\MovieWatchlist;
@@ -77,6 +78,11 @@ class DashboardController extends AbstractDashboardController
             'entity.user.label.plural',
             'fa fa-solid fa-users',
             User::class
+        );
+        yield MenuItem::linkToCrud(
+            'entity.email_log.label.plural',
+            'fa fa-solid fa-envelope',
+            EmailLog::class
         );
     }
 }
