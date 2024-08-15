@@ -12,3 +12,4 @@ templates:
         account_menu: 'Account menu'
         my_account: 'My account'
         admin_dashboard: 'Admin dashboard'
+        search: 'Search'

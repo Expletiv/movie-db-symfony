@@ -12,4 +12,5 @@ templates:
         account_menu: 'Account-Menü'
         my_account: 'Mein Account'
         admin_dashboard: 'Admin-Dashboard'
+        search: 'Suche'
 

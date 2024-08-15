@@ -20,7 +20,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
-                <ul class="navbar-nav w-100 mb-2 mb-xxl-0 align-items-xxl-end">
+                <ul class="navbar-nav mb-2 mb-xxl-0 align-items-xxl-end">
                     <li class="nav-item">
                         <a class="nav-link {% if app.current_route is same as 'app_movies_popular' %} active {% endif %}"
                            href="{{ path('app_movies_popular') }}">
@@ -45,85 +45,94 @@
                             {{ 'templates.navbar.section.watchlist'|trans }}
                         </a>
                     </li>
-                    <hr class="d-xxl-none">
-                    <li class="nav-item d-flex mx-xxl-auto my-auto">
-                        <!-- search bar -->
-                    </li>
-                    <hr class="d-xxl-none">
-                    <li class="nav-item d-flex">
-                        {% if not is_granted('IS_AUTHENTICATED') %}
-                            {% if app.current_route is not same as 'app_register' %}
-                                <div class="my-auto order-xxl-last me-2">
-                                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
-                                            data-bs-target="#registrationModal">
-                                        {{ 'templates.navbar.register'|trans }}
-                                    </button>
-                                </div>
-                            {% endif %}
-                            {% if app.current_route is not same as 'app_login' %}
-                                <div class="order-xxl-last my-auto me-auto">
-                                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
-                                            data-bs-target="#loginModal">
-                                        {{ 'templates.navbar.login'|trans }}
-                                    </button>
-                                </div>
-                            {% endif %}
-                        {% else %}
-                            {# Unfortunately dropdown-center does not work inside navbars currently: https://github.com/twbs/bootstrap/issues/36897 #}
-                            <div class="dropdown order-xxl-last my-auto me-auto">
-                                <a class="text-reset" href="#" role="button" data-bs-toggle="dropdown"
-                                   aria-expanded="false" title="{{ 'templates.navbar.account_menu'|trans }}">
-                                    <i class="bi bi-person-circle fs-3"></i>
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-sm dropdown-menu-xxl-end position-absolute">
-                                    <li>
-                                        <a class="dropdown-item" href="{{ path('app_profile_index') }}">
-                                            {{ 'templates.navbar.my_account'|trans }}
-                                        </a>
-                                    </li>
-                                    {% if is_granted('ROLE_ADMIN') %}
-                                        <li>
-                                            <a class="dropdown-item" href="{{ path('app_admin_dashboard_index') }}">
-                                                {{ 'templates.navbar.admin_dashboard'|trans }}
-                                            </a>
-                                        </li>
-                                    {% endif %}
-                                    <li>
-                                        <a class="dropdown-item" href="{{ path('app_logout') }}">
-                                            {{ 'templates.navbar.logout'|trans }}
-                                        </a>
-                                    </li>
-                                </ul>
+                </ul>
+                <hr class="d-xxl-none">
+                <div class="nav-item d-flex mx-auto my-auto justify-content-center">
+                    <!-- search bar -->
+                    <form class="d-flex" action="{{ path('app_movies_search') }}" method="get">
+                        <input class="form-control me-2" type="search"
+                               placeholder="{{ 'templates.navbar.search'|trans }}"
+                               aria-label="{{ 'templates.navbar.search'|trans }}" name="query"
+                               value="{{ query ?? '' }}">
+                        <button class="btn btn-outline-primary" type="submit">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </form>
+                </div>
+                <hr class="d-xxl-none">
+                <div class="d-flex">
+                    {% if not is_granted('IS_AUTHENTICATED') %}
+                        {% if app.current_route is not same as 'app_register' %}
+                            <div class="my-auto order-xxl-last me-2">
+                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
+                                        data-bs-target="#registrationModal">
+                                    {{ 'templates.navbar.register'|trans }}
+                                </button>
                             </div>
                         {% endif %}
-                        <div class="dropdown ms-xxl-auto me-2 me-xxl-3 my-auto">
-                            <a class="btn btn-outline-secondary btn-sm dropdown-toggle" href="#" role="button"
-                               data-bs-toggle="dropdown"
-                               aria-expanded="false">
-                                {{ app.request.locale|locale_name(app.request.locale)|u.title }}
+                        {% if app.current_route is not same as 'app_login' %}
+                            <div class="order-xxl-last my-auto me-auto">
+                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
+                                        data-bs-target="#loginModal">
+                                    {{ 'templates.navbar.login'|trans }}
+                                </button>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        {# Unfortunately dropdown-center does not work inside navbars currently: https://github.com/twbs/bootstrap/issues/36897 #}
+                        <div class="dropdown order-xxl-last my-auto me-auto">
+                            <a class="text-reset" href="#" role="button" data-bs-toggle="dropdown"
+                               aria-expanded="false" title="{{ 'templates.navbar.account_menu'|trans }}">
+                                <i class="bi bi-person-circle fs-3"></i>
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-sm dropdown-menu-end position-absolute">
-                                {% for locale in app.enabled_locales %}
-                                    {% if locale != app.request.locale %}
-                                        <li>
-                                            <a class="dropdown-item"
-                                               href="{{ path(app.current_route, app.current_route_parameters|merge({_locale: locale})) }}">
-                                                {{ locale|locale_name(app.request.locale)|u.title }}
-                                            </a>
-                                        </li>
-                                    {% endif %}
-                                {% endfor %}
+                            <ul class="dropdown-menu dropdown-menu-sm dropdown-menu-xxl-end position-absolute">
+                                <li>
+                                    <a class="dropdown-item" href="{{ path('app_profile_index') }}">
+                                        {{ 'templates.navbar.my_account'|trans }}
+                                    </a>
+                                </li>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <li>
+                                        <a class="dropdown-item" href="{{ path('app_admin_dashboard_index') }}">
+                                            {{ 'templates.navbar.admin_dashboard'|trans }}
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                <li>
+                                    <a class="dropdown-item" href="{{ path('app_logout') }}">
+                                        {{ 'templates.navbar.logout'|trans }}
+                                    </a>
+                                </li>
                             </ul>
                         </div>
-                        <div class="form-check form-switch me-xxl-5 my-auto">
-                            <input class="form-check-input" type="checkbox" role="switch" id="themeSwitch"
-                                   aria-label="theme switch" data-theme-target="themeSwitch"
-                                {{ stimulus_action('theme', 'changeTheme', 'click') }}>
-                            <label class="form-check-label" for="themeSwitch"><i
-                                    class="bi bi-moon-stars-fill"></i></label>
-                        </div>
-                    </li>
-                </ul>
+                    {% endif %}
+                    <div class="dropdown ms-xxl-auto me-2 me-xxl-3 my-auto">
+                        <a class="btn btn-outline-secondary btn-sm dropdown-toggle" href="#" role="button"
+                           data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            {{ app.request.locale|locale_name(app.request.locale)|u.title }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-sm dropdown-menu-end position-absolute">
+                            {% for locale in app.enabled_locales %}
+                                {% if locale != app.request.locale %}
+                                    <li>
+                                        <a class="dropdown-item"
+                                           href="{{ current_path_with_params({_locale: locale}) }}">
+                                            {{ locale|locale_name(app.request.locale)|u.title }}
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="form-check form-switch me-xxl-5 my-auto">
+                        <input class="form-check-input" type="checkbox" role="switch" id="themeSwitch"
+                               aria-label="theme switch" data-theme-target="themeSwitch"
+                            {{ stimulus_action('theme', 'changeTheme', 'click') }}>
+                        <label class="form-check-label" for="themeSwitch"><i
+                                class="bi bi-moon-stars-fill"></i></label>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

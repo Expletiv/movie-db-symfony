@@ -82,4 +82,27 @@ class MovieListsController extends AbstractController
             'maxPage' => min($moviesResult['total_pages'], self::TMDB_MAX_PAGE),
         ]);
     }
+
+    #[Route('/{_locale}/search', name: 'app_movies_search')]
+    public function search(
+        Request $request,
+        #[MapQueryParameter] string $query,
+        #[MapQueryParameter(options: ['min_range' => 1, 'max_range' => self::TMDB_MAX_PAGE])] int $page = 1,
+    ): Response {
+        $moviesResult = $this->tmdbClient->getSearchApi()->searchMovies(
+            $query,
+            [
+                'language' => $request->getLocale(),
+                'page' => $page,
+            ]
+        );
+
+        return $this->render('movies/search.html.twig', [
+            'movies' => $moviesResult['results'],
+            'page' => $page,
+            'maxPage' => min($moviesResult['total_pages'], self::TMDB_MAX_PAGE),
+            'query' => $query,
+            'searchResults' => $moviesResult['total_results'],
+        ]);
+    }
 }

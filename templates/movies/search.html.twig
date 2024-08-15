@@ -1,0 +1,16 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    {{ 'templates.movies.popular'|trans }}
+{% endblock %}
+
+{% block body %}
+
+    <div class="container mt-2">
+        <h3>{{ 'templates.movies.search.query'|trans }} <span class="fst-italic">{{ query }}</span></h3>
+        <h4 class="text-body-secondary">{{ 'templates.movies.search.results'|trans }} <span>{{ searchResults }}</span></h4>
+    </div>
+
+    {% include('components/movie_preview_container.html.twig') %}
+
+{% endblock %}

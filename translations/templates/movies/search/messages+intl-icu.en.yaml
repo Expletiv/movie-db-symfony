@@ -1,0 +1,5 @@
+templates:
+    movies:
+        search:
+            query: 'Search term:'
+            results: 'Search results:'
