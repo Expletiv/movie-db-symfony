@@ -8,7 +8,7 @@
         <h1 class="mt-1">{{ ('forms.%s.title')|format(form.vars.name)|trans }}</h1>
 
         <turbo-frame id="{{ form.vars.id }}_frame">
-            {{ form(form, {'action': current_path_with_params({}) }) }}
+            {% include 'forms/base_form.html.twig' %}
         </turbo-frame>
     </div>
 

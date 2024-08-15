@@ -7,7 +7,6 @@ namespace App\Controller\Frontend;
 use App\Entity\MovieWatchlist;
 use App\Form\Watchlist\AddToWatchlistType;
 use App\Services\TmdbService;
-use App\Services\ToastService;
 use App\Services\UserProvider;
 use App\Services\WatchlistService;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -40,7 +39,6 @@ class MovieController extends AbstractController
         int $tmdbId,
         WatchlistService $watchlistService,
         UserProvider $userProvider,
-        ToastService $toastService
     ): Response {
         $form = $this->createForm(AddToWatchlistType::class);
         $form->handleRequest($request);
@@ -61,8 +59,10 @@ class MovieController extends AbstractController
 
         $watchlistService->addMovieToWatchlists($tmdbId, $watchlists);
 
-        $toastService->success(t('forms.add_to_watchlist.success_message'));
+        $this->addFlash('form_success', t('forms.add_to_watchlist.success_message'));
 
-        return $this->redirectToRoute('app_movie_details', ['tmdbId' => $tmdbId]);
+        return $this->render('forms/form_page.html.twig', [
+            'form' => $form,
+        ]);
     }
 }

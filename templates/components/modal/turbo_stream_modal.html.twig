@@ -2,12 +2,7 @@
 
 {% block modal_body %}
     <div id="{{ form.vars.id }}_form">
-        {% for flash in app.flashes('form_success') %}
-            <div class="alert alert-success">
-                {{ flash|trans|raw }}
-            </div>
-        {% endfor %}
-        {{ form(form, {'action': formPath }) }}
+        {% include 'forms/custom_path_form.html.twig' %}
     </div>
 {% endblock %}
 

@@ -2,11 +2,6 @@
 
 {% block modal_body %}
     <turbo-frame id="{{ form.vars.id }}_frame" src="{{ formPath }}" loading="lazy">
-        {% for flash in app.flashes('form_success') %}
-            <div class="alert alert-success">
-                {{ flash|trans|raw }}
-            </div>
-        {% endfor %}
-        {{ form(form, {'action': formPath }) }}
+        {% include 'forms/custom_path_form.html.twig' %}
     </turbo-frame>
 {% endblock %}

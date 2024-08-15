@@ -1,0 +1,4 @@
+{% for flash in app.flashes('form_success') %}
+    {% include 'forms/success_alert.html.twig' %}
+{% endfor %}
+{{ form(form, {'action': formPath }) }}
