@@ -8,7 +8,13 @@
 
     {% set isEditing = app.flashes('watchlist_edit') is not empty %}
     <div {{ stimulus_controller('previews', {'isEditing': isEditing}) }}>
-        <div class="container">
+        <div class="container mt-2">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ path('app_movie_watchlists') }}">{{ 'templates.movies.watchlist'|trans }}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ watchlist.name }}</li>
+                </ol>
+            </nav>
             <h1>{{ watchlist.name }}</h1>
             <button class="btn btn-primary" {{ stimulus_target('previews', 'editButton') }}
                 {{ stimulus_action('previews', 'edit') }} {% if isEditing %} hidden {% endif %}>
@@ -39,7 +45,7 @@
                 {% endembed %}
             {% endblock %}
 
-            {% block previews_pagination  %}
+            {% block previews_pagination %}
                 {% include 'components/pagination.html.twig' %}
             {% endblock %}
 

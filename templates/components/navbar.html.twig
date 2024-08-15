@@ -39,12 +39,6 @@
                             {{ 'templates.navbar.section.highest_rating'|trans }}
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if app.current_route is same as 'app_movie_watchlists' %} active {% endif %}"
-                           href="{{ path('app_movie_watchlists') }}">
-                            {{ 'templates.navbar.section.watchlist'|trans }}
-                        </a>
-                    </li>
                 </ul>
                 <hr class="d-xxl-none">
                 <div class="nav-item d-flex mx-auto my-auto justify-content-center">
@@ -90,6 +84,12 @@
                                         {{ 'templates.navbar.my_account'|trans }}
                                     </a>
                                 </li>
+                                <li>
+                                    <a class="dropdown-item"
+                                       href="{{ path('app_movie_watchlists') }}">
+                                        {{ 'templates.navbar.section.watchlist'|trans }}
+                                    </a>
+                                </li>
                                 {% if is_granted('ROLE_ADMIN') %}
                                     <li>
                                         <a class="dropdown-item" href="{{ path('app_admin_dashboard_index') }}">
@@ -125,7 +125,8 @@
                         </ul>
                     </div>
                     <div class="me-xxl-5 my-auto">
-                        <label class="form-check-label" for="themeSwitch" {{ stimulus_action('theme', 'changeTheme', 'click') }}>
+                        <label class="form-check-label" for="themeSwitch"
+                            {{ stimulus_action('theme', 'changeTheme', 'click') }}>
                             <i class="bi bi-moon-stars-fill fs-5" data-theme-target="themeIcon"></i>
                         </label>
                     </div>
