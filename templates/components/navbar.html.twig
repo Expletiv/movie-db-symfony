@@ -48,7 +48,6 @@
                 </ul>
                 <hr class="d-xxl-none">
                 <div class="nav-item d-flex mx-auto my-auto justify-content-center">
-                    <!-- search bar -->
                     <form class="d-flex" action="{{ path('app_movies_search') }}" method="get">
                         <input class="form-control me-2" type="search"
                                placeholder="{{ 'templates.navbar.search'|trans }}"
@@ -106,7 +105,7 @@
                             </ul>
                         </div>
                     {% endif %}
-                    <div class="dropdown ms-xxl-auto me-2 me-xxl-3 my-auto">
+                    <div class="dropdown ms-xxl-auto me-3 me-xxl-3 my-auto">
                         <a class="btn btn-outline-secondary btn-sm dropdown-toggle" href="#" role="button"
                            data-bs-toggle="dropdown"
                            aria-expanded="false">
@@ -125,12 +124,10 @@
                             {% endfor %}
                         </ul>
                     </div>
-                    <div class="form-check form-switch me-xxl-5 my-auto">
-                        <input class="form-check-input" type="checkbox" role="switch" id="themeSwitch"
-                               aria-label="theme switch" data-theme-target="themeSwitch"
-                            {{ stimulus_action('theme', 'changeTheme', 'click') }}>
-                        <label class="form-check-label" for="themeSwitch"><i
-                                class="bi bi-moon-stars-fill"></i></label>
+                    <div class="me-xxl-5 my-auto">
+                        <label class="form-check-label" for="themeSwitch" {{ stimulus_action('theme', 'changeTheme', 'click') }}>
+                            <i class="bi bi-moon-stars-fill fs-5" data-theme-target="themeIcon"></i>
+                        </label>
                     </div>
                 </div>
             </div>
