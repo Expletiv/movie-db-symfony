@@ -15,6 +15,7 @@ use Tmdb\Client;
 class MovieListsController extends AbstractController
 {
     private const int TMDB_MAX_PAGE = 500;
+    private const int TMDB_RECOMMENDATIONS_MAX_PAGE = 2;
 
     public function __construct(
         private readonly Client $tmdbClient,
@@ -103,6 +104,25 @@ class MovieListsController extends AbstractController
             'maxPage' => min($moviesResult['total_pages'], self::TMDB_MAX_PAGE),
             'query' => $query,
             'searchResults' => $moviesResult['total_results'],
+        ]);
+    }
+
+    // recommendations
+    #[Route('/{_locale}/recommendations/{tmdbId}', name: 'app_movies_recommendations')]
+    public function recommendations(
+        Request $request,
+        int $tmdbId,
+        #[MapQueryParameter(options: ['min_range' => 1, 'max_range' => self::TMDB_RECOMMENDATIONS_MAX_PAGE])] int $page = 1,
+    ): Response {
+        $moviesResult = $this->tmdbClient->getMoviesApi()->getRecommendations($tmdbId, [
+            'language' => $request->getLocale(),
+            'page' => $page,
+        ]);
+
+        return $this->render('movies/recommendations.html.twig', [
+            'movies' => $moviesResult['results'],
+            'page' => $page,
+            'maxPage' => min($moviesResult['total_pages'], self::TMDB_RECOMMENDATIONS_MAX_PAGE),
         ]);
     }
 }

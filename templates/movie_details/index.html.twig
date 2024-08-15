@@ -104,6 +104,9 @@
             </div>
         </div>
     </div>
+    <turbo-frame id="movie_recommendations" src="{{ path('app_movies_recommendations', {tmdbId: movie.id}) }}" loading="lazy">
+        {% include 'components/centered_spinner.html.twig' %}
+    </turbo-frame>
 
 {% endblock %}
 

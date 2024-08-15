@@ -5,3 +5,5 @@ templates:
         highest_rating: 'Highest rated movies'
         watchlist: 'All watchlists'
         watchlist_show: 'Your watchlist'
+        search: 'Search movies'
+        recommendations: 'Recommendations'

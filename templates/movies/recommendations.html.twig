@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ 'templates.movies.recommendations'|trans }}
+{% endblock %}
+
+{% block body %}
+
+    <turbo-frame id="movie_recommendations">
+        {% include('components/movie_preview_container.html.twig') %}
+    </turbo-frame>
+
+{% endblock %}
+
