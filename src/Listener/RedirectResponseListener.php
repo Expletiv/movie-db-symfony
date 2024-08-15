@@ -16,8 +16,8 @@ class RedirectResponseListener
         $response = $event->getResponse();
 
         if ($this->isRedirectedTurboFrameRequest($request, $response)) {
-            // redirectResponse is a redirect hidden as a 204 so fetch() doesn't follow it
-            $redirectResponse = new Response(null, 204, [
+            // do not use RedirectResponse but a custom header so fetch() doesn't follow it
+            $redirectResponse = new Response(null, Response::HTTP_FOUND, [
                 'Turbo-Location' => $response->headers->get('Location'),
             ]);
             $event->setResponse($redirectResponse);

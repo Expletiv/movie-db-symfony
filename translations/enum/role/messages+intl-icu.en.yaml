@@ -1,0 +1,4 @@
+enum:
+    role:
+        role_user: 'User'
+        role_admin: 'Admin'

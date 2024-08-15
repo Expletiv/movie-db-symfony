@@ -7,5 +7,5 @@ entity:
             id: 'Internal ID'
             email: 'Email'
             roles: 'Access roles'
-            is_verified: 'Email verified'
+            verified: 'Email verified'
             movie_watchlists: 'Movie-Watchlists'

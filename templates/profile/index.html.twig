@@ -1,0 +1,68 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-4 text-center">
+                <i class="bi bi-person-circle" style="font-size: 5rem"></i>
+                <h3>{{ 'templates.profile.sections.profile_information'|trans }}</h3>
+                <ul class="list-group mb-3 text-start">
+                    <li class="list-group-item">
+                        <div class="d-flex flex-column">
+                            <div>
+                                <strong>{{ 'templates.profile.fields.email'|trans }}</strong>
+                            </div>
+                            <div class="row">
+                                <div class="text-truncate col">
+                                    <span data-bs-toggle="tooltip" data-bs-placement="top"
+                                          data-bs-title="{{ user.email }}">
+                                        {{ user.email }}
+                                    </span>
+                                </div>
+                                <div class="col-auto">
+                                    {% if user.verified %}
+                                        <i class="bi bi-shield-fill-check text-success"
+                                           data-bs-toggle="tooltip" data-bs-placement="top"
+                                           data-bs-title="{{ 'templates.profile.tooltips.email_verified'|trans }}"></i>
+                                    {% else %}
+                                        <i class="bi bi-shield-slash-fill text-danger"
+                                           data-bs-toggle="tooltip" data-bs-placement="top"
+                                           data-bs-title="{{ 'templates.profile.tooltips.email_not_verified'|trans }}"></i>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="d-flex flex-column">
+                            <div>
+                                <strong>{{ 'templates.profile.fields.roles'|trans }}</strong>
+                            </div>
+                            <div>
+                                {% for role in user.roles %}
+                                    <span class="badge bg-{{ role|roleStyle }}">{{ role|roleTransKey|trans }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-8">
+                <h3>{{ 'templates.profile.sections.your_watchlists'|trans }}</h3>
+                <div class="list-group">
+                    {% for watchlist in user.movieWatchlists %}
+                        <a class="list-group-item list-group-item-action"
+                           href="{{ path('app_movie_watchlists_show', {id: watchlist.id}) }}">
+                            {{ watchlist.name }}
+                        </a>
+                    {% endfor %}
+                    {% if user.movieWatchlists.empty %}
+                        <h4 class="text-center text-danger bg-opacity-75 bg-body-secondary p-2 rounded">
+                            <i class="bi bi-emoji-frown-fill"></i> {{ 'templates.profile.other.no_watchlist_found'|trans }}
+                        </h4>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

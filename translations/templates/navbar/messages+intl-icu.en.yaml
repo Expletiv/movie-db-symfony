@@ -9,3 +9,5 @@ templates:
         login: 'Sign in'
         logout: 'Sign out'
         register: 'Register'
+        account_menu: 'Account menu'
+        my_account: 'My account'

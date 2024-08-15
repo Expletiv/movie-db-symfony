@@ -1,0 +1,13 @@
+templates:
+    profile:
+        sections:
+            profile_information: 'Account-Informationen'
+            your_watchlists: 'Ihre Watchlists'
+        fields:
+            email: 'E-Mail'
+            roles: 'Rollen'
+        tooltips:
+            email_verified: 'E-Mail wurde bestätigt'
+            email_not_verified: 'E-Mail wurde noch nicht bestätigt'
+        other:
+            no_watchlist_found: 'Keine Watchlist gefunden'

@@ -71,7 +71,7 @@ class RegistrationController extends AbstractController
     }
 
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    #[Route('/verify/email', name: 'app_verify_email')]
+    #[Route('/{_locale}/verify/email', name: 'app_verify_email')]
     public function verifyUserEmail(
         Request $request,
         #[CurrentUser] User $user,

@@ -9,3 +9,6 @@ templates:
         login: 'Anmelden'
         logout: 'Abmelden'
         register: 'Registrieren'
+        account_menu: 'Account-Menü'
+        my_account: 'Mein Account'
+

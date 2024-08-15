@@ -39,8 +39,8 @@ class UserCrudController extends AbstractCrudController
         yield ArrayField::new('roles')
             ->setLabel('entity.user.attributes.roles');
 
-        yield BooleanField::new('isVerified')
-            ->setLabel('entity.user.attributes.is_verified')
+        yield BooleanField::new('verified')
+            ->setLabel('entity.user.attributes.verified')
             ->renderAsSwitch(false);
 
         yield CollectionField::new('movieWatchlists')

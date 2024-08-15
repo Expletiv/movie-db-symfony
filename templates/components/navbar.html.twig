@@ -20,7 +20,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
-                <ul class="navbar-nav w-100 mb-2 mb-xxl-0">
+                <ul class="navbar-nav w-100 mb-2 mb-xxl-0 align-items-xxl-end">
                     <li class="nav-item">
                         <a class="nav-link {% if app.current_route is same as 'app_movies_popular' %} active {% endif %}"
                            href="{{ path('app_movies_popular') }}">
@@ -46,14 +46,14 @@
                         </a>
                     </li>
                     <hr class="d-xxl-none">
-                    <div class="nav-item d-flex mx-xxl-auto my-auto">
+                    <li class="nav-item d-flex mx-xxl-auto my-auto">
                         <!-- search bar -->
-                    </div>
+                    </li>
                     <hr class="d-xxl-none">
-                    <div class="d-flex">
+                    <li class="nav-item d-flex">
                         {% if not is_granted('IS_AUTHENTICATED') %}
                             {% if app.current_route is not same as 'app_register' %}
-                                <div class="my-auto order-xxl-last me-3">
+                                <div class="my-auto order-xxl-last me-2">
                                     <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
                                             data-bs-target="#registrationModal">
                                         {{ 'templates.navbar.register'|trans }}
@@ -61,7 +61,7 @@
                                 </div>
                             {% endif %}
                             {% if app.current_route is not same as 'app_login' %}
-                                <div class="order-xxl-last my-auto">
+                                <div class="order-xxl-last my-auto me-auto">
                                     <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
                                             data-bs-target="#loginModal">
                                         {{ 'templates.navbar.login'|trans }}
@@ -69,19 +69,33 @@
                                 </div>
                             {% endif %}
                         {% else %}
-                            <div class="order-xxl-last my-auto">
-                                <a class="btn btn-sm btn-outline-primary" href="{{ path('app_logout') }}">
-                                    {{ 'templates.navbar.logout'|trans }}
+                            {# Unfortunately dropdown-center does not work inside navbars currently: https://github.com/twbs/bootstrap/issues/36897 #}
+                            <div class="dropdown order-xxl-last my-auto me-auto">
+                                <a class="text-reset" href="#" role="button" data-bs-toggle="dropdown"
+                                   aria-expanded="false" title="{{ 'templates.navbar.account_menu'|trans }}">
+                                    <i class="bi bi-person-circle fs-3"></i>
                                 </a>
+                                <ul class="dropdown-menu dropdown-menu-sm dropdown-menu-xxl-end position-absolute">
+                                    <li>
+                                        <a class="dropdown-item" href="{{ path('app_profile_index') }}">
+                                            {{ 'templates.navbar.my_account'|trans }}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="{{ path('app_logout') }}">
+                                            {{ 'templates.navbar.logout'|trans }}
+                                        </a>
+                                    </li>
+                                </ul>
                             </div>
                         {% endif %}
-                        <div class="dropdown ms-auto me-2 me-xxl-3 my-auto">
+                        <div class="dropdown ms-xxl-auto me-2 me-xxl-3 my-auto">
                             <a class="btn btn-outline-secondary btn-sm dropdown-toggle" href="#" role="button"
                                data-bs-toggle="dropdown"
                                aria-expanded="false">
                                 {{ app.request.locale|locale_name(app.request.locale)|u.title }}
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-sm">
+                            <ul class="dropdown-menu dropdown-menu-sm dropdown-menu-end position-absolute">
                                 {% for locale in app.enabled_locales %}
                                     {% if locale != app.request.locale %}
                                         <li>
@@ -101,7 +115,7 @@
                             <label class="form-check-label" for="themeSwitch"><i
                                     class="bi bi-moon-stars-fill"></i></label>
                         </div>
-                    </div>
+                    </li>
                 </ul>
             </div>
         </div>

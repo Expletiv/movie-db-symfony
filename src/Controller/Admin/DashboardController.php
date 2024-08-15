@@ -21,10 +21,16 @@ class DashboardController extends AbstractDashboardController
     #[Route('/admin')]
     public function homepage(): RedirectResponse
     {
-        return $this->redirectToRoute('admin');
+        return $this->redirectToRoute('app_admin_dashboard_index');
     }
 
-    #[Route('/admin/{_locale}', name: 'admin')]
+    #[Route('/{_locale}/admin')]
+    public function homepageLocaleFirst(): RedirectResponse
+    {
+        return $this->redirectToRoute('app_admin_dashboard_index');
+    }
+
+    #[Route('/admin/{_locale}', name: 'app_admin_dashboard_index')]
     public function index(): Response
     {
         return $this->render('admin/dashboard/index.html.twig');
