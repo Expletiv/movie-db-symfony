@@ -6,4 +6,5 @@ templates:
             confirm: 'E-Mail bestätigen'
             expiration: 'Dieser Link läuft ab in'
             thank_you: 'Danke!'
+            flash_success: 'Deine E-Mail-Addresse wurde bestätigt!'
             

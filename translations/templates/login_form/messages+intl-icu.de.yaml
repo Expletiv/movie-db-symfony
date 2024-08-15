@@ -9,3 +9,4 @@ templates:
             password: 'Passwort'
         unauthorized: 'Du musst dich anmelden, um Zugriff auf diese Seite zu erhalten.'
         access_denied: 'Du hast keine Zugriffsberechtigung für diese Seite.'
+        success_flash: 'Die Anmeldung war erfolgreich!'

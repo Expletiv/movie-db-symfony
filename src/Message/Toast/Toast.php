@@ -25,4 +25,9 @@ readonly class Toast
     {
         return $this->style;
     }
+
+    public function __toString(): string
+    {
+        return $this->message;
+    }
 }

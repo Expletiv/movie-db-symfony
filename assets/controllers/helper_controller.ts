@@ -1,14 +1,17 @@
 import {Controller} from "@hotwired/stimulus";
-import {TurboFrameMissingEvent} from "@hotwired/turbo";
+import {FetchResponse, FrameElement, TurboBeforeFetchResponseEvent, TurboFrameMissingEvent} from "@hotwired/turbo";
 
 export default class extends Controller {
 
+  private boundBeforeFetchResponse: any;
+
   connect() {
-    document.addEventListener('turbo:frame-missing', this.onFrameMissing);
+    this.boundBeforeFetchResponse = this.beforeFetchResponse.bind(this);
+    document.addEventListener('turbo:before-fetch-response', this.boundBeforeFetchResponse);
   }
 
   disconnect() {
-    document.removeEventListener('turbo:frame-missing', this.onFrameMissing)
+    document.removeEventListener('turbo:before-fetch-response', this.boundBeforeFetchResponse)
   }
 
   linkToUrl(event: { params: { url: string; }; }) {
@@ -19,10 +22,11 @@ export default class extends Controller {
     event.stopImmediatePropagation();
   }
 
-  onFrameMissing(event: TurboFrameMissingEvent) {
-    const response: Response = event.detail.response;
-    if (response.redirected) {
-      event.detail.visit(response.url, {action: "advance", frame: undefined});
+  beforeFetchResponse(event: TurboBeforeFetchResponseEvent) {
+    const response: FetchResponse = event.detail.fetchResponse;
+    const location = response.header('turbo-location');
+    if (location) {
+      Turbo.visit(location, {action: 'advance'});
       event.preventDefault();
     }
   }

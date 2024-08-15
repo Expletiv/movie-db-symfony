@@ -5,4 +5,5 @@ templates:
         email: 'Email'
         password: 'Passwort'
         agree_terms: 'Ich stimme den Bedingungen zu'
+        success_flash: 'Registrierung erfolgreich! Bitte bestätige deine E-Mail-Adresse, indem du auf den Link in der E-Mail klickst, die du gerade erhalten hast!'
             

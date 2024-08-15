@@ -6,9 +6,7 @@ namespace App\Controller\Frontend;
 
 use App\Entity\MovieWatchlist;
 use App\Entity\User;
-use App\Enum\ToastStyle;
 use App\Form\Watchlist\AddWatchlistType;
-use App\Message\Toast\Toast;
 use App\Repository\MovieRepository;
 use App\Repository\MovieTmdbDataRepository;
 use App\Repository\MovieWatchlistRepository;
@@ -95,10 +93,9 @@ class WatchlistController extends AbstractController
         $this->entityManager->remove($watchlist);
         $this->entityManager->flush();
 
-        $this->toastService->addToast(new Toast(
+        $this->toastService->success(
             t('forms.delete_watchlist.success_message', ['watchlistName' => $watchlist->getName()]),
-            ToastStyle::SUCCESS
-        ));
+        );
 
         return $this->redirectToRoute('app_movie_watchlists');
     }
@@ -147,10 +144,7 @@ class WatchlistController extends AbstractController
         }
         $this->entityManager->flush();
 
-        $this->toastService->addToast(new Toast(
-            t('forms.delete_from_watchlist.success_message'),
-            ToastStyle::SUCCESS
-        ));
+        $this->toastService->success(t('forms.delete_from_watchlist.success_message'));
         $this->addFlash('watchlist_edit', 1);
 
         return $this->redirectToRoute('app_movie_watchlists_show', [

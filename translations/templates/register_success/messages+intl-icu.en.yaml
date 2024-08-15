@@ -1,5 +1,0 @@
-templates:
-    register_success:
-        title: 'Registration complete!'
-        info: 'Please confirm your email address by clicking the link in the email you just received!'
-            
