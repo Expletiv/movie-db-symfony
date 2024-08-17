@@ -39,7 +39,7 @@
         "symfony/dotenv": "7.1.*",
         "symfony/event-dispatcher": "7.1.*",
         "symfony/expression-language": "7.1.*",
-        "symfony/flex": "^2",
+        "symfony/flex": "^2.4",
         "symfony/form": "7.1.*",
         "symfony/framework-bundle": "7.1.*",
         "symfony/http-client": "7.1.*",
@@ -145,10 +145,10 @@
             "docker compose --env-file .env.dev --env-file .env.local down",
             "docker compose --env-file .env.dev --env-file .env.local up -d --build --wait",
             "docker exec -it movie-db-php-1 composer install",
-            "docker exec -it movie-db-php-1 bin/console doctrine:migrations:migrate --no-interaction",
-            "docker exec -it movie-db-node-1 npm install",
-            "@test:setup",
+            "docker exec -it movie-db-node-1 npm install --force",
             "@webpack:run",
+            "docker exec -it movie-db-php-1 bin/console doctrine:migrations:migrate --no-interaction",
+            "@test:setup",
             "echo 'Visit the application under https://localhost:4443'"
         ],
         "fix": "@format:php src",
@@ -173,7 +173,7 @@
             "docker exec -it movie-db-php-1 bin/console --env=test doctrine:fixtures:load --no-interaction"
         ],
         "test:translations": "bin/console lint:yaml translations",
-        "webpack:run": "docker exec -it movie-db-node-1 npm run dev",
+        "webpack:run": "docker exec -it movie-db-node-1 npm run build",
         "worker:restart": "docker compose restart php-worker"
     }
 }
