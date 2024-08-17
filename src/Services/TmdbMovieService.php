@@ -4,10 +4,11 @@ namespace App\Services;
 
 use App\Entity\Movie;
 use App\Repository\MovieRepository;
+use App\Services\Interface\TmdbMovieInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Tmdb\Client;
 
-readonly class TmdbService
+readonly class TmdbMovieService implements TmdbMovieInterface
 {
     public function __construct(
         private Client $tmdbClient,

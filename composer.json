@@ -117,6 +117,7 @@
     "require-dev": {
         "captainhook/captainhook-phar": "^5.23",
         "captainhook/hook-installer": "^1.0",
+        "doctrine/doctrine-fixtures-bundle": "^3.6",
         "friendsofphp/php-cs-fixer": "^3.58",
         "phpmd/phpmd": "^2.15",
         "phpstan/phpstan": "^1.11",
@@ -143,14 +144,16 @@
         "dev:setup": [
             "docker compose --env-file .env.dev --env-file .env.local down",
             "docker compose --env-file .env.dev --env-file .env.local up -d --build --wait",
+            "docker exec -it movie-db-php-1 composer install",
+            "docker exec -it movie-db-php-1 bin/console doctrine:migrations:migrate --no-interaction",
             "docker exec -it movie-db-node-1 npm install",
+            "@test:setup",
             "@webpack:run",
             "echo 'Visit the application under https://localhost:4443'"
         ],
-        "fix": [
-            "@format:php"
-        ],
-        "format:php": "docker exec -it movie-db-php-1 vendor/bin/php-cs-fixer fix src",
+        "fix": "@format:php src",
+        "fix:tests": "@format:php tests",
+        "format:php": "docker exec -it movie-db-php-1 vendor/bin/php-cs-fixer fix",
         "test": [
             "@test:phpcsfixer",
             "@test:phpstan",
@@ -158,10 +161,17 @@
             "@test:phpunit",
             "@test:translations"
         ],
+        "test:coverage": "XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-text",
         "test:phpstan": "vendor/bin/phpstan analyse",
         "test:phpcsfixer": "vendor/bin/php-cs-fixer check src",
         "test:phpmd": "vendor/bin/phpmd src ansi cleancode",
         "test:phpunit": "bin/phpunit",
+        "test:setup": [
+            "docker exec -it movie-db-php-1 bin/console --env=test doctrine:database:drop --force",
+            "docker exec -it movie-db-php-1 bin/console --env=test doctrine:database:create",
+            "docker exec -it movie-db-php-1 bin/console --env=test doctrine:schema:create",
+            "docker exec -it movie-db-php-1 bin/console --env=test doctrine:fixtures:load --no-interaction"
+        ],
         "test:translations": "bin/console lint:yaml translations",
         "webpack:run": "docker exec -it movie-db-node-1 npm run dev",
         "worker:restart": "docker compose restart php-worker"
