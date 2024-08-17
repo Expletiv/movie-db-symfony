@@ -28,7 +28,7 @@ services:
       - ./:/app
       # If you develop on Mac or Windows you can remove the vendor/ directory
       #  from the bind-mount for better performance by enabling the next line:
-      - /app/vendor
+      # - /app/vendor
   
   node:
     image: node:lts-alpine
