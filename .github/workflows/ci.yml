@@ -43,7 +43,7 @@ jobs:
         run: docker compose up --wait --no-build
       -
         name: Install npm dependencies
-        run: docker compose exec -T node npm install --force
+        run: docker compose exec -T node npm install
       -
         name: Build assets
         run: docker compose exec -T node npm run build
