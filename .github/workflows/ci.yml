@@ -11,6 +11,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
+env:
+  GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
 jobs:
   tests:
     name: Tests
@@ -37,9 +40,13 @@ jobs:
             *.cache-to=type=gha,scope=${{github.ref}},mode=max
       -
         name: Start services
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: docker compose up --wait --no-build
+      -
+        name: Install npm dependencies
+        run: docker compose exec -T node npm install
+      -
+        name: Build assets
+        run: docker compose exec -T node npm run build
       -
         name: Check HTTP reachability
         run: curl -v --fail-with-body http://localhost
@@ -56,9 +63,6 @@ jobs:
       -
         name: Load fixtures
         run: docker compose exec -T php bin/console -e test doctrine:fixtures:load --no-interaction
-      -
-        name: Run Webpack
-        run: docker compose exec -T node npm install | docker compose exec -T node npm run dev
       -
         name: Run PHPUnit
         run: docker compose exec -T php bin/phpunit
