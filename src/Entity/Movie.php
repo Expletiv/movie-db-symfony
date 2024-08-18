@@ -179,7 +179,7 @@ class Movie
 
     public function getTmdbDataForLocale(string $locale): ?MovieTmdbData
     {
-        return $this->getTmdbData()->findFirst(
+        return $this->tmdbData->findFirst(
             fn ($i, $tmdbData) => $tmdbData->getMovie() === $this && $tmdbData->getLocale() === $locale
         );
     }
