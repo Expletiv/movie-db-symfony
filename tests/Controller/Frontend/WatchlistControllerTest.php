@@ -3,12 +3,8 @@
 namespace App\Tests\Controller\Frontend;
 
 use App\DataFixtures\MovieWatchlistFixtures;
-use App\DataFixtures\UserFixtures;
-use App\Repository\UserRepository;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class WatchlistControllerTest extends WebTestCase
+class WatchlistControllerTest extends AbstractWebTestCase
 {
     public function testIndex(): void
     {
@@ -74,12 +70,5 @@ class WatchlistControllerTest extends WebTestCase
         $this->loginWithTestUser($client);
         $client->request('POST', '/en/watchlists/'.MovieWatchlistFixtures::MOVIE_WATCHLIST_ID.'/delete-movie/1');
         $this->assertResponseRedirects('/en/login', 302);
-    }
-
-    public function loginWithTestUser(KernelBrowser $client): void
-    {
-        $userRepository = $client->getContainer()->get(UserRepository::class);
-        $testUser = $userRepository->find(UserFixtures::TEST_USER_ID);
-        $client->loginUser($testUser);
     }
 }

@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller\Frontend;
 
-use App\DataFixtures\UserFixtures;
-use App\Repository\UserRepository;
 use App\Services\Interface\TmdbMovieInterface;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class MovieControllerTest extends WebTestCase
+class MovieControllerTest extends AbstractWebTestCase
 {
     public function testIndex(): void
     {
@@ -53,9 +50,7 @@ class MovieControllerTest extends WebTestCase
         $client->request('GET', '/en/movie/123/add-to-watchlist');
         $this->assertResponseRedirects('/en/login', 302);
 
-        $userRepository = static::getContainer()->get(UserRepository::class);
-        $testUser = $userRepository->find(UserFixtures::TEST_USER_ID);
-        $client->loginUser($testUser);
+        $this->loginWithTestUser($client);
 
         $client->request('GET', '/en/movie/123/add-to-watchlist');
         $this->assertResponseIsSuccessful();
