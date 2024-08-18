@@ -65,9 +65,7 @@ jobs:
         run: docker compose exec -T php bin/console -e test doctrine:fixtures:load --no-interaction
       -
         name: Run PHPUnit
-        env:
-          XDEBUG_MODE: coverage
-        run: docker compose exec -T php bin/phpunit src --coverage-clover coverage.xml .
+        run: docker compose exec -T php bin/phpunit tests --coverage-clover coverage.xml .
       -  
         name: Run PHP-CS-Fixer
         run: docker compose exec -T php vendor/bin/php-cs-fixer check src
