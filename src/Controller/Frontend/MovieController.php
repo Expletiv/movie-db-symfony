@@ -10,6 +10,7 @@ use App\Form\Watchlist\AddToWatchlistType;
 use App\Services\Interface\TmdbMovieInterface;
 use App\Services\Interface\WatchlistInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Locale;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -61,6 +62,26 @@ class MovieController extends AbstractController
 
         return $this->render('forms/form_page.html.twig', [
             'form' => $form,
+        ]);
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
+    #[Route('/{_locale}/movie/{tmdbId}/watch-providers', name: 'app_movie_watch_providers')]
+    public function watchProviders(
+        Request $request,
+        int $tmdbId,
+        TmdbMovieInterface $tmdb
+    ): Response {
+        if (null === $request->headers->get('Turbo-Frame')) {
+            throw $this->createNotFoundException();
+        }
+        $locale = Locale::acceptFromHttp($request->headers->get('accept-language')) ?: $request->getLocale();
+
+        return $this->render('movie_details/watch_providers.html.twig', [
+            'tmdbId' => $tmdbId,
+            'providers' => $tmdb->findWatchProviders($tmdbId, $locale),
         ]);
     }
 }

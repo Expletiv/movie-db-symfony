@@ -1,0 +1,77 @@
+<turbo-frame id="watch-providers-{{ tmdbId }}">
+    <div class="accordion accordion-flush" id="providers-accordion">
+        {% if providers.flatrate is not empty %}
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#providers-collapse-1" aria-expanded="false"
+                            aria-controls="providers-collapse-1">
+                        {{ 'templates.movie_details.watch_providers.flatrate'|trans }}
+                    </button>
+                </h2>
+                <div id="providers-collapse-1" class="accordion-collapse collapse"
+                     data-bs-parent="#providers-accordion">
+                    <div class="accordion-body">
+                        <div class="d-flex flex-wrap">
+                            {% for provider in providers.flatrate %}
+                                <img class="rounded me-1 mb-1" src="{{ provider.logo_path|tmdb_image_url }}"
+                                     alt="{{ provider.provider_name }}" width="65" height="65">
+                            {% endfor %}
+                        </div>
+                        {{ 'templates.movie_details.watch_providers.provided_by'|trans }}
+                        <img src="{{ asset('build/images/just_watch_logo.svg') }}" alt="Just Watch logo" width="90">
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {% if providers.rent is not empty %}
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#providers-collapse-2" aria-expanded="false"
+                            aria-controls="providers-collapse-2">
+                        {{ 'templates.movie_details.watch_providers.rent'|trans }}
+                    </button>
+                </h2>
+                <div id="providers-collapse-2" class="accordion-collapse collapse"
+                     data-bs-parent="#providers-accordion">
+                    <div class="accordion-body">
+                        <div class="d-flex flex-wrap">
+                            {% for provider in providers.rent %}
+                                <img class="rounded me-1 mb-1" src="{{ provider.logo_path|tmdb_image_url }}"
+                                     alt="{{ provider.provider_name }}" width="65" height="65">
+                            {% endfor %}
+                        </div>
+                        {{ 'templates.movie_details.watch_providers.provided_by'|trans }}
+                        <img src="{{ asset('build/images/just_watch_logo.svg') }}" alt="Just Watch logo" width="90">
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {% if providers.buy is not empty %}
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#providers-collapse-3" aria-expanded="false"
+                            aria-controls="providers-collapse-3">
+                        {{ 'templates.movie_details.watch_providers.buy'|trans }}
+                    </button>
+                </h2>
+                <div id="providers-collapse-3" class="accordion-collapse collapse"
+                     data-bs-parent="#providers-accordion">
+                    <div class="accordion-body">
+                        <div class="d-flex flex-wrap">
+                            {% for provider in providers.buy %}
+                                <img class="rounded me-1 mb-1" src="{{ provider.logo_path|tmdb_image_url }}"
+                                     alt="{{ provider.provider_name }}" width="65" height="65">
+                            {% endfor %}
+                        </div>
+                        {{ 'templates.movie_details.watch_providers.provided_by'|trans }}
+                        <img src="{{ asset('build/images/just_watch_logo.svg') }}" alt="Just Watch logo" width="90">
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</turbo-frame>
+

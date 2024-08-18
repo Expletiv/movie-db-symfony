@@ -48,6 +48,13 @@
                             {% endfor %}
                         </h5>
                     </div>
+                    <div class="bg-body-tertiary bg-opacity-75 rounded p-3 mt-2">
+                        {% include 'components/modal/turbo_frame_modal.html.twig' with {
+                            'form': addToWatchlistForm,
+                            'formPath': path('app_movie_add_to_watchlist', {tmdbId: movie.id}),
+                            'requiredRole': 'IS_AUTHENTICATED'
+                        } %}
+                    </div>
                     <table
                         class="table table-hover table-sm table-borderless table-striped rounded overflow-hidden mt-2">
                         <tbody>
@@ -93,18 +100,15 @@
                         </tr>
                         </tbody>
                     </table>
-                    <div class="bg-body-tertiary bg-opacity-75 rounded p-3 mt-2">
-                        {% include 'components/modal/turbo_frame_modal.html.twig' with {
-                            'form': addToWatchlistForm,
-                            'formPath': path('app_movie_add_to_watchlist', {tmdbId: movie.id}),
-                            'requiredRole': 'IS_AUTHENTICATED'
-                        } %}
-                    </div>
+                    <turbo-frame id="watch-providers-{{ movie.id }}"
+                                 src="{{ path('app_movie_watch_providers', {tmdbId: movie.id}) }}" loading="lazy">
+                    </turbo-frame>
                 </div>
             </div>
         </div>
     </div>
-    <turbo-frame id="movie_recommendations" src="{{ path('app_movies_recommendations', {tmdbId: movie.id}) }}" loading="lazy">
+    <turbo-frame id="movie_recommendations" src="{{ path('app_movies_recommendations', {tmdbId: movie.id}) }}"
+                 loading="lazy">
         {% include 'components/centered_spinner.html.twig' %}
     </turbo-frame>
 
