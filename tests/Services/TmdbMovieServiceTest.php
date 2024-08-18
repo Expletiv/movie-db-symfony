@@ -16,7 +16,7 @@ use Tmdb\Client;
 class TmdbMovieServiceTest extends TestCase
 {
     /**
-     * @return array{EntityManagerInterface&MockObject, MovieRepository&MockObject, Client&MockObject, array{title: string}}
+     * @return array{EntityManagerInterface&MockObject, MovieRepository&MockObject, Client&MockObject, Movies&MockObject}
      */
     public function setupDependencies(): array
     {
@@ -25,11 +25,9 @@ class TmdbMovieServiceTest extends TestCase
         $tmdbClient = $this->createMock(Client::class);
         $moviesApi = $this->createMock(Movies::class);
 
-        $tmdbData = ['title' => 'The Movie'];
         $tmdbClient->method('getMoviesApi')->willReturn($moviesApi);
-        $moviesApi->method('getMovie')->willReturn($tmdbData);
 
-        return [$entityManager, $movieRepository, $tmdbClient, $tmdbData];
+        return [$entityManager, $movieRepository, $tmdbClient, $moviesApi];
     }
 
     /**
@@ -37,7 +35,10 @@ class TmdbMovieServiceTest extends TestCase
      */
     public function testFindTmdbDetailsData(Movie $movie): void
     {
-        list($entityManager, $movieRepository, $tmdbClient, $tmdbData) = $this->setupDependencies();
+        list($entityManager, $movieRepository, $tmdbClient, $moviesApi) = $this->setupDependencies();
+
+        $tmdbData = ['title' => 'The Movie'];
+        $moviesApi->method('getMovie')->willReturn($tmdbData);
 
         $movieRepository->expects($this->once())
             ->method('findOneBy')
@@ -53,7 +54,10 @@ class TmdbMovieServiceTest extends TestCase
 
     public function testFindTmdbDetailsDataMovieNotFound(): void
     {
-        list($entityManager, $movieRepository, $tmdbClient, $tmdbData) = $this->setupDependencies();
+        list($entityManager, $movieRepository, $tmdbClient, $moviesApi) = $this->setupDependencies();
+
+        $tmdbData = ['title' => 'The Movie'];
+        $moviesApi->method('getMovie')->willReturn($tmdbData);
 
         $movieRepository->expects($this->once())
             ->method('findOneBy')
@@ -70,6 +74,50 @@ class TmdbMovieServiceTest extends TestCase
         $detailsData = $tmdbMovieService->findTmdbDetailsData(123, 'en');
 
         $this->assertSame($tmdbData, $detailsData);
+    }
+
+    public function testWatchlistProvider(): void
+    {
+        list($entityManager, $movieRepository, $tmdbClient, $moviesApi) = $this->setupDependencies();
+
+        $emptyData = [
+            'link' => null,
+            'buy' => [],
+            'flatrate' => [],
+            'rent' => [],
+        ];
+        $usData = [
+            'link' => 'https://www.themoviedb.org/movie/123/watch',
+            'buy' => ['provider' => 'Amazon'],
+            'flatrate' => ['provider' => 'Netflix'],
+            'rent' => ['provider' => 'Google Play'],
+        ];
+        $deData = [
+            'link' => 'https://www.themoviedb.org/movie/123/watch',
+            'rent' => ['provider' => 'Google Play'],
+        ];
+        $moviesApi->method('getWatchProviders')->willReturn(
+            [
+                'results' => [
+                    'US' => $usData,
+                    'DE' => $deData,
+                ],
+            ]
+        );
+
+        $tmdbMovieService = new TmdbMovieService($tmdbClient, $movieRepository, $entityManager);
+        $usProviders = $tmdbMovieService->findWatchProviders(123, 'en-US');
+        $deProviders = $tmdbMovieService->findWatchProviders(123, 'de-DE');
+
+        $this->assertSame($usData, $usProviders);
+        // The data is merged with empty arrays, so the data should not be the same
+        $this->assertNotSame($deData, $deProviders);
+        $this->assertSame(
+            array_merge($emptyData, $deData),
+            $deProviders
+        );
+        $frProviders = $tmdbMovieService->findWatchProviders(123, 'fr-FR');
+        $this->assertSame($emptyData, $frProviders);
     }
 
     /**

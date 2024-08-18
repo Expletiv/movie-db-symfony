@@ -77,7 +77,7 @@ class MovieController extends AbstractController
         if (null === $request->headers->get('Turbo-Frame')) {
             throw $this->createNotFoundException();
         }
-        $locale = Locale::acceptFromHttp($_SERVER['HTTP_ACCEPT_LANGUAGE']) ?: $request->getLocale();
+        $locale = Locale::acceptFromHttp($request->headers->get('accept-language')) ?: $request->getLocale();
 
         return $this->render('movie_details/watch_providers.html.twig', [
             'tmdbId' => $tmdbId,

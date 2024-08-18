@@ -16,3 +16,4 @@ templates:
             rent: 'Rent'
             buy: 'Buy'
             flatrate: 'Streaming services'
+            provided_by: 'Provided by'

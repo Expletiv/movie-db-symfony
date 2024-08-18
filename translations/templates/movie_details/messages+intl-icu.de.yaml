@@ -15,4 +15,5 @@ templates:
         watch_providers:
             rent: 'Leihen'
             buy: 'Kaufen'
-            flatrate: 'Streamingdienste'            
+            flatrate: 'Streamingdienste'
+            provided_by: 'Bereitgestellt von'

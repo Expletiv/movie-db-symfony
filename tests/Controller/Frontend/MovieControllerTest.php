@@ -55,4 +55,37 @@ class MovieControllerTest extends AbstractWebTestCase
         $client->request('GET', '/en/movie/123/add-to-watchlist');
         $this->assertResponseIsSuccessful();
     }
+
+    public function testWatchProviders(): void
+    {
+        $client = static::createClient();
+
+        $tmdb = $this->createMock(TmdbMovieInterface::class);
+        $tmdb->method('findWatchProviders')
+            ->with(123, 'en-US')
+            ->willReturn(
+                [
+                    'link' => 'https://www.themoviedb.org/movie/123/watch?locale=US',
+                    'flatrate' => [
+                        ['logo_path' => 'test.jpg', 'provider_name' => 'Netflix'],
+                        ['logo_path' => 'test.jpg', 'provider_name' => 'Hulu'],
+                    ],
+                    'buy' => [
+                        ['provider_id' => 3, 'provider_name' => 'Amazon'],
+                    ],
+                    'rent' => [
+                        ['provider_id' => 2, 'provider_name' => 'Google Play'],
+                    ],
+                ],
+            );
+        $container = $client->getContainer();
+        $container->set(TmdbMovieInterface::class, $tmdb);
+
+        $client->request('GET', '/en/movie/123/watch-providers', server: ['HTTP_ACCEPT_LANGUAGE' => 'en-US']);
+        $this->assertResponseStatusCodeSame(404);
+
+        $client->request('GET', '/en/movie/123/watch-providers', server: ['HTTP_ACCEPT_LANGUAGE' => 'en-US', 'HTTP_Turbo-Frame' => 'watch-providers']);
+        $this->assertResponseIsSuccessful();
+        $this->assertNotEmpty($client->getResponse()->getContent());
+    }
 }
