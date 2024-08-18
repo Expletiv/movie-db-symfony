@@ -148,9 +148,11 @@ class Movie
     /**
      * @param Collection<int, MovieTmdbData> $tmdbData
      */
-    public function setTmdbData(Collection $tmdbData): void
+    public function setTmdbData(Collection $tmdbData): static
     {
         $this->tmdbData = $tmdbData;
+
+        return $this;
     }
 
     public function addTmdbDatum(MovieTmdbData $tmdbData): static
@@ -177,7 +179,7 @@ class Movie
 
     public function getTmdbDataForLocale(string $locale): ?MovieTmdbData
     {
-        return $this->getTmdbData()->findFirst(
+        return $this->tmdbData->findFirst(
             fn ($i, $tmdbData) => $tmdbData->getMovie() === $this && $tmdbData->getLocale() === $locale
         );
     }

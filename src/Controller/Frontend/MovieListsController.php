@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace App\Controller\Frontend;
 
 use App\Form\MovieDiscoverFilterType;
+use App\Services\Interface\TmdbListInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
-use Tmdb\Client;
 
 class MovieListsController extends AbstractController
 {
@@ -18,7 +18,7 @@ class MovieListsController extends AbstractController
     private const int TMDB_RECOMMENDATIONS_MAX_PAGE = 2;
 
     public function __construct(
-        private readonly Client $tmdbClient,
+        private readonly TmdbListInterface $tmdbList,
     ) {
     }
 
@@ -27,7 +27,7 @@ class MovieListsController extends AbstractController
         Request $request,
         #[MapQueryParameter(options: ['min_range' => 1, 'max_range' => self::TMDB_MAX_PAGE])] int $page = 1,
     ): Response {
-        $moviesResult = $this->tmdbClient->getMoviesApi()->getPopular([
+        $moviesResult = $this->tmdbList->popularMovies([
             'language' => $request->getLocale(),
             'page' => $page,
         ]);
@@ -54,7 +54,7 @@ class MovieListsController extends AbstractController
             $params['primary_release_year'] = $data['primaryReleaseYear'];
         }
 
-        $moviesResult = $this->tmdbClient->getDiscoverApi()->discoverMovies(array_merge([
+        $moviesResult = $this->tmdbList->discoverMovies(array_merge([
             'language' => $request->getLocale(),
             'page' => $page,
         ], $params));
@@ -72,7 +72,7 @@ class MovieListsController extends AbstractController
         Request $request,
         #[MapQueryParameter(options: ['min_range' => 1, 'max_range' => self::TMDB_MAX_PAGE])] int $page = 1,
     ): Response {
-        $moviesResult = $this->tmdbClient->getMoviesApi()->getTopRated([
+        $moviesResult = $this->tmdbList->topRatedMovies([
             'language' => $request->getLocale(),
             'page' => $page,
         ]);
@@ -90,7 +90,7 @@ class MovieListsController extends AbstractController
         #[MapQueryParameter] string $query,
         #[MapQueryParameter(options: ['min_range' => 1, 'max_range' => self::TMDB_MAX_PAGE])] int $page = 1,
     ): Response {
-        $moviesResult = $this->tmdbClient->getSearchApi()->searchMovies(
+        $moviesResult = $this->tmdbList->searchMovies(
             $query,
             [
                 'language' => $request->getLocale(),
@@ -114,7 +114,7 @@ class MovieListsController extends AbstractController
         int $tmdbId,
         #[MapQueryParameter(options: ['min_range' => 1, 'max_range' => self::TMDB_RECOMMENDATIONS_MAX_PAGE])] int $page = 1,
     ): Response {
-        $moviesResult = $this->tmdbClient->getMoviesApi()->getRecommendations($tmdbId, [
+        $moviesResult = $this->tmdbList->recommendedMovies($tmdbId, [
             'language' => $request->getLocale(),
             'page' => $page,
         ]);

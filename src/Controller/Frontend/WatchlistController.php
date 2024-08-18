@@ -141,8 +141,8 @@ class WatchlistController extends AbstractController
 
         if (null !== $movie) {
             $watchlist->removeMovie($movie);
+            $this->entityManager->flush();
         }
-        $this->entityManager->flush();
 
         $this->toastService->success(t('forms.delete_from_watchlist.success_message'));
         $this->addFlash('watchlist_edit', 1);

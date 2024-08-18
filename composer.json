@@ -39,7 +39,7 @@
         "symfony/dotenv": "7.1.*",
         "symfony/event-dispatcher": "7.1.*",
         "symfony/expression-language": "7.1.*",
-        "symfony/flex": "^2",
+        "symfony/flex": "^2.4",
         "symfony/form": "7.1.*",
         "symfony/framework-bundle": "7.1.*",
         "symfony/http-client": "7.1.*",
@@ -58,13 +58,13 @@
         "symfony/security-bundle": "7.1.*",
         "symfony/security-csrf": "7.1.*",
         "symfony/serializer": "7.1.*",
-        "symfony/stimulus-bundle": "^2.17",
+        "symfony/stimulus-bundle": "^2.19",
         "symfony/string": "7.1.*",
         "symfony/translation": "7.1.*",
         "symfony/twig-bundle": "7.1.*",
         "symfony/ux-autocomplete": "^2.18",
         "symfony/ux-lazy-image": "^2.18",
-        "symfony/ux-turbo": "^2.18",
+        "symfony/ux-turbo": "^2.19",
         "symfony/validator": "7.1.*",
         "symfony/web-link": "7.1.*",
         "symfony/webpack-encore-bundle": "^2.1",
@@ -117,6 +117,7 @@
     "require-dev": {
         "captainhook/captainhook-phar": "^5.23",
         "captainhook/hook-installer": "^1.0",
+        "doctrine/doctrine-fixtures-bundle": "^3.6",
         "friendsofphp/php-cs-fixer": "^3.58",
         "phpmd/phpmd": "^2.15",
         "phpstan/phpstan": "^1.11",
@@ -142,15 +143,17 @@
         ],
         "dev:setup": [
             "docker compose --env-file .env.dev --env-file .env.local down",
-            "docker compose --env-file .env.dev --env-file .env.local up -d --build --wait",
-            "docker exec -it movie-db-node-1 npm install",
+            "docker compose --env-file .env.dev --env-file .env.local up -d --wait",
+            "docker exec -it movie-db-php-1 composer install",
+            "docker exec -it movie-db-node-1 npm install --force",
             "@webpack:run",
+            "docker exec -it movie-db-php-1 bin/console doctrine:migrations:migrate --no-interaction",
+            "@test:setup",
             "echo 'Visit the application under https://localhost:4443'"
         ],
-        "fix": [
-            "@format:php"
-        ],
-        "format:php": "docker exec -it movie-db-php-1 vendor/bin/php-cs-fixer fix src",
+        "fix": "@format:php src",
+        "fix:tests": "@format:php tests",
+        "format:php": "docker exec -it movie-db-php-1 vendor/bin/php-cs-fixer fix",
         "test": [
             "@test:phpcsfixer",
             "@test:phpstan",
@@ -158,12 +161,19 @@
             "@test:phpunit",
             "@test:translations"
         ],
+        "test:coverage": "XDEBUG_MODE=coverage bin/phpunit --coverage-text",
         "test:phpstan": "vendor/bin/phpstan analyse",
         "test:phpcsfixer": "vendor/bin/php-cs-fixer check src",
         "test:phpmd": "vendor/bin/phpmd src ansi cleancode",
         "test:phpunit": "bin/phpunit",
+        "test:setup": [
+            "docker exec -it movie-db-php-1 bin/console --env=test doctrine:database:drop --force",
+            "docker exec -it movie-db-php-1 bin/console --env=test doctrine:database:create",
+            "docker exec -it movie-db-php-1 bin/console --env=test doctrine:schema:create",
+            "docker exec -it movie-db-php-1 bin/console --env=test doctrine:fixtures:load --no-interaction"
+        ],
         "test:translations": "bin/console lint:yaml translations",
-        "webpack:run": "docker exec -it movie-db-node-1 npm run dev",
+        "webpack:run": "docker exec -it movie-db-node-1 npm run build",
         "worker:restart": "docker compose restart php-worker"
     }
 }

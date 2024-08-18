@@ -5,9 +5,10 @@ namespace App\Services;
 use App\Entity\Movie;
 use App\Entity\MovieWatchlist;
 use App\Repository\MovieRepository;
+use App\Services\Interface\WatchlistInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
-readonly class WatchlistService
+readonly class WatchlistService implements WatchlistInterface
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
@@ -22,8 +23,8 @@ readonly class WatchlistService
     {
         $movie = $this->movieRepository->findOneBy(['tmdbId' => $tmdbId]);
         if (null === $movie) {
-            $movie = (new Movie())
-                ->setTmdbId($tmdbId);
+            $movie = (new Movie())->setTmdbId($tmdbId);
+            $this->entityManager->persist($movie);
         }
         foreach ($watchlists as $watchlist) {
             $movie->addToWatchlist($watchlist);

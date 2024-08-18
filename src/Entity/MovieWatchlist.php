@@ -63,7 +63,7 @@ class MovieWatchlist
         return $this->getOwner()->getId() === $user->getId();
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }

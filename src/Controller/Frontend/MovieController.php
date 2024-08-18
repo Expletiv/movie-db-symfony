@@ -5,15 +5,16 @@ declare(strict_types=1);
 namespace App\Controller\Frontend;
 
 use App\Entity\MovieWatchlist;
+use App\Entity\User;
 use App\Form\Watchlist\AddToWatchlistType;
-use App\Services\TmdbService;
-use App\Services\UserProvider;
-use App\Services\WatchlistService;
+use App\Services\Interface\TmdbMovieInterface;
+use App\Services\Interface\WatchlistInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 use function Symfony\Component\Translation\t;
 
@@ -23,12 +24,12 @@ class MovieController extends AbstractController
     public function index(
         Request $request,
         int $tmdbId,
-        TmdbService $tmdbService
+        TmdbMovieInterface $tmdb
     ): Response {
         $form = $this->createForm(AddToWatchlistType::class);
 
         return $this->render('movie_details/index.html.twig', [
-            'movie' => $tmdbService->findTmdbDetailsData($tmdbId, $request->getLocale()),
+            'movie' => $tmdb->findTmdbDetailsData($tmdbId, $request->getLocale()),
             'addToWatchlistForm' => $form,
         ]);
     }
@@ -37,8 +38,8 @@ class MovieController extends AbstractController
     public function addToWatchlist(
         Request $request,
         int $tmdbId,
-        WatchlistService $watchlistService,
-        UserProvider $userProvider,
+        WatchlistInterface $watchlistService,
+        #[CurrentUser] User $user,
     ): Response {
         $form = $this->createForm(AddToWatchlistType::class);
         $form->handleRequest($request);
@@ -52,13 +53,10 @@ class MovieController extends AbstractController
         /** @var ArrayCollection<int, MovieWatchlist> $watchlists */
         $watchlists = $data['watchlists'];
 
-        $user = $userProvider->authenticateUser();
         if (!$user->ownsWatchlists($watchlists)) {
             throw $this->createAccessDeniedException();
         }
-
         $watchlistService->addMovieToWatchlists($tmdbId, $watchlists);
-
         $this->addFlash('form_success', t('forms.add_to_watchlist.success_message'));
 
         return $this->render('forms/form_page.html.twig', [
