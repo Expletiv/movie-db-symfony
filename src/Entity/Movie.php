@@ -148,9 +148,11 @@ class Movie
     /**
      * @param Collection<int, MovieTmdbData> $tmdbData
      */
-    public function setTmdbData(Collection $tmdbData): void
+    public function setTmdbData(Collection $tmdbData): static
     {
         $this->tmdbData = $tmdbData;
+
+        return $this;
     }
 
     public function addTmdbDatum(MovieTmdbData $tmdbData): static

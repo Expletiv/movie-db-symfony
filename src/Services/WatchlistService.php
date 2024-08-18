@@ -24,6 +24,7 @@ readonly class WatchlistService implements WatchlistInterface
         $movie = $this->movieRepository->findOneBy(['tmdbId' => $tmdbId]);
         if (null === $movie) {
             $movie = (new Movie())->setTmdbId($tmdbId);
+            $this->entityManager->persist($movie);
         }
         foreach ($watchlists as $watchlist) {
             $movie->addToWatchlist($watchlist);
