@@ -12,3 +12,7 @@ templates:
             vote_average: 'Average rating (TMDB)'
             vote_count: 'Ratings count (TMDB)'
             
+        watch_providers:
+            rent: 'Rent'
+            buy: 'Buy'
+            flatrate: 'Streaming services'

@@ -11,4 +11,8 @@ templates:
             imdb_id: 'IMDb-ID'
             vote_average: 'Bewertung (TMDB)'
             vote_count: 'Anzahl der Bewertungen (TMDB)'
-            
+        
+        watch_providers:
+            rent: 'Leihen'
+            buy: 'Kaufen'
+            flatrate: 'Streamingdienste'            
