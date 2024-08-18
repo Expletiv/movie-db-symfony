@@ -65,7 +65,9 @@ jobs:
         run: docker compose exec -T php bin/console -e test doctrine:fixtures:load --no-interaction
       -
         name: Run PHPUnit
-        run: docker compose exec -T php bin/phpunit
+        env:
+          XDEBUG_MODE: coverage
+        run: docker compose exec -T php bin/phpunit --coverage-clover coverage.xml .
       -  
         name: Run PHP-CS-Fixer
         run: docker compose exec -T php vendor/bin/php-cs-fixer check src
@@ -79,6 +81,11 @@ jobs:
         name: Doctrine Schema Validator
         if: false
         run: docker compose exec -T php bin/console -e test doctrine:schema:validate
+      -  
+        name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_ORG_TOKEN }}
   lint:
     name: Docker Lint
     runs-on: ubuntu-latest

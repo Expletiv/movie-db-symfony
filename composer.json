@@ -161,7 +161,7 @@
             "@test:phpunit",
             "@test:translations"
         ],
-        "test:coverage": "XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-text",
+        "test:coverage": "XDEBUG_MODE=coverage bin/phpunit --coverage-text",
         "test:phpstan": "vendor/bin/phpstan analyse",
         "test:phpcsfixer": "vendor/bin/php-cs-fixer check src",
         "test:phpmd": "vendor/bin/phpmd src ansi cleancode",
