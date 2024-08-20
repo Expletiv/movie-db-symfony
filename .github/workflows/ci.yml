@@ -49,7 +49,7 @@ jobs:
         run: docker compose exec -T node npm run build
       -
         name: Generate DTOs
-        run: docker compose exec -T php bin/console dto:generate dto/tmdb-openapi.json src/Dto
+        run: docker compose exec -T php bin/console app:dto:generate dto/tmdb-openapi.json src/Dto
       -  
         name: Check HTTP reachability
         run: curl -v --fail-with-body http://localhost

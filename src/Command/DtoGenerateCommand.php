@@ -10,6 +10,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Filesystem\Filesystem;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
@@ -17,11 +18,14 @@ use function preg_match;
 use function sprintf;
 
 #[AsCommand(
-    name: 'dto:generate',
+    name: 'app:dto:generate',
     description: 'Generates DTOs from the TMDB OpenAPI file',
 )]
 class DtoGenerateCommand extends Command
 {
+    private ?string $directory;
+    private bool $dryRun = false;
+
     public function __construct(
         private readonly Environment $twig,
         #[Autowire(param: 'kernel.project_dir')]
@@ -34,7 +38,8 @@ class DtoGenerateCommand extends Command
     {
         $this
             ->addArgument('from', InputArgument::REQUIRED, 'The TMDB OpenAPI file to generate DTOs from')
-            ->addArgument('to', InputArgument::REQUIRED, 'The directory to save the generated DTOs');
+            ->addArgument('to', InputArgument::REQUIRED, 'The directory to save the generated DTOs')
+            ->addOption('dry-run', 'd', null, 'Do not write the files');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -43,6 +48,7 @@ class DtoGenerateCommand extends Command
 
         $from = $input->getArgument('from');
         $to = $input->getArgument('to');
+        $this->dryRun = $input->getOption('dry-run');
 
         $this->generateDtos($from, $to, $io);
 
@@ -68,6 +74,8 @@ class DtoGenerateCommand extends Command
             throw new InvalidArgumentException(sprintf('Directory %s does not exist', $to));
         }
 
+        $this->directory = $this->projectDir.'/'.$to.'/Tmdb';
+
         $openApi = file_get_contents($from);
         $openApi = json_decode($openApi, true);
 
@@ -80,6 +88,8 @@ class DtoGenerateCommand extends Command
                 $getDomains[$data['domain']][] = $data['pathData'];
             }
         }
+
+        $this->removeOldFiles();
 
         foreach ($getDomains as $domain => $paths) {
             $this->generateDto($domain, $paths, $to);
@@ -138,7 +148,7 @@ class DtoGenerateCommand extends Command
 
     private function generateDto(string $domain, mixed $paths, string $to): void
     {
-        list($namespace, $dtoDirectory) = $this->generateDirectoryAndNamespace($to, $domain);
+        list($namespace, $dtoDirectory) = $this->generateDirectoryAndNamespaceForDomain($to, $domain);
 
         $loader = $this->twig->getLoader();
 
@@ -152,6 +162,9 @@ class DtoGenerateCommand extends Command
         }
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ElseExpression)
+     */
     private function generateDtoRecursive(string $namespace, string $directory, string $propertyName, mixed $schema, string $parentClassName): string
     {
         $schema = $this->checkMissingSchema($schema, $propertyName);
@@ -164,13 +177,13 @@ class DtoGenerateCommand extends Command
             }
         }
         // If there is an array of objects, generate the DTO for the object (in case it is an array of scalars there is no items property)
-        if ('array' === $schema['type'] && array_key_exists('items', $schema)) {
+        elseif ('array' === $schema['type'] && array_key_exists('items', $schema)) {
             $schema['items']['type'] = $this->generateDtoRecursive($namespace, $directory, $propertyName, $schema['items'], $parentClassName);
 
             return 'array<'.$schema['items']['type'].'>';
         }
         // If  it is a scalar type, return the type
-        if ('object' !== $schema['type'] && ('array' !== $schema['type'] || !array_key_exists('items', $schema))) {
+        else {
             return $schema['type'];
         }
 
@@ -181,7 +194,9 @@ class DtoGenerateCommand extends Command
             'properties' => $schema['properties'],
         ]);
 
-        file_put_contents($directory.'/'.$schema['type'].'.php', $dtoClass);
+        if (!$this->dryRun) {
+            file_put_contents($directory.'/'.$schema['type'].'.php', $dtoClass);
+        }
 
         return $schema['type'];
     }
@@ -320,7 +335,7 @@ class DtoGenerateCommand extends Command
     /**
      * @return array{0: string, 1: string}
      */
-    public function generateDirectoryAndNamespace(string $to, string $domain): array
+    public function generateDirectoryAndNamespaceForDomain(string $to, string $domain): array
     {
         // Create namespace from $to directory which is a relative path from the project directory
         // First: Remove leading directory (e.g. for src/Dto/Tmdb/Movie, remove src/)
@@ -330,16 +345,36 @@ class DtoGenerateCommand extends Command
         $toNamespace = '' !== $toNamespace ? '\\'.$toNamespace.'\\' : '\\';
 
         $namespace = 'App'.$toNamespace.'Tmdb\\'.ucfirst($domain);
-        $dtoDirectory = $this->projectDir.'/'.$to.'/Tmdb/'.ucfirst($domain);
+        $directory = $this->directory;
+        assert(null !== $directory);
+        $dtoDirectory = $directory.'/'.ucfirst($domain);
 
         if (0 === preg_match('/^[a-zA-Z0-9_\\\\]+$/', $namespace)) {
             throw new InvalidArgumentException(sprintf('Generated namespace %s from %s does not match the expected format', $namespace, $to));
         }
 
-        if (!is_dir($dtoDirectory)) {
+        if (!is_dir($dtoDirectory) && !$this->dryRun) {
             mkdir($dtoDirectory, recursive: true);
         }
 
         return [$namespace, $dtoDirectory];
+    }
+
+    public function removeOldFiles(): void
+    {
+        if ($this->dryRun) {
+            return;
+        }
+        $directory = $this->directory;
+        assert(null !== $directory);
+        $files = scandir($directory);
+
+        // Remove all files in the Tmdb directory (except .gitignore)
+        $filesystem = new Filesystem();
+        $files =
+            array_map(fn ($file) => $directory.'/'.$file,
+                array_filter($files, fn ($file) => '.' !== $file && '..' !== $file && '.gitignore' !== $file));
+
+        $filesystem->remove($files);
     }
 }

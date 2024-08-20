@@ -152,7 +152,7 @@
             "@dto:generate",
             "echo 'Visit the application under https://localhost:4443'"
         ],
-        "dto:generate": "docker exec -it movie-db-php-1 bin/console dto:generate dto/tmdb-openapi.json src/Dto",
+        "dto:generate": "docker exec -it movie-db-php-1 bin/console app:dto:generate dto/tmdb-openapi.json src/Dto",
         "fix": "@format:php",
         "format:php": "docker exec -it movie-db-php-1 vendor/bin/php-cs-fixer fix",
         "test": [
