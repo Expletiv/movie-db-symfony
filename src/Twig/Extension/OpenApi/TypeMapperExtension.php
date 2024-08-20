@@ -34,6 +34,9 @@ class TypeMapperExtension extends AbstractExtension
 
     public function camelCase(string $string): string
     {
+        // Remove . from parameter names and capitalize next letter (needed for DiscoverApiClient)
+        $string = implode('', array_map(ucfirst(...), explode('.', $string)));
+
         // Replace - with _ (needed for CA-QC in CertificationMovieListCertifications)
         $string = str_replace('-', '_', $string);
 

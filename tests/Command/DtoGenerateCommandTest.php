@@ -27,7 +27,7 @@ class DtoGenerateCommandTest extends KernelTestCase
         $commandTester->assertCommandIsSuccessful();
 
         $output = $commandTester->getDisplay();
-        $this->assertStringContainsString('DTOs generated', $output);
+        $this->assertStringContainsString('Generation of DTOs and Clients completed', $output);
     }
 
     public function testFailure(): void

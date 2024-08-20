@@ -23,7 +23,10 @@ use function sprintf;
 )]
 class DtoGenerateCommand extends Command
 {
-    private ?string $directory;
+    private ?string $directory = null;
+    private ?string $responsesDirectory = null;
+    private ?string $clientsDirectory = null;
+
     private bool $dryRun = false;
 
     public function __construct(
@@ -74,7 +77,9 @@ class DtoGenerateCommand extends Command
             throw new InvalidArgumentException(sprintf('Directory %s does not exist', $to));
         }
 
-        $this->directory = $this->projectDir.'/'.$to.'/Tmdb';
+        $this->directory = $to.'/Tmdb';
+        $this->responsesDirectory = $this->directory.'/Responses';
+        $this->clientsDirectory = $this->directory.'/Clients';
 
         $openApi = file_get_contents($from);
         $openApi = json_decode($openApi, true);
@@ -91,12 +96,66 @@ class DtoGenerateCommand extends Command
 
         $this->removeOldFiles();
 
+        // Load the DTO and Client templates
+        $loader = $this->twig->getLoader();
+        assert($loader instanceof FilesystemLoader);
+        $loader->addPath($this->projectDir.'/dto');
+
         foreach ($getDomains as $domain => $paths) {
-            $this->generateDto($domain, $paths, $to);
+            $paths = $this->generateDto($domain, $paths);
             $io->text(sprintf('DTOs for domain %s generated', $domain));
+
+            $this->generateClient($domain, $paths);
+            $io->text(sprintf('Client for domain %s generated', $domain));
         }
 
-        $io->success('DTOs generated');
+        $io->success('Generation of DTOs and Clients completed');
+    }
+
+    /**
+     * @param array{
+     *           domain: string,
+     *           pathData: array{
+     *             path: string,
+     *             operation: string,
+     *             description: string,
+     *             parameters: mixed,
+     *             schema: mixed,
+     *             response_type: string,
+     *             actual_type: string,
+     *             response_fqcn: class-string
+     *             }
+     *           } $paths
+     */
+    public function generateClient(string $domain, array $paths): void
+    {
+        $domain = $domain.'Api';
+
+        $directory = $this->clientsDirectory;
+        assert(null !== $directory);
+        list($namespace, $clientDirectory) = $this->generateDirectoryAndNamespaceForDomain($directory, $domain);
+
+        if (!is_dir($clientDirectory) && !$this->dryRun) {
+            mkdir($clientDirectory, recursive: true);
+        }
+
+        $clientClass = $this->twig->render('client_template.php.twig', [
+            'namespace' => $namespace,
+            'className' => $domain.'Client',
+            'interfaceName' => $domain.'Interface',
+            'paths' => $paths,
+        ]);
+
+        $clientInterface = $this->twig->render('client_interface_template.php.twig', [
+            'namespace' => $namespace,
+            'interfaceName' => $domain.'Interface',
+            'paths' => $paths,
+        ]);
+
+        if (!$this->dryRun) {
+            file_put_contents($clientDirectory.'/'.$domain.'Client.php', $clientClass);
+            file_put_contents($clientDirectory.'/'.$domain.'Interface.php', $clientInterface);
+        }
     }
 
     /**
@@ -136,6 +195,7 @@ class DtoGenerateCommand extends Command
         $pathData = [
             'path' => $path,
             'operation' => $operation,
+            'description' => $get['description'] ?? '',
             'parameters' => $get['parameters'] ?? [],
             'schema' => $schema,
         ];
@@ -146,20 +206,45 @@ class DtoGenerateCommand extends Command
         ];
     }
 
-    private function generateDto(string $domain, mixed $paths, string $to): void
+    /**
+     * @return array{
+     *     domain: string,
+     *     pathData: array{
+     *       path: string,
+     *       operation: string,
+     *       description: string,
+     *       parameters: mixed,
+     *       schema: mixed,
+     *       response_type: string,
+     *       actual_type: string,
+     *       response_fqcn: class-string
+     *    }
+     * }
+     */
+    private function generateDto(string $domain, mixed $paths): array
     {
-        list($namespace, $dtoDirectory) = $this->generateDirectoryAndNamespaceForDomain($to, $domain);
+        $directory = $this->responsesDirectory;
+        assert(null !== $directory);
+        list($namespace, $dtoDirectory) = $this->generateDirectoryAndNamespaceForDomain($directory, $domain);
 
-        $loader = $this->twig->getLoader();
-
-        assert($loader instanceof FilesystemLoader);
-
-        $loader->addPath($this->projectDir.'/dto');
-
-        foreach ($paths as $path) {
-            $className = ucfirst($path['operation']);
-            $this->generateDtoRecursive($namespace, $dtoDirectory, $className, $path['schema'], '');
+        if (!is_dir($dtoDirectory) && !$this->dryRun) {
+            mkdir($dtoDirectory, recursive: true);
         }
+
+        for ($i = 0; $i < count($paths); ++$i) {
+            $className = ucfirst($paths[$i]['operation']);
+            $paths[$i]['response_type'] = $this->generateDtoRecursive($namespace, $dtoDirectory, $className, $paths[$i]['schema'], '');
+
+            $type = $paths[$i]['response_type'];
+            // If the response type is an array, we only want the type of the array. We need to do this iteratively
+            while (str_starts_with($type, 'array<')) {
+                $type = substr($type, 6, -1);
+            }
+            $paths[$i]['actual_type'] = $type;
+            $paths[$i]['response_fqcn'] = $namespace.'\\'.$type;
+        }
+
+        return $paths;
     }
 
     /**
@@ -175,14 +260,12 @@ class DtoGenerateCommand extends Command
             foreach ($schema['properties'] as $name => $nestedProperty) {
                 $schema['properties'][$name]['type'] = $this->generateDtoRecursive($namespace, $directory, $name, $nestedProperty, $schema['type']);
             }
-        }
-        // If there is an array of objects, generate the DTO for the object (in case it is an array of scalars there is no items property)
+        } // If there is an array of objects, generate the DTO for the object (in case it is an array of scalars there is no items property)
         elseif ('array' === $schema['type'] && array_key_exists('items', $schema)) {
             $schema['items']['type'] = $this->generateDtoRecursive($namespace, $directory, $propertyName, $schema['items'], $parentClassName);
 
             return 'array<'.$schema['items']['type'].'>';
-        }
-        // If  it is a scalar type, return the type
+        } // If  it is a scalar type, return the type
         else {
             return $schema['type'];
         }
@@ -209,7 +292,7 @@ class DtoGenerateCommand extends Command
         return str_replace('_', '', ucwords($string, '_'));
     }
 
-    public function checkMissingSchema(mixed $schema, string $propertyName): mixed
+    private function checkMissingSchema(mixed $schema, string $propertyName): mixed
     {
         $valueIsScalar = array_key_exists('type', $schema) && !in_array($schema['type'], ['array', 'object'], true);
         // Also allow empty arrays
@@ -335,44 +418,39 @@ class DtoGenerateCommand extends Command
     /**
      * @return array{0: string, 1: string}
      */
-    public function generateDirectoryAndNamespaceForDomain(string $to, string $domain): array
+    private function generateDirectoryAndNamespaceForDomain(string $to, string $domain): array
     {
         // Create namespace from $to directory which is a relative path from the project directory
-        // First: Remove leading directory (e.g. for src/Dto/Tmdb/Movie, remove src/)
+        // First: Remove leading directory (e.g. for src/Dto/Tmdb/Responses, remove src/)
         $toParts = explode('/', $to);
         array_shift($toParts);
-        $toNamespace = implode('\\', $toParts);
-        $toNamespace = '' !== $toNamespace ? '\\'.$toNamespace.'\\' : '\\';
 
-        $namespace = 'App'.$toNamespace.'Tmdb\\'.$domain;
-        $directory = $this->directory;
-        assert(null !== $directory);
-        $dtoDirectory = $directory.'/'.$domain;
+        $toNamespace = implode('\\', $toParts);
+        $toNamespace = '' !== $toNamespace ? '\\'.$toNamespace.'\\' : '';
+
+        $namespace = 'App'.$toNamespace.$domain;
+        $dtoDirectory = $this->projectDir.'/'.$to.'/'.$domain;
 
         if (0 === preg_match('/^[a-zA-Z0-9_\\\\]+$/', $namespace)) {
             throw new InvalidArgumentException(sprintf('Generated namespace %s from %s does not match the expected format', $namespace, $to));
         }
 
-        if (!is_dir($dtoDirectory) && !$this->dryRun) {
-            mkdir($dtoDirectory, recursive: true);
-        }
-
         return [$namespace, $dtoDirectory];
     }
 
-    public function removeOldFiles(): void
+    private function removeOldFiles(): void
     {
         if ($this->dryRun) {
             return;
         }
         $directory = $this->directory;
         assert(null !== $directory);
-        $files = scandir($directory);
+        $files = scandir($this->projectDir.'/'.$directory);
 
         // Remove all files in the Tmdb directory (except .gitignore)
         $filesystem = new Filesystem();
         $files =
-            array_map(fn ($file) => $directory.'/'.$file,
+            array_map(fn ($file) => $this->projectDir.'/'.$directory.'/'.$file,
                 array_filter($files, fn ($file) => '.' !== $file && '..' !== $file && '.gitignore' !== $file));
 
         $filesystem->remove($files);

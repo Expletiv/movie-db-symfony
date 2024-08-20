@@ -165,7 +165,7 @@
         "test:coverage": "XDEBUG_MODE=coverage bin/phpunit --coverage-text",
         "test:phpstan": "vendor/bin/phpstan analyse",
         "test:phpcsfixer": "vendor/bin/php-cs-fixer check",
-        "test:phpmd": "vendor/bin/phpmd src ansi cleancode",
+        "test:phpmd": "vendor/bin/phpmd src ansi phpmd.xml",
         "test:phpunit": "bin/phpunit",
         "test:setup": [
             "docker exec -it movie-db-php-1 bin/console --env=test doctrine:database:drop --force",
