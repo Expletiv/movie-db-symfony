@@ -149,10 +149,11 @@
             "@webpack:run",
             "docker exec -it movie-db-php-1 bin/console doctrine:migrations:migrate --no-interaction",
             "@test:setup",
+            "@dto:generate",
             "echo 'Visit the application under https://localhost:4443'"
         ],
-        "fix": "@format:php src",
-        "fix:tests": "@format:php tests",
+        "dto:generate": "docker exec -it movie-db-php-1 bin/console dto:generate dto/tmdb-openapi.json src/Dto",
+        "fix": "@format:php",
         "format:php": "docker exec -it movie-db-php-1 vendor/bin/php-cs-fixer fix",
         "test": [
             "@test:phpcsfixer",
@@ -163,7 +164,7 @@
         ],
         "test:coverage": "XDEBUG_MODE=coverage bin/phpunit --coverage-text",
         "test:phpstan": "vendor/bin/phpstan analyse",
-        "test:phpcsfixer": "vendor/bin/php-cs-fixer check src",
+        "test:phpcsfixer": "vendor/bin/php-cs-fixer check",
         "test:phpmd": "vendor/bin/phpmd src ansi cleancode",
         "test:phpunit": "bin/phpunit",
         "test:setup": [

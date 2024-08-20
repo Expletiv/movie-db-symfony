@@ -3,6 +3,7 @@
 $finder = (new PhpCsFixer\Finder())
     ->in(__DIR__)
     ->exclude('var')
+    ->exclude('src/Dto/Tmdb')
 ;
 
 return (new PhpCsFixer\Config())

@@ -35,3 +35,7 @@ yarn-error.log
 ###> phpstan/phpstan ###
 phpstan.neon
 ###< phpstan/phpstan ###
+
+###> DTO Generator ###
+src/Dto/Tmdb
+###< DTO Generator ###
