@@ -141,7 +141,7 @@ class DtoGenerateCommand extends Command
         ];
 
         return [
-            'domain' => $domain,
+            'domain' => $this->snakeCaseToPascalCase($domain),
             'pathData' => $pathData,
         ];
     }
@@ -311,7 +311,7 @@ class DtoGenerateCommand extends Command
             ];
         }
 
-        if ($this->isStringEdgeCase($propertyName)) {
+        if ($this->isMissingStringSchema($propertyName)) {
             return [
                 'type' => 'string',
             ];
@@ -320,7 +320,7 @@ class DtoGenerateCommand extends Command
         throw new InvalidArgumentException(sprintf('Property %s does not have a valid type definition', $propertyName));
     }
 
-    private function isStringEdgeCase(string $propertyName): bool
+    private function isMissingStringSchema(string $propertyName): bool
     {
         // The following properties are strings but are not defined as such in the OpenAPI file
         return match ($propertyName) {
@@ -344,10 +344,10 @@ class DtoGenerateCommand extends Command
         $toNamespace = implode('\\', $toParts);
         $toNamespace = '' !== $toNamespace ? '\\'.$toNamespace.'\\' : '\\';
 
-        $namespace = 'App'.$toNamespace.'Tmdb\\'.ucfirst($domain);
+        $namespace = 'App'.$toNamespace.'Tmdb\\'.$domain;
         $directory = $this->directory;
         assert(null !== $directory);
-        $dtoDirectory = $directory.'/'.ucfirst($domain);
+        $dtoDirectory = $directory.'/'.$domain;
 
         if (0 === preg_match('/^[a-zA-Z0-9_\\\\]+$/', $namespace)) {
             throw new InvalidArgumentException(sprintf('Generated namespace %s from %s does not match the expected format', $namespace, $to));

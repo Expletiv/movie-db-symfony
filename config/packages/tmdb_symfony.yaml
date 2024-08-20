@@ -1,10 +1,10 @@
 tmdb_symfony:
-    api_key: bd705be33361e89eae53e325178ae8ef
+    api_key: '%env(TMDB_API_KEY)%'
     cache:
         enabled: true
         adapter: cache.tmdb
     options:
-        bearer_token: eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiZDcwNWJlMzMzNjFlODllYWU1M2UzMjUxNzhhZThlZiIsInN1YiI6IjY1ZTBiYWU4NTFmOTlhMDE2MjU2NzAyNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.pQ1ZLroLE17Ay_74cLPowa-b3cMvhaTNUpfmRRLHDiw
+        bearer_token: '%env(TMDB_API_TOKEN)%'
         http:
             client: Symfony\Component\HttpClient\Psr18Client
             request_factory: Nyholm\Psr7\Factory\Psr17Factory
@@ -19,4 +19,4 @@ tmdb_symfony:
         hydration:
             event_listener_handles_hydration: false
             only_for_specified_models: { }
-        api_token: bd705be33361e89eae53e325178ae8ef # you don't have to set this if you set it at the root level
+            
