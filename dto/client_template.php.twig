@@ -15,7 +15,7 @@ use {{ path.response_fqcn }};
  */
 readonly class {{ className }} implements {{ interfaceName }}
 {
-    public function __construct(private HttpClientInterface $tmdbClient, private DenormalizerInterface $denormalizer)
+    public function __construct(private HttpClientInterface $tmdbHttpClient, private DenormalizerInterface $denormalizer)
     {
     }
 
@@ -44,7 +44,7 @@ readonly class {{ className }} implements {{ interfaceName }}
             '{{ param.name }}' => ${{ param.name|camelCase }},
 {% endfor %}
         ];
-        $response = $this->tmdbClient->request('GET', $url, $query);
+        $response = $this->tmdbHttpClient->request('GET', $url, ['query' => $query]);
 
 {% if path.actual_type != path.actual_type|lower %}
         return $this->denormalizer->denormalize($response->toArray(), {{ path.actual_type|mapType }}::class{% if path.response_type|mapType == 'array' %} . '[]'{% endif %});

@@ -18,7 +18,7 @@ class {{ className }}
      */
 {% endif %}
     #[SerializedName('{{ name }}')]
-    private {{ property.type|mapType }} ${{ name|camelCase }};
+    private {% if not (property.type starts with 'array') %}?{% endif %}{{ property.type|mapType }} ${{ name|camelCase }};
 {% endfor %}
 
 {% for name, property in properties %}
@@ -27,7 +27,7 @@ class {{ className }}
      * @return {{ property.type }}
      */
 {% endif %}
-    public function get{{ name|pascalCase }}(): {{ property.type|mapType }}
+    public function get{{ name|pascalCase }}(): {% if not (property.type starts with 'array') %}?{% endif %}{{ property.type|mapType }}
     {
         return $this->{{ name|camelCase }};
     }
@@ -37,7 +37,7 @@ class {{ className }}
      * @param {{ property.type }} ${{ name|camelCase }}
      */
 {% endif %}
-    public function set{{ name|pascalCase }}({{ property.type|mapType }} ${{ name|camelCase }}): self
+    public function set{{ name|pascalCase }}({% if not (property.type starts with 'array') %}?{% endif %}{{ property.type|mapType }} ${{ name|camelCase }}): self
     {
         $this->{{ name|camelCase }} = ${{ name|camelCase }};
 

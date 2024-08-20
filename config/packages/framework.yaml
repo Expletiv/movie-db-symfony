@@ -11,7 +11,7 @@ framework:
     
     http_client:
         scoped_clients:
-            tmdb.client:
+            tmdb.http.client:
                 base_uri: 'https://api.themoviedb.org'
                 headers:
                     accept: 'application/json'

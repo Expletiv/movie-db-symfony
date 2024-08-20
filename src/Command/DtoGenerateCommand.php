@@ -101,61 +101,33 @@ class DtoGenerateCommand extends Command
         assert($loader instanceof FilesystemLoader);
         $loader->addPath($this->projectDir.'/dto');
 
+        $collectedClients = [];
         foreach ($getDomains as $domain => $paths) {
             $paths = $this->generateDto($domain, $paths);
             $io->text(sprintf('DTOs for domain %s generated', $domain));
 
-            $this->generateClient($domain, $paths);
+            $collectedClients[] = $this->generateClient($domain, $paths);
             $io->text(sprintf('Client for domain %s generated', $domain));
         }
 
-        $io->success('Generation of DTOs and Clients completed');
-    }
+        list($namespace, $clientDirectory) = $this->generateDirectoryAndNamespaceForDomain($this->directory, '');
+        $namespace = rtrim($namespace, '\\');
 
-    /**
-     * @param array{
-     *           domain: string,
-     *           pathData: array{
-     *             path: string,
-     *             operation: string,
-     *             description: string,
-     *             parameters: mixed,
-     *             schema: mixed,
-     *             response_type: string,
-     *             actual_type: string,
-     *             response_fqcn: class-string
-     *             }
-     *           } $paths
-     */
-    public function generateClient(string $domain, array $paths): void
-    {
-        $domain = $domain.'Api';
-
-        $directory = $this->clientsDirectory;
-        assert(null !== $directory);
-        list($namespace, $clientDirectory) = $this->generateDirectoryAndNamespaceForDomain($directory, $domain);
-
-        if (!is_dir($clientDirectory) && !$this->dryRun) {
-            mkdir($clientDirectory, recursive: true);
-        }
-
-        $clientClass = $this->twig->render('client_template.php.twig', [
+        $tmdbClient = $this->twig->render('tmdb_client_template.php.twig', [
+            'clients' => $collectedClients,
             'namespace' => $namespace,
-            'className' => $domain.'Client',
-            'interfaceName' => $domain.'Interface',
-            'paths' => $paths,
         ]);
-
-        $clientInterface = $this->twig->render('client_interface_template.php.twig', [
+        $tmdbClientInterface = $this->twig->render('tmdb_client_interface_template.php.twig', [
+            'clients' => $collectedClients,
             'namespace' => $namespace,
-            'interfaceName' => $domain.'Interface',
-            'paths' => $paths,
         ]);
 
         if (!$this->dryRun) {
-            file_put_contents($clientDirectory.'/'.$domain.'Client.php', $clientClass);
-            file_put_contents($clientDirectory.'/'.$domain.'Interface.php', $clientInterface);
+            file_put_contents($clientDirectory.'TmdbClient.php', $tmdbClient);
+            file_put_contents($clientDirectory.'TmdbClientInterface.php', $tmdbClientInterface);
         }
+
+        $io->success('Generation of DTOs and Clients completed');
     }
 
     /**
@@ -245,6 +217,57 @@ class DtoGenerateCommand extends Command
         }
 
         return $paths;
+    }
+
+    /**
+     * @param array{
+     *           domain: string,
+     *           pathData: array{
+     *             path: string,
+     *             operation: string,
+     *             description: string,
+     *             parameters: mixed,
+     *             schema: mixed,
+     *             response_type: string,
+     *             actual_type: string,
+     *             response_fqcn: class-string
+     *             }
+     *           } $paths
+     */
+    public function generateClient(string $domain, array $paths): mixed
+    {
+        $domain = $domain.'Api';
+
+        $directory = $this->clientsDirectory;
+        assert(null !== $directory);
+        list($namespace, $clientDirectory) = $this->generateDirectoryAndNamespaceForDomain($directory, $domain);
+
+        if (!is_dir($clientDirectory) && !$this->dryRun) {
+            mkdir($clientDirectory, recursive: true);
+        }
+
+        $clientClass = $this->twig->render('client_template.php.twig', [
+            'namespace' => $namespace,
+            'className' => $domain.'Client',
+            'interfaceName' => $domain.'Interface',
+            'paths' => $paths,
+        ]);
+
+        $clientInterface = $this->twig->render('client_interface_template.php.twig', [
+            'namespace' => $namespace,
+            'interfaceName' => $domain.'Interface',
+            'paths' => $paths,
+        ]);
+
+        if (!$this->dryRun) {
+            file_put_contents($clientDirectory.'/'.$domain.'Client.php', $clientClass);
+            file_put_contents($clientDirectory.'/'.$domain.'Interface.php', $clientInterface);
+        }
+
+        return [
+            'className' => $domain,
+            'namespace' => $namespace,
+        ];
     }
 
     /**
