@@ -79,7 +79,7 @@ jobs:
         run: docker compose exec -T php vendor/bin/phpstan analyse
       -        
         name: Run PHPMD
-        run: docker compose exec -T php vendor/bin/phpmd src ansi cleancode
+        run: docker compose exec -T php vendor/bin/phpmd src ansi phpmd.xml
       -
         name: Doctrine Schema Validator
         if: false
