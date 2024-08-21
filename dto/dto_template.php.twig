@@ -18,7 +18,7 @@ class {{ className }}
      */
 {% endif %}
     #[SerializedName('{{ name }}')]
-    private {% if not (property.type starts with 'array') %}?{% endif %}{{ property.type|mapType }} ${{ name|camelCase }};
+    private {% if not (property.type starts with 'array') %}?{% endif %}{{ property.type|mapType }} ${{ name|camelCase }} = {% if property.type starts with 'array' %}[]{% else %}null{% endif %};
 {% endfor %}
 
 {% for name, property in properties %}
