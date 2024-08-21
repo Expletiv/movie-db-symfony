@@ -5,6 +5,7 @@ namespace {{ namespace }};
 
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Contracts\Cache\CacheInterface;
 {% for path in paths|filter(path => path.actual_type != path.actual_type|lower) %}
 use {{ path.response_fqcn }};
 {% endfor %}
@@ -15,7 +16,11 @@ use {{ path.response_fqcn }};
  */
 readonly class {{ className }} implements {{ interfaceName }}
 {
-    public function __construct(private HttpClientInterface $tmdbHttpClient, private DenormalizerInterface $denormalizer)
+    public function __construct(
+        private HttpClientInterface $tmdbHttpClient,
+        private DenormalizerInterface $denormalizer,
+        private CacheInterface $redis,
+    )
     {
     }
 
@@ -44,13 +49,17 @@ readonly class {{ className }} implements {{ interfaceName }}
             '{{ param.name }}' => ${{ param.name|camelCase }},
 {% endfor %}
         ];
-        $response = $this->tmdbHttpClient->request('GET', $url, ['query' => $query]);
 
+        $cacheKey = md5($url . json_encode($query));
+        return $this->redis->get($cacheKey, function ($item) use ($url, $query) {
+            $item->expiresAfter(10800);
+            $response = $this->tmdbHttpClient->request('GET', $url, ['query' => $query]);
 {% if path.actual_type != path.actual_type|lower %}
-        return $this->denormalizer->denormalize($response->toArray(), {{ path.actual_type|mapType }}::class{% if path.response_type|mapType == 'array' %} . '[]'{% endif %});
+            return $this->denormalizer->denormalize($response->toArray(), {{ path.actual_type|mapType }}::class{% if path.response_type|mapType == 'array' %} . '[]'{% endif %});
 {% else %}
-        return $response->toArray();
+            return $response->toArray();
 {% endif %}
+        });
     }
 {% if loop.last %}}{% else %}
 

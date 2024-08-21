@@ -78,12 +78,27 @@ services:
       # - ./docker/db/data:/var/lib/postgresql/data:rw
 ###< doctrine/doctrine-bundle ###
 
+  redis:
+    image: redis:alpine
+    restart: unless-stopped
+    command: redis-server /usr/local/etc/redis/redis.conf --requirepass ${REDIS_PASSWORD:-!ChangeThisRedisPassword!}
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ['CMD','redis-cli','ping']
+      interval: 5s
+      timeout: 2s
+      retries: 3
+
 volumes:
   caddy_data:
   caddy_config:
-###> symfony/mercure-bundle ###
-###< symfony/mercure-bundle ###
 
 ###> doctrine/doctrine-bundle ###
   database_data:
 ###< doctrine/doctrine-bundle ###
+
+  redis_data:
