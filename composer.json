@@ -82,7 +82,8 @@
             "symfony/flex": true,
             "symfony/runtime": true,
             "captainhook/captainhook-phar": true,
-            "captainhook/hook-installer": true
+            "captainhook/hook-installer": true,
+            "phpstan/extension-installer": true
         },
         "sort-packages": true
     },
@@ -120,8 +121,11 @@
         "captainhook/hook-installer": "^1.0",
         "doctrine/doctrine-fixtures-bundle": "^3.6",
         "friendsofphp/php-cs-fixer": "^3.58",
+        "mockery/mockery": "^1.6",
         "phpmd/phpmd": "^2.15",
+        "phpstan/extension-installer": "^1.4",
         "phpstan/phpstan": "^1.11",
+        "phpstan/phpstan-mockery": "^1.1",
         "phpunit/phpunit": "^9.5",
         "symfony/browser-kit": "7.1.*",
         "symfony/css-selector": "7.1.*",

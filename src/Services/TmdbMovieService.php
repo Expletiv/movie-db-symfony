@@ -28,11 +28,9 @@ readonly class TmdbMovieService implements TmdbMovieInterface
 
         $data = $movie?->getTmdbDataForLocale($locale)?->getTmdbDetailsData();
 
-        if (empty($data)) {
-            $data = $this->tmdb->movieApi()->movieDetails($tmdbId, language: $locale);
-        } else {
-            $data = $this->denormalizer->denormalize($data, MovieDetails::class);
-        }
+        $data = empty($data)
+            ? $this->tmdb->movieApi()->movieDetails($tmdbId, language: $locale)
+            : $this->denormalizer->denormalize($data, MovieDetails::class);
 
         if (null === $movie) {
             $movie = (new Movie())->setTmdbId($tmdbId);
