@@ -12,7 +12,6 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  GH_TOKEN: ${{ secrets.GH_TOKEN }}
   TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
   TMDB_API_TOKEN: ${{ secrets.TMDB_API_TOKEN }}
 
