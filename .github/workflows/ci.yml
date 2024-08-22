@@ -76,7 +76,7 @@ jobs:
         run: docker compose exec -T php vendor/bin/php-cs-fixer check
       -        
         name: Run PHPStan
-        run: docker compose exec -T php vendor/bin/phpstan analyse
+        run: docker compose exec -T php vendor/bin/phpstan analyse --memory-limit=512M
       -        
         name: Run PHPMD
         run: docker compose exec -T php vendor/bin/phpmd src ansi phpmd.xml

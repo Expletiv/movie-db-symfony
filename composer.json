@@ -169,7 +169,7 @@
             "@test:translations"
         ],
         "test:coverage": "XDEBUG_MODE=coverage bin/phpunit --coverage-text",
-        "test:phpstan": "vendor/bin/phpstan analyse",
+        "test:phpstan": "vendor/bin/phpstan analyse --memory-limit=512M",
         "test:phpcsfixer": "vendor/bin/php-cs-fixer check",
         "test:phpmd": "vendor/bin/phpmd src ansi phpmd.xml",
         "test:phpunit": "bin/phpunit",
