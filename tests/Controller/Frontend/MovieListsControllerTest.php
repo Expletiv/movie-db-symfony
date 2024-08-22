@@ -2,7 +2,16 @@
 
 namespace App\Tests\Controller\Frontend;
 
-use App\Services\Interface\TmdbListInterface;
+use App\Dto\Tmdb\Clients\DiscoverApi\DiscoverApiInterface;
+use App\Dto\Tmdb\Clients\MovieApi\MovieApiInterface;
+use App\Dto\Tmdb\Clients\SearchApi\SearchApiInterface;
+use App\Dto\Tmdb\Responses\Discover\DiscoverMovie;
+use App\Dto\Tmdb\Responses\Movie\MoviePopularList;
+use App\Dto\Tmdb\Responses\Movie\MovieRecommendations;
+use App\Dto\Tmdb\Responses\Movie\MovieTopRatedList;
+use App\Dto\Tmdb\Responses\Search\SearchMovie;
+use App\Dto\Tmdb\TmdbClientInterface;
+use Mockery;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Twig\Environment;
@@ -19,20 +28,19 @@ class MovieListsControllerTest extends WebTestCase
 
     public function testPopular(): void
     {
-        $tmdbList = $this->createMock(TmdbListInterface::class);
-        $tmdbList->expects($this->once())
-            ->method('popularMovies')
-            ->with([
-                'language' => 'en',
-                'page' => 12,
-            ])
-            ->willReturn([
-                'page' => 12,
-                'results' => [],
-                'total_pages' => 100,
-            ]);
+        $tmdb = Mockery::mock(TmdbClientInterface::class);
+        $movieApi = Mockery::mock(MovieApiInterface::class);
+        $tmdb->allows()->movieApi()->andReturn($movieApi);
 
-        $this->client->getContainer()->set(TmdbListInterface::class, $tmdbList);
+        $moviePopularList = (new MoviePopularList())
+            ->setPage(12)
+            ->setResults([])
+            ->setTotalPages(100)
+            ->setTotalResults(2000);
+
+        $movieApi->shouldReceive('moviePopularList')->andReturn($moviePopularList);
+
+        $this->client->getContainer()->set(TmdbClientInterface::class, $tmdb);
 
         $this->client->request('GET', '/en/popular?page=12');
         $this->assertResponseIsSuccessful();
@@ -43,20 +51,19 @@ class MovieListsControllerTest extends WebTestCase
 
     public function testDiscover(): void
     {
-        $tmdbList = $this->createMock(TmdbListInterface::class);
-        $tmdbList->expects($this->once())
-            ->method('discoverMovies')
-            ->with([
-                'language' => 'en',
-                'page' => 12,
-            ])
-            ->willReturn([
-                'page' => 12,
-                'results' => [],
-                'total_pages' => 100,
-            ]);
+        $tmdb = Mockery::mock(TmdbClientInterface::class);
+        $discoverApi = Mockery::mock(DiscoverApiInterface::class);
+        $tmdb->allows()->discoverApi()->andReturn($discoverApi);
 
-        $this->client->getContainer()->set(TmdbListInterface::class, $tmdbList);
+        $discoverList = (new DiscoverMovie())
+            ->setPage(12)
+            ->setResults([])
+            ->setTotalPages(100)
+            ->setTotalResults(2000);
+
+        $discoverApi->shouldReceive('discoverMovie')->andReturn($discoverList);
+
+        $this->client->getContainer()->set(TmdbClientInterface::class, $tmdb);
 
         $this->client->request('GET', '/en/discover?page=12');
         $this->assertResponseIsSuccessful();
@@ -67,20 +74,19 @@ class MovieListsControllerTest extends WebTestCase
 
     public function testHighestRating(): void
     {
-        $tmdbList = $this->createMock(TmdbListInterface::class);
-        $tmdbList->expects($this->once())
-            ->method('topRatedMovies')
-            ->with([
-                'language' => 'en',
-                'page' => 12,
-            ])
-            ->willReturn([
-                'page' => 12,
-                'results' => [],
-                'total_pages' => 100,
-            ]);
+        $tmdb = Mockery::mock(TmdbClientInterface::class);
+        $movieApi = Mockery::mock(MovieApiInterface::class);
+        $tmdb->allows()->movieApi()->andReturn($movieApi);
 
-        $this->client->getContainer()->set(TmdbListInterface::class, $tmdbList);
+        $movieApi->shouldReceive('movieTopRatedList')->andReturn(
+            (new MovieTopRatedList())
+                ->setPage(12)
+                ->setResults([])
+                ->setTotalPages(100)
+                ->setTotalResults(2000)
+        );
+
+        $this->client->getContainer()->set(TmdbClientInterface::class, $tmdb);
 
         $this->client->request('GET', '/en/highest-rating?page=12');
         $this->assertResponseIsSuccessful();
@@ -91,18 +97,19 @@ class MovieListsControllerTest extends WebTestCase
 
     public function testSearch(): void
     {
-        $tmdbList = $this->createMock(TmdbListInterface::class);
-        $tmdbList->expects($this->once())
-            ->method('searchMovies')
-            ->withAnyParameters()
-            ->willReturn([
-                'page' => 12,
-                'results' => [],
-                'total_pages' => 100,
-                'total_results' => 1000,
-            ]);
+        $tmdb = Mockery::mock(TmdbClientInterface::class);
+        $searchApi = Mockery::mock(SearchApiInterface::class);
+        $tmdb->allows()->searchApi()->andReturn($searchApi);
 
-        $this->client->getContainer()->set(TmdbListInterface::class, $tmdbList);
+        $searchApi->shouldReceive('searchMovie')->andReturn(
+            (new SearchMovie())
+                ->setPage(12)
+                ->setResults([])
+                ->setTotalPages(100)
+                ->setTotalResults(2000)
+        );
+
+        $this->client->getContainer()->set(TmdbClientInterface::class, $tmdb);
 
         $this->client->request('GET', '/en/search?query=test&page=12');
         $this->assertResponseIsSuccessful();
@@ -116,17 +123,19 @@ class MovieListsControllerTest extends WebTestCase
 
     public function testRecommendations(): void
     {
-        $tmdbList = $this->createMock(TmdbListInterface::class);
-        $tmdbList->expects($this->once())
-            ->method('recommendedMovies')
-            ->withAnyParameters()
-            ->willReturn([
-                'page' => 12,
-                'results' => [],
-                'total_pages' => 100,
-            ]);
+        $tmdb = Mockery::mock(TmdbClientInterface::class);
+        $movieApi = Mockery::mock(MovieApiInterface::class);
+        $tmdb->allows()->movieApi()->andReturn($movieApi);
 
-        $this->client->getContainer()->set(TmdbListInterface::class, $tmdbList);
+        $movieApi->shouldReceive('movieRecommendations')->andReturn(
+            (new MovieRecommendations())
+                ->setPage(12)
+                ->setResults([])
+                ->setTotalPages(100)
+                ->setTotalResults(2000)
+        );
+
+        $this->client->getContainer()->set(TmdbClientInterface::class, $tmdb);
 
         $this->client->request('GET', '/en/recommendations/123?page=1');
         $this->assertResponseIsSuccessful();

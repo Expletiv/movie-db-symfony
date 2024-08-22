@@ -4,23 +4,24 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
+use App\Dto\Tmdb\Responses\Search\SearchMovieResults;
+use App\Dto\Tmdb\TmdbClientInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
-use Tmdb\Client;
 
 class MovieAutocompleteController extends AbstractController
 {
     #[Route('/admin/{_locale}/movie-autocomplete', name: 'app_movie_autocomplete')]
-    public function index(#[MapQueryParameter] string $query, Client $client, Request $request): JsonResponse
+    public function index(#[MapQueryParameter] string $query, TmdbClientInterface $tmdbClient, Request $request): JsonResponse
     {
-        $response = $client->getSearchApi()->searchMovies($query, ['language' => $request->getLocale()]);
+        $search = $tmdbClient->searchApi()->searchMovie(query: $query, language: $request->getLocale());
 
-        $mappedMovies = array_map(function (mixed $movie) {
-            return ['value' => $movie['id'], 'text' => $movie['title']];
-        }, $response['results']);
+        $mappedMovies = array_map(function (SearchMovieResults $movie) {
+            return ['value' => $movie->getId(), 'text' => $movie->getTitle()];
+        }, $search->getResults());
 
         return new JsonResponse(['results' => $mappedMovies]);
     }

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controller\Frontend;
 
+use App\Dto\Tmdb\TmdbClientInterface;
 use App\Form\MovieDiscoverFilterType;
-use App\Services\Interface\TmdbListInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +18,7 @@ class MovieListsController extends AbstractController
     private const int TMDB_RECOMMENDATIONS_MAX_PAGE = 2;
 
     public function __construct(
-        private readonly TmdbListInterface $tmdbList,
+        private readonly TmdbClientInterface $tmdbClient,
     ) {
     }
 
@@ -27,15 +27,14 @@ class MovieListsController extends AbstractController
         Request $request,
         #[MapQueryParameter(options: ['min_range' => 1, 'max_range' => self::TMDB_MAX_PAGE])] int $page = 1,
     ): Response {
-        $moviesResult = $this->tmdbList->popularMovies([
-            'language' => $request->getLocale(),
-            'page' => $page,
-        ]);
+        $moviePopularList = $this->tmdbClient->movieApi()->moviePopularList(
+            page: $page,
+            language: $request->getLocale()
+        );
+        $moviePopularList->setTotalPages(min($moviePopularList->getTotalPages(), self::TMDB_MAX_PAGE));
 
         return $this->render('movies/popular.html.twig', [
-            'movies' => $moviesResult['results'],
-            'page' => $page,
-            'maxPage' => min($moviesResult['total_pages'], self::TMDB_MAX_PAGE),
+            'list' => $moviePopularList,
         ]);
     }
 
@@ -46,23 +45,22 @@ class MovieListsController extends AbstractController
     ): Response {
         $form = $this->createForm(MovieDiscoverFilterType::class);
         $form->handleRequest($request);
-        $params = [];
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            $params['sort_by'] = $data['sortCategory'].'.'.$data['sortDirection'];
-            $params['primary_release_year'] = $data['primaryReleaseYear'];
+            $sortBy = $data['sortCategory'].'.'.$data['sortDirection'];
         }
 
-        $moviesResult = $this->tmdbList->discoverMovies(array_merge([
-            'language' => $request->getLocale(),
-            'page' => $page,
-        ], $params));
+        $discoverMovie = $this->tmdbClient->discoverApi()->discoverMovie(
+            page: $page,
+            primaryReleaseYear: $data['primaryReleaseYear'] ?? null,
+            language: $request->getLocale(),
+            sortBy: $sortBy ?? null,
+        );
+        $discoverMovie->setTotalPages(min($discoverMovie->getTotalPages(), self::TMDB_MAX_PAGE));
 
         return $this->render('movies/discover.html.twig', [
-            'movies' => $moviesResult['results'],
-            'page' => $page,
-            'maxPage' => min($moviesResult['total_pages'], self::TMDB_MAX_PAGE),
+            'list' => $discoverMovie,
             'form' => $form,
         ]);
     }
@@ -72,15 +70,14 @@ class MovieListsController extends AbstractController
         Request $request,
         #[MapQueryParameter(options: ['min_range' => 1, 'max_range' => self::TMDB_MAX_PAGE])] int $page = 1,
     ): Response {
-        $moviesResult = $this->tmdbList->topRatedMovies([
-            'language' => $request->getLocale(),
-            'page' => $page,
-        ]);
+        $movieTopRatedList = $this->tmdbClient->movieApi()->movieTopRatedList(
+            page: $page,
+            language: $request->getLocale()
+        );
+        $movieTopRatedList->setTotalPages(min($movieTopRatedList->getTotalPages(), self::TMDB_MAX_PAGE));
 
         return $this->render('movies/highest_rating.html.twig', [
-            'movies' => $moviesResult['results'],
-            'page' => $page,
-            'maxPage' => min($moviesResult['total_pages'], self::TMDB_MAX_PAGE),
+            'list' => $movieTopRatedList,
         ]);
     }
 
@@ -90,39 +87,34 @@ class MovieListsController extends AbstractController
         #[MapQueryParameter] string $query,
         #[MapQueryParameter(options: ['min_range' => 1, 'max_range' => self::TMDB_MAX_PAGE])] int $page = 1,
     ): Response {
-        $moviesResult = $this->tmdbList->searchMovies(
-            $query,
-            [
-                'language' => $request->getLocale(),
-                'page' => $page,
-            ]
+        $searchMovie = $this->tmdbClient->searchApi()->searchMovie(
+            query: $query,
+            page: $page,
+            language: $request->getLocale(),
         );
+        $searchMovie->setTotalPages(min($searchMovie->getTotalPages(), self::TMDB_MAX_PAGE));
 
         return $this->render('movies/search.html.twig', [
-            'movies' => $moviesResult['results'],
-            'page' => $page,
-            'maxPage' => min($moviesResult['total_pages'], self::TMDB_MAX_PAGE),
+            'list' => $searchMovie,
             'query' => $query,
-            'searchResults' => $moviesResult['total_results'],
         ]);
     }
 
-    // recommendations
     #[Route('/{_locale}/recommendations/{tmdbId}', name: 'app_movies_recommendations')]
     public function recommendations(
         Request $request,
         int $tmdbId,
         #[MapQueryParameter(options: ['min_range' => 1, 'max_range' => self::TMDB_RECOMMENDATIONS_MAX_PAGE])] int $page = 1,
     ): Response {
-        $moviesResult = $this->tmdbList->recommendedMovies($tmdbId, [
-            'language' => $request->getLocale(),
-            'page' => $page,
-        ]);
+        $movieRecommendations = $this->tmdbClient->movieApi()->movieRecommendations(
+            movieId: $tmdbId,
+            page: $page,
+            language: $request->getLocale()
+        );
+        $movieRecommendations->setTotalPages(min($movieRecommendations->getTotalPages(), self::TMDB_RECOMMENDATIONS_MAX_PAGE));
 
         return $this->render('movies/recommendations.html.twig', [
-            'movies' => $moviesResult['results'],
-            'page' => $page,
-            'maxPage' => min($moviesResult['total_pages'], self::TMDB_RECOMMENDATIONS_MAX_PAGE),
+            'list' => $movieRecommendations,
         ]);
     }
 }

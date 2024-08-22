@@ -12,6 +12,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
+  TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+  TMDB_API_TOKEN: ${{ secrets.TMDB_API_TOKEN }}
   GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
 jobs:
@@ -48,6 +50,9 @@ jobs:
         name: Build assets
         run: docker compose exec -T node npm run build
       -
+        name: Generate DTOs
+        run: docker compose exec -T php bin/console app:dto:generate dto/tmdb-openapi.json src/Dto
+      -  
         name: Check HTTP reachability
         run: curl -v --fail-with-body http://localhost
       -
@@ -68,13 +73,13 @@ jobs:
         run: docker compose exec -T php bin/phpunit tests --coverage-clover coverage.xml .
       -  
         name: Run PHP-CS-Fixer
-        run: docker compose exec -T php vendor/bin/php-cs-fixer check src
+        run: docker compose exec -T php vendor/bin/php-cs-fixer check
       -        
         name: Run PHPStan
-        run: docker compose exec -T php vendor/bin/phpstan analyse
+        run: docker compose exec -T php vendor/bin/phpstan analyse --memory-limit=512M
       -        
         name: Run PHPMD
-        run: docker compose exec -T php vendor/bin/phpmd src ansi cleancode
+        run: docker compose exec -T php vendor/bin/phpmd src ansi phpmd.xml
       -
         name: Doctrine Schema Validator
         if: false

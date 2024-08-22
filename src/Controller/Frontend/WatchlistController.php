@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Frontend;
 
+use App\Dto\Tmdb\Responses\Movie\MovieDetails;
 use App\Entity\MovieWatchlist;
 use App\Entity\User;
 use App\Form\Watchlist\AddWatchlistType;
@@ -20,6 +21,7 @@ use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsCsrfTokenValid;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\UX\Turbo\TurboBundle;
 
 use function Symfony\Component\Translation\t;
@@ -105,6 +107,7 @@ class WatchlistController extends AbstractController
         Request $request,
         #[CurrentUser] User $user,
         MovieWatchlist $watchlist,
+        DenormalizerInterface $denormalizer,
         #[MapQueryParameter(options: ['min_range' => 1])] int $page = 1,
     ): Response {
         if (!$watchlist->hasOwner($user)) {
@@ -115,13 +118,18 @@ class WatchlistController extends AbstractController
         $page = min($page, $maxWatchlistPage);
 
         $movies = $this->tmdbDataRepository->findWatchlistMovies($watchlist->getId(), $page, $request->getLocale());
-        $tmdbMovies = array_map(fn ($movie) => $movie->getTmdbDetailsData(), $movies);
+        $tmdbMovies = array_map(fn ($movie) => $denormalizer->denormalize($movie->getTmdbDetailsData(), MovieDetails::class), $movies);
+
+        $list = [
+            'page' => $page,
+            'results' => $tmdbMovies,
+            'totalPages' => $maxWatchlistPage,
+            'totalResults' => count($tmdbMovies),
+        ];
 
         return $this->render('movies/watchlist/show.html.twig', [
             'watchlist' => $watchlist,
-            'movies' => $tmdbMovies,
-            'page' => $page,
-            'maxPage' => $maxWatchlistPage,
+            'list' => $list,
         ]);
     }
 

@@ -35,7 +35,6 @@ readonly class MovieBatchHydrationHandler
 
         foreach ($movies as $i => $movie) {
             $this->movieHydrator->hydrate($movie);
-            $this->entityManager->persist($movie);
 
             $this->publishProgress((int) (($i + 1) / $count * 100));
         }

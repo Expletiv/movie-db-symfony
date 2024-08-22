@@ -34,7 +34,7 @@
                         <div class="card-footer z-3" {{ stimulus_action('helper', 'stopEvent', 'click') }}
                             {{ stimulus_target('previews', 'editComponent') }} hidden>
                             <form method="post"
-                                  action="{{ path('app_movie_watchlists_delete_movie', {id: watchlist.id, tmdbId: movie.id, page: page}) }}">
+                                  action="{{ path('app_movie_watchlists_delete_movie', {id: watchlist.id, tmdbId: movie.id, page: list.page}) }}">
                                 <input type="hidden" name="_token"
                                        value="{{ csrf_token('delete-watchlist-movie-' ~ movie.id) }}">
                                 <button class="btn btn-danger w-100"

@@ -25,7 +25,7 @@ class MovieController extends AbstractController
     public function index(
         Request $request,
         int $tmdbId,
-        TmdbMovieInterface $tmdb
+        TmdbMovieInterface $tmdb,
     ): Response {
         $form = $this->createForm(AddToWatchlistType::class);
 
@@ -72,7 +72,7 @@ class MovieController extends AbstractController
     public function watchProviders(
         Request $request,
         int $tmdbId,
-        TmdbMovieInterface $tmdb
+        TmdbMovieInterface $tmdb,
     ): Response {
         if (null === $request->headers->get('Turbo-Frame')) {
             throw $this->createNotFoundException();

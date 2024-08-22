@@ -19,6 +19,7 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+            - '../src/Dto/Tmdb/Response/'
 
     Symfony\Component\HttpClient\Psr18Client:
         class: Symfony\Component\HttpClient\Psr18Client

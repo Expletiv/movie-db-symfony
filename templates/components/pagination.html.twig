@@ -1,3 +1,5 @@
+{% set page = list.page %}
+{% set totalPages = list.totalPages %}
 <div class="d-flex flex-column flex-sm-row mb-4 mt-2">
     <nav class="me-sm-auto" aria-label="Page navigation">
         <ul class="pagination justify-content-center justify-content-sm-start">
@@ -33,20 +35,20 @@
                     {{ page }}
                 </a>
             </li>
-            {% if page < maxPage %}
+            {% if page < totalPages %}
                 <li class="page-item">
                     <a class="page-link" href="{{ current_path_with_params({page: page+1}) }}">
                         {{ page+1 }}
                     </a>
                 </li>
-                {% if page < maxPage - 1 %}
-                    {% if page == maxPage - 3 %}
+                {% if page < totalPages - 1 %}
+                    {% if page == totalPages - 3 %}
                         <li class="page-item">
-                            <a class="page-link" href="{{ current_path_with_params({page: maxPage-1}) }}">
-                                {{ maxPage-1 }}
+                            <a class="page-link" href="{{ current_path_with_params({page: totalPages-1}) }}">
+                                {{ totalPages-1 }}
                             </a>
                         </li>
-                    {% elseif page < maxPage - 3 %}
+                    {% elseif page < totalPages - 3 %}
                         <li class="page-item">
                             <a class="page-link">
                                 ...
@@ -54,8 +56,8 @@
                         </li>
                     {% endif %}
                     <li class="page-item">
-                        <a class="page-link" href="{{ current_path_with_params({page: maxPage}) }}">
-                            {{ maxPage }}
+                        <a class="page-link" href="{{ current_path_with_params({page: totalPages}) }}">
+                            {{ totalPages }}
                         </a>
                     </li>
                 {% endif %}
@@ -65,7 +67,7 @@
     <form class="d-flex justify-content-center justify-content-sm-end" method="get"
           action="{{ current_path_with_params({}) }}">
         <div class="me-2">
-            <input class="form-control" name="page" type="number" min="1" max="{{ maxPage }}" aria-label="page">
+            <input class="form-control" name="page" type="number" min="1" max="{{ totalPages }}" aria-label="page">
         </div>
         <div>
             <button class="btn btn-primary">{{ 'templates.movie_preview_container.show_page'|trans }}</button>
