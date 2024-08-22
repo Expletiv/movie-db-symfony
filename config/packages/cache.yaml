@@ -1,10 +1,6 @@
 framework:
     cache:
         pools:
-            cache.tmdb:
-                adapter: cache.adapter.filesystem
-                default_lifetime: 86400
-
             redis:
                 adapter: cache.adapter.redis
                 provider: 'redis://%env(REDIS_PASSWORD)%@redis'

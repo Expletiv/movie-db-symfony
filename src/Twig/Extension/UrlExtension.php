@@ -20,6 +20,7 @@ class UrlExtension extends AbstractExtension
     {
         return [
             new TwigFilter('movie_details_url', $this->movieDetails(...)),
+            new TwigFilter('tmdb_image_url', $this->tmdbImageUrl(...)),
         ];
     }
 
@@ -50,5 +51,10 @@ class UrlExtension extends AbstractExtension
                 $params,
             )
         );
+    }
+
+    public function tmdbImageUrl(string $path, string $size = 'original'): string
+    {
+        return sprintf('https://image.tmdb.org/t/p/%s/%s', $size, $path);
     }
 }
