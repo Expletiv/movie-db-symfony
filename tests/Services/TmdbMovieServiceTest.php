@@ -53,7 +53,7 @@ class TmdbMovieServiceTest extends TestCase
     {
         list($entityManager, $movieRepository, $tmdbClient, $movieApi, $serializer) = $this->setupDependencies();
 
-        $movieDetails = (new MovieDetails())->setTitle('The Movie');
+        $movieDetails = MovieDetails::fromArray(['title' => 'The Movie']);
         $movieApi->method('movieDetails')->willReturn($movieDetails);
 
         $movieRepository->expects($this->once())

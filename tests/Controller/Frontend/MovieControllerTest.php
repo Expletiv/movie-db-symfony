@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Tests\Controller\Frontend;
 
 use App\Dto\Tmdb\Responses\Movie\MovieDetails;
-use App\Dto\Tmdb\Responses\Movie\MovieDetailsGenres;
 use App\Services\Interface\TmdbMovieInterface;
 
 class MovieControllerTest extends AbstractWebTestCase
@@ -15,25 +14,25 @@ class MovieControllerTest extends AbstractWebTestCase
         $client = static::createClient();
         $container = $client->getContainer();
 
-        $movieDetails = (new MovieDetails())
-            ->setId(123)
-            ->setTitle('Test Movie')
-            ->setTagline('Test Tagline')
-            ->setOverview('Test Overview')
-            ->setPosterPath('/test.jpg')
-            ->setReleaseDate('2021-01-01')
-            ->setRuntime(120)
-            ->setVoteAverage(7.5)
-            ->setBackdropPath('/test_backdrop.jpg')
-            ->setGenres([
-                (new MovieDetailsGenres())
-                    ->setName('Test Genre'),
-            ])
-            ->setStatus('Released')
-            ->setBudget(1000000)
-            ->setRevenue(2000000)
-            ->setImdbId('tt1234567')
-            ->setVoteCount(100);
+        $movieDetails = MovieDetails::fromArray([
+            'id' => 123,
+            'title' => 'Test Movie',
+            'tagline' => 'Test Tagline',
+            'overview' => 'Test Overview',
+            'poster_path' => '/test.jpg',
+            'release_date' => '2021-01-01',
+            'runtime' => 120,
+            'vote_average' => 7.5,
+            'backdrop_path' => '/test_backdrop.jpg',
+            'genres' => [
+                ['name' => 'Test Genre'],
+            ],
+            'status' => 'Released',
+            'budget' => 1000000,
+            'revenue' => 2000000,
+            'imdb_id' => 'tt1234567',
+            'vote_count' => 100,
+        ]);
 
         $tmdb = $this->createMock(TmdbMovieInterface::class);
         $tmdb->expects($this->once())
