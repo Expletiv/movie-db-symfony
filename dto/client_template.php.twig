@@ -50,7 +50,7 @@ readonly class {{ className }} implements {{ interfaceName }}
 {% endfor %}
         ];
 
-        $cacheKey = md5($url . json_encode($query));
+        $cacheKey = md5($url.'?'.http_build_query($query));
         return $this->redis->get($cacheKey, function ($item) use ($url, $query) {
             $item->expiresAfter(10800);
             $response = $this->tmdbHttpClient->request('GET', $url, ['query' => $query]);

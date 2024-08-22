@@ -1,8 +1,9 @@
+{# @var list App\Dto\Tmdb\Responses\Movie\MoviePopularList #}
 <div class="container mt-3">
-    <turbo-frame id="movie-previews-page-{{ page }}" target="_top">
-        {% if movies is not empty %}
+    <turbo-frame id="movie-previews-page-{{ list.page }}" target="_top">
+        {% if list.results is not empty %}
             <div class="row justify-content-center" data-turbo-prefetch="false">
-                {% for movie in movies %}
+                {% for movie in list.results %}
                     <div class="col-auto mb-2 px-1">
                         {% block previews %}
                             {% include 'components/movie_preview.html.twig' %}
@@ -15,15 +16,15 @@
                 <div class="filling-empty-space-childs"></div>
             </div>
             {% block previews_pagination %}
-                {% if page < maxPage %}
-                    <turbo-frame id="movie-previews-page-{{ page+1 }}"
-                                 src="{{ current_path_with_params({page: page+1}) }}"
+                {% if list.page < list.totalPages %}
+                    <turbo-frame id="movie-previews-page-{{ list.page+1 }}"
+                                 src="{{ current_path_with_params({page: list.page+1}) }}"
                                  loading="lazy" target="_top">
                         {% include 'components/centered_spinner.html.twig' %}
                     </turbo-frame>
                 {% endif %}
             {% endblock %}
-        {% elseif page == 1 %}
+        {% elseif list.page == 1 %}
             <div class="d-flex justify-content-center">
                 <h3 class="text-center text-danger bg-opacity-75 bg-body-secondary p-2 rounded">
                     <i class="bi bi-emoji-frown-fill"></i> {{ 'templates.movie_preview_container.no_movies_found'|trans }}

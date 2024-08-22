@@ -17,11 +17,6 @@ framework:
                     accept: 'application/json'
                     authorization: 'Bearer %env(TMDB_API_TOKEN)%'
                     
-    cache:
-        pools:
-            redis:
-                adapter: cache.adapter.redis
-                provider: 'redis://%env(REDIS_PASSWORD)%@localhost'
 
 when@test:
     framework:

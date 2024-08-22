@@ -470,11 +470,11 @@ class DtoGenerateCommand extends Command
         assert(null !== $directory);
         $files = scandir($this->projectDir.'/'.$directory);
 
-        // Remove all files in the Tmdb directory (except .gitignore)
+        // Remove all files in the Tmdb directory (except .gitignore and the TmdbClient)
         $filesystem = new Filesystem();
         $files =
             array_map(fn ($file) => $this->projectDir.'/'.$directory.'/'.$file,
-                array_filter($files, fn ($file) => '.' !== $file && '..' !== $file && '.gitignore' !== $file));
+                array_filter($files, fn ($file) => '.' !== $file && '..' !== $file && '.gitignore' !== $file && !str_contains($file, 'TmdbClient')));
 
         $filesystem->remove($files);
     }

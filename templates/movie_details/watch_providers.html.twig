@@ -14,8 +14,9 @@
                     <div class="accordion-body">
                         <div class="d-flex flex-wrap">
                             {% for provider in providers.flatrate %}
-                                <img class="rounded me-1 mb-1" src="{{ provider.logo_path|tmdb_image_url }}"
-                                     alt="{{ provider.provider_name }}" width="65" height="65">
+                                {# @var provider App\Dto\Tmdb\Responses\Movie\MovieWatchProvidersResultsUSFlatrate #}
+                                <img class="rounded me-1 mb-1" src="{{ provider.logoPath|tmdb_image_url }}"
+                                     alt="{{ provider.providerName }}" width="65" height="65">
                             {% endfor %}
                         </div>
                         {{ 'templates.movie_details.watch_providers.provided_by'|trans }}
@@ -38,8 +39,9 @@
                     <div class="accordion-body">
                         <div class="d-flex flex-wrap">
                             {% for provider in providers.rent %}
-                                <img class="rounded me-1 mb-1" src="{{ provider.logo_path|tmdb_image_url }}"
-                                     alt="{{ provider.provider_name }}" width="65" height="65">
+                                {# @var provider App\Dto\Tmdb\Responses\Movie\MovieWatchProvidersResultsUSRent #}
+                                <img class="rounded me-1 mb-1" src="{{ provider.logoPath|tmdb_image_url }}"
+                                     alt="{{ provider.providerName }}" width="65" height="65">
                             {% endfor %}
                         </div>
                         {{ 'templates.movie_details.watch_providers.provided_by'|trans }}
@@ -62,8 +64,9 @@
                     <div class="accordion-body">
                         <div class="d-flex flex-wrap">
                             {% for provider in providers.buy %}
-                                <img class="rounded me-1 mb-1" src="{{ provider.logo_path|tmdb_image_url }}"
-                                     alt="{{ provider.provider_name }}" width="65" height="65">
+                                {# @var provider App\Dto\Tmdb\Responses\Movie\MovieWatchProvidersResultsUSBuy #}
+                                <img class="rounded me-1 mb-1" src="{{ provider.logoPath|tmdb_image_url }}"
+                                     alt="{{ provider.providerName }}" width="65" height="65">
                             {% endfor %}
                         </div>
                         {{ 'templates.movie_details.watch_providers.provided_by'|trans }}

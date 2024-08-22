@@ -143,7 +143,7 @@
             "@auto-scripts"
         ],
         "dev:setup": [
-            "docker compose --env-file .env.dev --env-file .env.local down",
+            "docker compose --env-file .env.dev --env-file .env.local down --remove-orphans",
             "docker compose --env-file .env.dev --env-file .env.local up -d --wait",
             "docker exec -it movie-db-php-1 composer install",
             "docker exec -it movie-db-node-1 npm install --force",
@@ -153,7 +153,8 @@
             "@dto:generate",
             "echo 'Visit the application under https://localhost:4443'"
         ],
-        "dto:generate": "docker exec -it movie-db-php-1 bin/console app:dto:generate dto/tmdb-openapi.json src/Dto",
+        "dto:generate": "docker exec -it movie-db-php-1 bin/console app:dto:generate dto/tmdb-openapi.json src/Dto --no-debug",
+        "dto:generate:dry-run": "@dto:generate --dry-run",
         "fix": "@format:php",
         "format:php": "docker exec -it movie-db-php-1 vendor/bin/php-cs-fixer fix",
         "test": [

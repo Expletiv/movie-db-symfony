@@ -79,7 +79,7 @@ services:
 ###< doctrine/doctrine-bundle ###
 
   redis:
-    image: redis:alpine
+    image: redis:7.2-alpine
     restart: unless-stopped
     command: redis-server /usr/local/etc/redis/redis.conf --requirepass ${REDIS_PASSWORD:-!ChangeThisRedisPassword!}
     volumes:
