@@ -33,6 +33,7 @@ class RegistrationController extends AbstractController
         UserPasswordHasherInterface $userPasswordHasher,
         EntityManagerInterface $entityManager,
         ToastService $toastService,
+        TranslatorInterface $translator,
     ): Response {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -56,7 +57,7 @@ class RegistrationController extends AbstractController
                     ->sender('mailer@example.com')
                     ->from(new Address('mailer@example.com', 'MovieDB Mail Bot'))
                     ->to($user->getEmail())
-                    ->subject('Please Confirm your Email')
+                    ->subject($translator->trans('templates.mail.confirmation_email.subject'))
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
 

@@ -1,11 +1,66 @@
-<h1>{{ 'templates.mail.confirmation_email.title'|trans }}</h1>
-
-<p>
-    {{ 'templates.mail.confirmation_email.text'|trans }} <br><br>
-    <a href="{{ signedUrl|raw }}">{{ 'templates.mail.confirmation_email.confirm'|trans }}</a>.
-    {{ 'templates.mail.confirmation_email.expiration'|trans }} {{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }}.
-</p>
-
-<p>
-    {{ 'templates.mail.confirmation_email.thank_you'|trans }}
-</p>
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+        }
+        .header {
+            text-align: center;
+            font-size: 18px;
+            padding: 10px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .body {
+            padding: 20px;
+        }
+        .footer {
+            text-align: center;
+            padding: 10px 0;
+            border-top: 1px solid #dee2e6;
+            font-size: 14px;
+            color: #6c757d;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 20px 0;
+            font-size: 16px;
+            color: #ffffff;
+            background-color: #007bff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>{{ 'templates.mail.confirmation_email.title'|trans }}</h1>
+        </div>
+        <div class="body">
+            <p>{{ 'templates.mail.confirmation_email.text'|trans }}</p>
+            <p>
+                <a href="{{ signedUrl|raw }}" class="btn">{{ 'templates.mail.confirmation_email.confirm'|trans }}</a>
+            </p>
+            <p>{{ 'templates.mail.confirmation_email.expiration'|trans }} {{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }}.</p>
+        </div>
+        <div class="footer">
+            <p>{{ 'templates.mail.confirmation_email.thank_you'|trans }}</p>
+        </div>
+    </div>
+</body>
+</html>
