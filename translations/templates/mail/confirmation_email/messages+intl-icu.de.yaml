@@ -1,10 +1,11 @@
 templates:
     mail:
         confirmation_email:
+            subject: 'Bitte bestätige deine E-Mail-Addresse!'
             title: 'Hallo! Bitte bestätige deine E-Mail-Addresse!'
             text: 'Bitte bestätige deine E-Mail-Addresse durch klicken dieses Links:'
             confirm: 'E-Mail bestätigen'
-            expiration: 'Dieser Link läuft ab in'
+            expiration: 'Dieser Link läuft ab in:'
             thank_you: 'Danke!'
             flash_success: 'Deine E-Mail-Addresse wurde bestätigt!'
             

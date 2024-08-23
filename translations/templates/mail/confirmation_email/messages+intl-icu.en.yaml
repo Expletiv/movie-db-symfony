@@ -1,6 +1,7 @@
 templates:
     mail:
         confirmation_email:
+            subject: 'Please confirm your email address!'
             title: 'Hi! Please confirm your email!'
             text: 'Please confirm your email address by clicking the following link:'
             confirm: 'Confirm my Email'
