@@ -15,3 +15,7 @@ services:
       target: frankenphp_prod
     environment:
       APP_SECRET: ${APP_SECRET}
+
+  redis:
+    volumes:
+      - ./docker/redis.prod.conf:/usr/local/etc/redis/redis.conf
