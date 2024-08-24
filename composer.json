@@ -138,7 +138,7 @@
             "docker compose --env-file .env.dev --env-file .env.local down --remove-orphans",
             "docker compose --env-file .env.dev --env-file .env.local up -d --wait",
             "docker exec -it movie-db-php-1 composer install",
-            "docker exec -it movie-db-node-1 npm install --force",
+            "docker exec -it movie-db-php-1 npm install --force",
             "@webpack:run",
             "docker exec -it movie-db-php-1 bin/console doctrine:migrations:migrate --no-interaction",
             "@test:setup",
@@ -168,7 +168,7 @@
             "docker exec -it movie-db-php-1 bin/console --env=test doctrine:fixtures:load --no-interaction"
         ],
         "test:translations": "bin/console lint:yaml translations",
-        "webpack:run": "docker exec -it movie-db-node-1 npm run dev",
+        "webpack:run": "docker exec -it movie-db-php-1 npm run dev",
         "worker:restart": "docker compose restart php-worker"
     }
 }

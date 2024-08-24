@@ -34,6 +34,11 @@ RUN set -eux; \
 		zip \
 	;
 
+# Install Node.js and npm
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+ && apt-get install -y nodejs \
+ && npm install -g npm
+
 # https://getcomposer.org/doc/03-cli.md#composer-allow-superuser
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
@@ -86,6 +91,10 @@ RUN set -eux; \
 
 # copy sources
 COPY --link . ./
+
+RUN npm install; \
+ 	npm run build
+
 RUN rm -Rf frankenphp/
 
 RUN set -eux; \
