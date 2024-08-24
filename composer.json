@@ -16,6 +16,7 @@
         "phpdocumentor/reflection-docblock": "^5.4",
         "phpstan/phpdoc-parser": "^1.29",
         "predis/predis": "^2.2",
+        "runtime/frankenphp-symfony": "^0.2.0",
         "scienta/doctrine-json-functions": "^6.1",
         "symfony/asset": "7.1.*",
         "symfony/cache": "7.1.*",
@@ -160,8 +161,8 @@
         "test:phpmd": "vendor/bin/phpmd src ansi phpmd.xml",
         "test:phpunit": "bin/phpunit",
         "test:setup": [
-            "docker exec -it movie-db-php-1 bin/console --env=test doctrine:database:drop --force",
-            "docker exec -it movie-db-php-1 bin/console --env=test doctrine:database:create",
+            "docker exec -it movie-db-php-1 bin/console --env=test doctrine:database:drop --if-exists --force",
+            "docker exec -it movie-db-php-1 bin/console --env=test doctrine:database:create --if-not-exists",
             "docker exec -it movie-db-php-1 bin/console --env=test doctrine:schema:create",
             "docker exec -it movie-db-php-1 bin/console --env=test doctrine:fixtures:load --no-interaction"
         ],
