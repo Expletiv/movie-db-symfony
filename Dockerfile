@@ -36,8 +36,8 @@ RUN set -eux; \
 
 # Install Node.js and npm
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
- && apt-get install -y nodejs \
- && npm install -g npm
+ && apt-get install -y --no-install-recommends nodejs \
+ && npm install -g npm@latest
 
 # https://getcomposer.org/doc/03-cli.md#composer-allow-superuser
 ENV COMPOSER_ALLOW_SUPERUSER=1
