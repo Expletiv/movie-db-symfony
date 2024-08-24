@@ -9,6 +9,11 @@ services:
       MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
       MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET}
       MAILER_DSN: ${MAILER_DSN}
+      # Set FRANKENPHP_CONFIG to an empty string because of
+      # this issue https://github.com/EasyCorp/EasyAdminBundle/issues/5986
+      # Should be fixed with https://github.com/EasyCorp/EasyAdminBundle/pull/6273
+      # But it's not merged yet
+      FRANKENPHP_CONFIG: ''
       
   php-worker:
     build:
@@ -17,6 +22,7 @@ services:
     environment:
       APP_SECRET: ${APP_SECRET}
       MAILER_DSN: ${MAILER_DSN}
+      FRANKENPHP_CONFIG: ''
 
   redis:
     volumes:
