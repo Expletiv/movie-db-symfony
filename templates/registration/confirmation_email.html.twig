@@ -54,7 +54,7 @@
         <div class="body">
             <p>{{ 'templates.mail.confirmation_email.text'|trans }}</p>
             <p>
-                <a href="{{ signedUrl|raw }}" class="btn">{{ 'templates.mail.confirmation_email.confirm'|trans }}</a>
+                <a href="{{ signedUrl|raw }}" class="btn"><span style="color: white">{{ 'templates.mail.confirmation_email.confirm'|trans }}</span></a>
             </p>
             <p>{{ 'templates.mail.confirmation_email.expiration'|trans }} {{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }}.</p>
         </div>
