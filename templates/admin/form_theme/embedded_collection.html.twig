@@ -1,0 +1,12 @@
+{# @var embedded_collection_url ___PHPSTORM_HELPERS\object #}
+{% block embedded_collection_label %}
+    <h2>{{ label|trans }}</h2>
+{% endblock %}
+
+{% block embedded_collection_widget %}
+    <turbo-frame id="embeddedCollection" loading="lazy" src="{{ embedded_collection_url }}" data-turbo="true"
+    {{ stimulus_controller('embedded_collection') }}>
+        {% include 'components/centered_spinner.html.twig' %}
+    </turbo-frame>
+{% endblock %}
+

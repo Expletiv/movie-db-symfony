@@ -1,5 +1,5 @@
 import {Controller} from "@hotwired/stimulus";
-import {FetchResponse, FrameElement, TurboBeforeFetchResponseEvent, TurboFrameMissingEvent} from "@hotwired/turbo";
+import {FetchResponse, TurboBeforeFetchResponseEvent} from "@hotwired/turbo";
 
 export default class extends Controller {
 

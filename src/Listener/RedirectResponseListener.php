@@ -15,7 +15,7 @@ class RedirectResponseListener
         $request = $event->getRequest();
         $response = $event->getResponse();
 
-        if ($this->isRedirectedTurboFrameRequest($request, $response)) {
+        if ($this->isRedirectedTurboFrameRequest($request, $response) && $this->isNotAdminRequest($request)) {
             // do not use RedirectResponse but a custom header so fetch() doesn't follow it
             $redirectResponse = new Response(null, Response::HTTP_FOUND, [
                 'Turbo-Location' => $response->headers->get('Location'),
@@ -27,5 +27,10 @@ class RedirectResponseListener
     private function isRedirectedTurboFrameRequest(Request $request, Response $response): bool
     {
         return null !== $request->headers->get('Turbo-Frame') && $response->isRedirection();
+    }
+
+    private function isNotAdminRequest(Request $request): bool
+    {
+        return !str_starts_with($request->getPathInfo(), '/admin');
     }
 }

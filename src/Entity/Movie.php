@@ -47,6 +47,7 @@ class Movie
         cascade: ['persist'],
         orphanRemoval: true
     )]
+    #[Assert\Valid]
     private Collection $tmdbData;
 
     /**

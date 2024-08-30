@@ -6,6 +6,7 @@ use App\Repository\MovieListRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MovieListRepository::class)]
 class MovieList
@@ -21,7 +22,13 @@ class MovieList
     /**
      * @var Collection<int, MovieListItem>
      */
-    #[ORM\OneToMany(targetEntity: MovieListItem::class, mappedBy: 'movieList', orphanRemoval: true)]
+    #[ORM\OneToMany(
+        targetEntity: MovieListItem::class,
+        mappedBy: 'movieList',
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true,
+    )]
+    #[Assert\Valid]
     private Collection $movies;
 
     public function __construct()
@@ -71,13 +78,13 @@ class MovieList
 
     public function removeMovie(MovieListItem $movie): static
     {
-        if ($this->movies->removeElement($movie)) {
-            // set the owning side to null (unless already changed)
-            if ($movie->getMovieList() === $this) {
-                $movie->setMovieList(null);
-            }
-        }
+        $this->movies->removeElement($movie);
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->title;
     }
 }
