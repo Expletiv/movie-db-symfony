@@ -3,20 +3,28 @@
 namespace App\Controller\Admin\Crud;
 
 use App\Entity\MovieListItem;
+use App\Repository\MovieListItemRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
-use Symfony\Component\HttpFoundation\RequestStack;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
-class MovieListItemCrudController extends AbstractCrudController
+class MovieListItemCrudController extends EmbeddedCollectionCrudController
 {
     public function __construct(
-        private readonly RequestStack $requestStack,
+        private readonly MovieListItemRepository $movieListItemRepository,
+        private readonly EntityManagerInterface $entityManager,
+        private readonly AdminUrlGenerator $adminUrlGenerator,
+        private readonly TranslatorInterface $translator,
     ) {
     }
 
@@ -27,22 +35,12 @@ class MovieListItemCrudController extends AbstractCrudController
 
     public function configureCrud(Crud $crud): Crud
     {
-        return $crud
-            ->overrideTemplates([
-                'crud/index' => 'admin/crud/turbo_frame/index.html.twig',
-                'crud/new' => 'admin/crud/turbo_frame/new.html.twig',
-            ])
-            ->setFormOptions([
-                'attr' => ['action' => $this->requestStack->getCurrentRequest()->getRequestUri()],
-            ])
-            ->showEntityActionsInlined()
+        return parent::configureCrud($crud)
             ->setEntityLabelInSingular('entity.movie_list_item.label.singular')
-            ->setEntityLabelInPlural('entity.movie_list_item.label.plural');
+            ->setEntityLabelInPlural('entity.movie_list_item.label.plural')
+            ->setDefaultSort(['position' => 'ASC']);
     }
 
-    /**
-     * @SuppressWarnings(PHPMD.StaticAccess)
-     */
     public function configureFields(string $pageName): iterable
     {
         yield IdField::new('id')
@@ -65,13 +63,69 @@ class MovieListItemCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         return parent::configureActions($actions)
-            ->remove(Crud::PAGE_INDEX, Action::EDIT)
-            ->add(Crud::PAGE_NEW, Action::INDEX);
+            ->add(
+                Crud::PAGE_INDEX,
+                Action::new('moveUp')
+                    ->setLabel(false)
+                    ->setHtmlAttributes([
+                        'title' => $this->translator->trans('entity.movie_list_item.actions.move_up'),
+                        'onclick' => 'this.disabled = true; this.querySelector("i").classList.add("fa-spinner", "fa-spin");',
+                    ])
+                    ->addCssClass('btn btn-secondary')
+                    ->setIcon('fa fa-arrow-up')
+                    ->linkToCrudAction('moveUp')
+                    ->displayIf(fn ($entity) => $entity->getPosition() > 1)
+                    ->displayAsLink()
+            )
+            ->add(
+                Crud::PAGE_INDEX,
+                Action::new('moveDown')
+                    ->setLabel(false)
+                    ->setHtmlAttributes([
+                        'title' => $this->translator->trans('entity.movie_list_item.actions.move_down'),
+                        'onclick' => 'this.disabled = true; this.querySelector("i").classList.add("fa-spinner", "fa-spin");',
+                    ])
+                    ->addCssClass('btn btn-secondary')
+                    ->setIcon('fa fa-arrow-down')
+                    ->linkToCrudAction('moveDown')
+                    ->displayIf(fn ($entity) => $entity->getPosition() < $this->movieListItemRepository->count(['movieList' => $entity->getMovieList()]))
+                    ->displayAsLink()
+            );
     }
 
     public function configureFilters(Filters $filters): Filters
     {
-        return $filters
-            ->add('movieList');
+        return $filters->add('movieList');
+    }
+
+    public function moveUp(AdminContext $adminContext): Response
+    {
+        return $this->move($adminContext, fn (MovieListItem $item) => $item->positionUp());
+    }
+
+    public function moveDown(AdminContext $adminContext): Response
+    {
+        return $this->move($adminContext, function (MovieListItem $item) {
+            if ($item->getPosition() >= $this->movieListItemRepository->count(['movieList' => $item->getMovieList()])) {
+                return;
+            }
+            $item->positionDown();
+        });
+    }
+
+    private function move(AdminContext $adminContext, callable $positionModifier): Response
+    {
+        $item = $adminContext->getEntity()->getInstance();
+
+        if (!$item instanceof MovieListItem) {
+            throw new BadRequestHttpException(sprintf('Item is not an instance of %s', MovieListItem::class));
+        }
+
+        $positionModifier($item);
+
+        $this->entityManager->persist($item);
+        $this->entityManager->flush();
+
+        return $this->redirect($this->adminUrlGenerator->setAction(Action::INDEX)->generateUrl());
     }
 }

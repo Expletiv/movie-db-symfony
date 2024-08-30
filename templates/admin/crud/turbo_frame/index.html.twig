@@ -98,7 +98,9 @@
                             {% for field in entity.fields %}
                                 {% set is_searchable = null == ea.crud.searchFields or field.property in ea.crud.searchFields %}
 
-                                <td data-column="{{ field.property }}"
+                                {# Disable turbo for association links #}
+                                <td data-turbo="false"
+                                    data-column="{{ field.property }}"
                                     data-label="{{ field.label|trans|e('html_attr') }}"
                                     class="{{ is_searchable ? 'searchable' }} {{ field.property == sort_field_name ? 'sorted' }} text-{{ field.textAlign }} {{ field.cssClass }}"
                                     dir="{{ ea.i18n.textDirection }}">

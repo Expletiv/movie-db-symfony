@@ -57,6 +57,9 @@ class MovieListItem implements Sortable
 
     public function positionUp(): static
     {
+        if (1 === $this->position) {
+            return $this;
+        }
         --$this->position;
 
         return $this;

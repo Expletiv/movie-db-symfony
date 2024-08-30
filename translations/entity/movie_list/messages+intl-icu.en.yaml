@@ -17,3 +17,6 @@ entity:
             movie: 'Movie'
             position: 'Position'
             movie_list: 'Movie list'
+        actions:
+            move_up: 'Move up'
+            move_down: 'Move down'
