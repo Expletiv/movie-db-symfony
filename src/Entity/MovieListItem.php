@@ -27,6 +27,7 @@ class MovieListItem implements Sortable
     #[ORM\JoinColumn(nullable: false)]
     private Movie $movie;
 
+    #[Gedmo\SortableGroup]
     #[ORM\ManyToOne(inversedBy: 'movies')]
     #[ORM\JoinColumn(nullable: false)]
     private MovieList $movieList;

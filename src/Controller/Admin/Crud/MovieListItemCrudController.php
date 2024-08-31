@@ -56,7 +56,9 @@ class MovieListItemCrudController extends EmbeddedCollectionCrudController
             ->setRequired(false);
 
         yield AssociationField::new('movieList')
-            ->setLabel('entity.movie_list_item.attributes.movie_list')
+            ->setLabel(false)
+            ->setRequired(false)
+            ->setFormTypeOptions(['attr' => ['hidden' => true]])
             ->hideOnIndex();
     }
 
