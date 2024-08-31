@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
+use App\Entity\Interface\Sortable;
 use App\Repository\MovieListItemRepository;
+use App\Trait\SortableTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\Sortable\Sortable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: MovieListItemRepository::class)]
@@ -14,14 +15,12 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[UniqueEntity(fields: ['movie', 'movieList'])]
 class MovieListItem implements Sortable
 {
+    use SortableTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     #[ORM\Column]
     private int $id;
-
-    #[Gedmo\SortablePosition]
-    #[ORM\Column]
-    private int $position = 1;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
@@ -40,35 +39,6 @@ class MovieListItem implements Sortable
     public function setId(int $id): static
     {
         $this->id = $id;
-
-        return $this;
-    }
-
-    public function getPosition(): int
-    {
-        return $this->position;
-    }
-
-    public function setPosition(int $position): static
-    {
-        $this->position = $position;
-
-        return $this;
-    }
-
-    public function positionUp(): static
-    {
-        if (1 === $this->position) {
-            return $this;
-        }
-        --$this->position;
-
-        return $this;
-    }
-
-    public function positionDown(): static
-    {
-        ++$this->position;
 
         return $this;
     }

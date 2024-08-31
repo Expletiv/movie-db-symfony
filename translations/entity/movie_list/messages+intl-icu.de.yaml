@@ -17,6 +17,3 @@ entity:
             movie: 'Film'
             position: 'Position'
             movie_list: 'Filmliste'
-        actions:
-            move_up: 'Nach oben bewegen'
-            move_down: 'Nach unten bewegen'

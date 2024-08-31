@@ -1,0 +1,20 @@
+entity:
+    movies_page:
+        label:
+            singular: 'Filmseite'
+            plural: 'Filmseiten'
+        attributes:
+            id: 'ID'
+            type: 'Typ'
+            title: 'Titel'
+            movie_lists: 'Filmlisten'
+            
+    movies_page_list:
+        label:
+            singular: 'Filmliste'
+            plural: 'Filmlisten'
+        attributes:
+            id: 'ID'
+            position: 'Position'
+            list: 'Liste'
+            page: 'Seite'

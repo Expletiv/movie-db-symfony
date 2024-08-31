@@ -1,0 +1,5 @@
+admin:
+    sortable_collection:
+        actions:
+            move_up: 'Nach oben bewegen'
+            move_down: 'Nach unten bewegen'
