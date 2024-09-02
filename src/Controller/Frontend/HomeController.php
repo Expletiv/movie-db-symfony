@@ -42,13 +42,13 @@ class HomeController extends AbstractController
             }
 
             return [
-                'title' => $list->getTitle()[$request->getLocale()],
+                'title' => $list->getTitleForLocale($request->getLocale()),
                 'results' => $tmdbMovies,
             ];
         });
 
         $page = [
-            'title' => $page->getTitle(),
+            'title' => $page->getTitleForLocale($request->getLocale()),
             'lists' => $lists,
         ];
 

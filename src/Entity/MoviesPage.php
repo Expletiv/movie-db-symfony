@@ -24,8 +24,11 @@ class MoviesPage
     #[ORM\Column(type: Types::STRING, unique: true, enumType: PageType::class)]
     private PageType $type;
 
-    #[ORM\Column(length: 255)]
-    private string $title;
+    /**
+     * @var array<string, string> $title
+     */
+    #[ORM\Column(type: Types::JSON, options: ['jsonb' => true])]
+    private array $title;
 
     /**
      * @var Collection<int, MoviesPageList>
@@ -81,14 +84,32 @@ class MoviesPage
         return $this;
     }
 
-    public function getTitle(): string
+    /**
+     * @return array<string, string>
+     */
+    public function getTitle(): array
     {
         return $this->title;
     }
 
-    public function setTitle(string $title): static
+    /**
+     * @param array<string, string> $title
+     */
+    public function setTitle(array $title): static
     {
         $this->title = $title;
+
+        return $this;
+    }
+
+    public function getTitleForLocale(string $locale): ?string
+    {
+        return $this->title[$locale] ?? null;
+    }
+
+    public function setTitleForLocale(string $locale, string $title): static
+    {
+        $this->title[$locale] = $title;
 
         return $this;
     }
@@ -120,6 +141,6 @@ class MoviesPage
 
     public function __toString(): string
     {
-        return $this->title;
+        return $this->title['en'] ?? 'MoviesPage#'.$this->id;
     }
 }

@@ -5,13 +5,13 @@ namespace App\Controller\Admin\Crud;
 use App\Entity\MoviesPage;
 use App\Enum\PageType;
 use App\Form\Admin\EmbeddedCollectionField;
+use App\Form\Admin\TranslatableTextField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class MoviesPageCrudController extends AbstractCrudController
 {
@@ -43,7 +43,7 @@ class MoviesPageCrudController extends AbstractCrudController
             ->renderAsBadges(PageType::getBadgeStyles())
             ->allowMultipleChoices(false);
 
-        yield TextField::new('title')
+        yield TranslatableTextField::new('title')
             ->setLabel('entity.movies_page.attributes.title');
 
         yield EmbeddedCollectionField::new('movie_lists')
@@ -54,6 +54,7 @@ class MoviesPageCrudController extends AbstractCrudController
     {
         return parent::configureActions($actions)
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
-            ->add(Crud::PAGE_EDIT, Action::DELETE);
+            ->add(Crud::PAGE_EDIT, Action::DELETE)
+            ->add(Crud::PAGE_EDIT, Action::INDEX);
     }
 }

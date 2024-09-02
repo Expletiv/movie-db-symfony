@@ -109,6 +109,6 @@ class MovieList
 
     public function __toString(): string
     {
-        return $this->title['en'] ?? 'List'.$this->id;
+        return $this->title['en'] ?? 'MovieList#'.$this->id;
     }
 }

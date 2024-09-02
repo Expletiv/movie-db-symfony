@@ -36,8 +36,7 @@ class MovieListCrudController extends AbstractCrudController
             ->hideOnForm();
 
         yield TranslatableTextField::new('title')
-            ->setLabel('entity.movie_list.attributes.title')
-            ->setRequired(true);
+            ->setLabel('entity.movie_list.attributes.title');
 
         yield EmbeddedCollectionField::new('movies')
             ->setLabel('entity.movie_list.attributes.movies');
