@@ -6,6 +6,7 @@ namespace App\Tests\Controller\Frontend;
 
 use App\Dto\Tmdb\Responses\Movie\MovieDetails;
 use App\Services\Interface\TmdbMovieInterface;
+use App\Tests\Controller\AbstractWebTestCase;
 
 class MovieControllerTest extends AbstractWebTestCase
 {
