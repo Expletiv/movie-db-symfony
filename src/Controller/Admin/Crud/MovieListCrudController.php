@@ -4,12 +4,12 @@ namespace App\Controller\Admin\Crud;
 
 use App\Entity\MovieList;
 use App\Form\Admin\EmbeddedCollectionField;
+use App\Form\Admin\TranslatableTextField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class MovieListCrudController extends AbstractCrudController
 {
@@ -35,8 +35,9 @@ class MovieListCrudController extends AbstractCrudController
             ->setLabel('entity.movie_list.attributes.id')
             ->hideOnForm();
 
-        yield TextField::new('title')
-            ->setLabel('entity.movie_list.attributes.title');
+        yield TranslatableTextField::new('title')
+            ->setLabel('entity.movie_list.attributes.title')
+            ->setRequired(true);
 
         yield EmbeddedCollectionField::new('movies')
             ->setLabel('entity.movie_list.attributes.movies');
@@ -46,6 +47,7 @@ class MovieListCrudController extends AbstractCrudController
     {
         return parent::configureActions($actions)
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
-            ->add(Crud::PAGE_EDIT, Action::DELETE);
+            ->add(Crud::PAGE_EDIT, Action::DELETE)
+            ->add(Crud::PAGE_EDIT, Action::INDEX);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\MovieListRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -16,8 +17,11 @@ class MovieList
     #[ORM\Column]
     private int $id;
 
-    #[ORM\Column(length: 255)]
-    private string $title;
+    /**
+     * @var array<string, string> $title
+     */
+    #[ORM\Column(type: Types::JSON, options: ['jsonb' => true])]
+    private array $title;
 
     /**
      * @var Collection<int, MovieListItem>
@@ -41,19 +45,39 @@ class MovieList
         return $this->id;
     }
 
-    public function setId(int $id): void
+    public function setId(int $id): static
     {
         $this->id = $id;
+
+        return $this;
     }
 
-    public function getTitle(): string
+    /**
+     * @return array<string, string>
+     */
+    public function getTitle(): array
     {
         return $this->title;
     }
 
-    public function setTitle(string $title): static
+    /**
+     * @param array<string, string> $title
+     */
+    public function setTitle(array $title): static
     {
         $this->title = $title;
+
+        return $this;
+    }
+
+    public function getTitleForLocale(string $locale): ?string
+    {
+        return $this->title[$locale] ?? null;
+    }
+
+    public function setTitleForLocale(string $locale, string $title): static
+    {
+        $this->title[$locale] = $title;
 
         return $this;
     }
@@ -85,6 +109,6 @@ class MovieList
 
     public function __toString(): string
     {
-        return $this->title;
+        return $this->title['en'] ?? 'List'.$this->id;
     }
 }
