@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Controller\admin;
+namespace App\Tests\Controller\Admin;
 
 use App\Dto\Tmdb\Clients\SearchApi\SearchApiInterface;
 use App\Dto\Tmdb\Responses\Search\SearchMovie;
