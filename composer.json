@@ -18,6 +18,7 @@
         "predis/predis": "^2.2",
         "runtime/frankenphp-symfony": "^0.2.0",
         "scienta/doctrine-json-functions": "^6.1",
+        "stof/doctrine-extensions-bundle": "^1.12",
         "symfony/asset": "7.1.*",
         "symfony/cache": "7.1.*",
         "symfony/config": "7.1.*",
@@ -136,7 +137,7 @@
         ],
         "dev:setup": [
             "docker compose --env-file .env.dev --env-file .env.local down --remove-orphans",
-            "docker compose --env-file .env.dev --env-file .env.local up -d --wait",
+            "docker compose --env-file .env.dev --env-file .env.local up -d --wait --build",
             "docker exec -it movie-db-php-1 composer install",
             "docker exec -it movie-db-php-1 npm install --force",
             "@webpack:run",

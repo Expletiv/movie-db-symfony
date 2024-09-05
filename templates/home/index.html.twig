@@ -6,6 +6,29 @@
 
 {% block body %}
 
-    {% include('components/movie_preview_container.html.twig') %}
+    <div class="container mt-3">
+        <h1>{{ page.title }}</h1>
+        <br>
+        {% for list in page.lists %}
+            {% if list.results is not empty %}
+                <h2 class="mt-5">{{ list.title }}</h2>
+                <hr class="border border-secondary border-1 opacity-75">
+                <div class="row justify-content-center" data-turbo-prefetch="false">
+                    {% for movie in list.results %}
+                        <div class="col-auto mb-2 px-1">
+                            {% block previews %}
+                                {% include 'components/movie_preview.html.twig' %}
+                            {% endblock %}
+                        </div>
+                    {% endfor %}
+                    <div class="filling-empty-space-childs"></div>
+                    <div class="filling-empty-space-childs"></div>
+                    <div class="filling-empty-space-childs"></div>
+                    <div class="filling-empty-space-childs"></div>
+                </div>
+            {% endif %}
+        {% endfor %}
+
+    </div>
 
 {% endblock %}

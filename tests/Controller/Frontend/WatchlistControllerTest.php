@@ -3,6 +3,7 @@
 namespace App\Tests\Controller\Frontend;
 
 use App\DataFixtures\MovieWatchlistFixtures;
+use App\Tests\Controller\AbstractWebTestCase;
 
 class WatchlistControllerTest extends AbstractWebTestCase
 {

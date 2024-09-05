@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace App\Controller\Frontend;
 
 use App\Dto\Tmdb\Responses\Movie\MovieDetails;
-use App\Repository\MovieTmdbDataRepository;
+use App\Entity\MoviesPageList;
+use App\Enum\PageType;
+use App\Repository\MoviesPageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
@@ -19,25 +20,40 @@ class HomeController extends AbstractController
     #[Route('/{_locale}/home')]
     public function index(
         Request $request,
-        MovieTmdbDataRepository $movieRepository,
         DenormalizerInterface $denormalizer,
-        #[MapQueryParameter(options: ['min_range' => 1])] int $page = 1,
+        MoviesPageRepository $moviesPageRepository,
     ): Response {
-        $movies = $movieRepository->findPageOrderedByPopularity($page, $request->getLocale());
+        $page = $moviesPageRepository->findOneBy(['type' => PageType::HOME]);
 
-        $tmdbMovies = array_map(
-            fn ($movie) => $denormalizer->denormalize($movie->getTmdbDetailsData(), MovieDetails::class),
-            $movies);
+        if (null === $page) {
+            return $this->redirectToRoute('app_movies_popular', ['_locale' => $request->getLocale()]);
+        }
 
-        $list = [
-            'page' => $page,
-            'results' => $tmdbMovies,
-            'totalPages' => $movieRepository->getMaxPage($request->getLocale()),
-            'totalResults' => $movieRepository->count(['locale' => $request->getLocale()]),
+        $lists = $page->getMovieLists()->map(static function (MoviesPageList $movieList) use ($denormalizer, $request): array {
+            $list = $movieList->getList();
+
+            $tmdbMovies = [];
+            foreach ($list->getMovies() as $movie) {
+                $tmdbData = $movie->getMovie()->getTmdbDataForLocale($request->getLocale());
+                if (null === $tmdbData) {
+                    continue;
+                }
+                $tmdbMovies[] = $denormalizer->denormalize($tmdbData->getTmdbDetailsData(), MovieDetails::class);
+            }
+
+            return [
+                'title' => $list->getTitleForLocale($request->getLocale()),
+                'results' => $tmdbMovies,
+            ];
+        });
+
+        $page = [
+            'title' => $page->getTitleForLocale($request->getLocale()),
+            'lists' => $lists,
         ];
 
         return $this->render('home/index.html.twig', [
-            'list' => $list,
+            'page' => $page,
         ]);
     }
 

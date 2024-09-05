@@ -2,6 +2,8 @@
 
 namespace App\Tests\Controller\Frontend;
 
+use App\Tests\Controller\AbstractWebTestCase;
+
 class ProfileControllerTest extends AbstractWebTestCase
 {
     public function testIndex(): void

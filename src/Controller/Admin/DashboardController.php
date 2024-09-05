@@ -4,6 +4,8 @@ namespace App\Controller\Admin;
 
 use App\Entity\EmailLog;
 use App\Entity\Movie;
+use App\Entity\MovieList;
+use App\Entity\MoviesPage;
 use App\Entity\MovieTmdbData;
 use App\Entity\MovieWatchlist;
 use App\Entity\User;
@@ -77,6 +79,16 @@ class DashboardController extends AbstractDashboardController
             'entity.movie_watchlist.label.plural',
             'fa fa-solid fa-list',
             MovieWatchlist::class
+        );
+        yield MenuItem::linkToCrud(
+            'entity.movie_list.label.plural',
+            'fa fa-solid fa-list',
+            MovieList::class
+        );
+        yield MenuItem::linkToCrud(
+            'entity.movies_page.label.plural',
+            'fa fa-solid fa-list',
+            MoviesPage::class
         );
 
         yield MenuItem::section('admin.dashboard.menu.section.users');

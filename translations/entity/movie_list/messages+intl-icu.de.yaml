@@ -1,0 +1,19 @@
+entity:
+    movie_list:
+        label:
+            singular: 'Filmliste'
+            plural: 'Filmlisten'
+        attributes:
+            id: 'ID'
+            title: 'Titel'
+            movies: 'Gespeicherte Filme'
+            
+    movie_list_item:
+        label:
+            singular: 'Filmliste-Eintrag'
+            plural: 'Filmliste-Einträge'
+        attributes:
+            id: 'ID'
+            movie: 'Film'
+            position: 'Position'
+            movie_list: 'Filmliste'
