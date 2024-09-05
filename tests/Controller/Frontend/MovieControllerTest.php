@@ -7,6 +7,7 @@ namespace App\Tests\Controller\Frontend;
 use App\Dto\Tmdb\Responses\Movie\MovieDetails;
 use App\Services\Interface\TmdbMovieInterface;
 use App\Tests\Controller\AbstractWebTestCase;
+use Mockery;
 
 class MovieControllerTest extends AbstractWebTestCase
 {
@@ -63,27 +64,26 @@ class MovieControllerTest extends AbstractWebTestCase
     public function testWatchProviders(): void
     {
         $client = static::createClient();
+        $client->disableReboot();
 
-        $tmdb = $this->createMock(TmdbMovieInterface::class);
-        $tmdb->method('findWatchProviders')
-            ->with(123, 'en-US')
-            ->willReturn(
+        $tmdb = Mockery::mock(TmdbMovieInterface::class);
+        $tmdb->shouldReceive('findWatchProviders')
+            ->andReturn(
                 [
                     'link' => 'https://www.themoviedb.org/movie/123/watch?locale=US',
                     'flatrate' => [
-                        ['logo_path' => 'test.jpg', 'provider_name' => 'Netflix'],
-                        ['logo_path' => 'test.jpg', 'provider_name' => 'Hulu'],
+                        ['logoPath' => 'test.jpg', 'providerName' => 'Netflix'],
+                        ['logoPath' => 'test.jpg', 'providerName' => 'Hulu'],
                     ],
                     'buy' => [
-                        ['provider_id' => 3, 'provider_name' => 'Amazon'],
+                        ['logoPath' => 'test.jpg', 'providerName' => 'Amazon'],
                     ],
                     'rent' => [
-                        ['provider_id' => 2, 'provider_name' => 'Google Play'],
+                        ['logoPath' => 'test.jpg', 'providerName' => 'Google Play'],
                     ],
                 ],
             );
-        $container = $client->getContainer();
-        $container->set(TmdbMovieInterface::class, $tmdb);
+        $client->getContainer()->set(TmdbMovieInterface::class, $tmdb);
 
         $client->request('GET', '/en/movie/123/watch-providers', server: ['HTTP_ACCEPT_LANGUAGE' => 'en-US']);
         $this->assertResponseStatusCodeSame(404);

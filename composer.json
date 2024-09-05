@@ -137,7 +137,7 @@
         ],
         "dev:setup": [
             "docker compose --env-file .env.dev --env-file .env.local down --remove-orphans",
-            "docker compose --env-file .env.dev --env-file .env.local up -d --wait",
+            "docker compose --env-file .env.dev --env-file .env.local up -d --wait --build",
             "docker exec -it movie-db-php-1 composer install",
             "docker exec -it movie-db-php-1 npm install --force",
             "@webpack:run",

@@ -23,7 +23,9 @@ if [ "$1" = 'frankenphp' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 	fi
 
 	if [ -z "$(ls -A 'vendor/' 2>/dev/null)" ]; then
-		composer config --global github-oauth.github.com $GH_TOKEN
+		if [ -n "$GH_TOKEN" ] && [ "$GH_TOKEN" != "!UseATokenWithoutScopeForComposer!" ]; then
+          composer config --global github-oauth.github.com $GH_TOKEN
+        fi
 		composer install --prefer-dist --no-progress --no-interaction
 	fi
 

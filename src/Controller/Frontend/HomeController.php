@@ -26,7 +26,7 @@ class HomeController extends AbstractController
         $page = $moviesPageRepository->findOneBy(['type' => PageType::HOME]);
 
         if (null === $page) {
-            $this->redirectToRoute('app_movies_popular', ['_locale' => $request->getLocale()]);
+            return $this->redirectToRoute('app_movies_popular', ['_locale' => $request->getLocale()]);
         }
 
         $lists = $page->getMovieLists()->map(static function (MoviesPageList $movieList) use ($denormalizer, $request): array {
