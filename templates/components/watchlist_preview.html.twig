@@ -1,4 +1,4 @@
-<div class="card card-animated my-auto" {{ stimulus_action('helper', 'linkToUrl', 'click', {'url': path('app_movie_watchlists_show', {id: watchlist.id})}) }}>
+<div class="card card-preview card-preview-animated my-auto" {{ stimulus_action('helper', 'linkToUrl', 'click', {'url': path('app_movie_watchlists_show', {id: watchlist.id})}) }}>
     {% if posterPaths[watchlist.id.toRfc4122] is defined %}
         <img class="card-img rounded mx-auto position-relative" alt="{{ watchlist.name }} poster"
              src="{{ posterPaths[watchlist.id.toRfc4122]|tmdb_image_url(size='w92') }}"
