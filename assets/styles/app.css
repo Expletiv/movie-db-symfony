@@ -7,30 +7,38 @@
     height: 0; /*Important! for the divs to collapse should they fall in a new row*/
 }
 
-.card {
+.card-preview {
     width: 256px;
 }
 
-.card-animated {
+.card-preview-animated {
     transition: transform 0.3s;
 }
 
-.card-animated:hover {
+.card-preview-animated:hover {
     transform: scale(1.05);
     z-index: 999;
 }
 
-#card-description {
+#card-preview-description {
     visibility: hidden;
 }
 
-.card-details-hover:hover #poster,
-.card-details-hover:hover #card-rating {
+.card-preview-details-hover:hover #card-preview-poster,
+.card-preview-details-hover:hover #card-preview-rating {
     transition: filter 0.6s 0.8s;
     filter: blur(5px) brightness(0.5);
 }
 
-.card-details-hover:hover #card-description {
+.card-preview-details-hover:hover #card-preview-description {
     transition: visibility 0.6s 0.8s;
     visibility: visible;
+}
+
+.hover-resize {
+    transition: transform 0.3s;
+}
+
+.hover-resize:hover {
+    transform: scale(1.05);
 }

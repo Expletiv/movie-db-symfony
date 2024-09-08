@@ -2,16 +2,25 @@
 
 namespace App\Form;
 
+use App\Dto\Tmdb\TmdbClientInterface;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\ChoiceList\Loader\CallbackChoiceLoader;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Range;
 
 class MovieDiscoverFilterType extends AbstractType
 {
+    public function __construct(
+        private readonly RequestStack $requestStack,
+        private readonly TmdbClientInterface $tmdbClient,
+    ) {
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -36,22 +45,50 @@ class MovieDiscoverFilterType extends AbstractType
                 'data' => 'popularity',
             ])
             ->add('primaryReleaseYear', IntegerType::class, [
-                'label' => 'forms.movie.discover.sort.label.primary_release_year',
+                'label' => 'forms.movie.discover.primary_release_year.label',
                 'constraints' => [
                     new Range(min: 1800, max: 2100),
                 ],
                 'required' => false,
             ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'forms.movie.discover.sort.button',
+            ->add('genres', ChoiceType::class, [
+                'choice_loader' => new CallbackChoiceLoader(function (): array {
+                    $response = $this->tmdbClient->genreApi()->genreMovieList(language: $this->requestStack->getCurrentRequest()->getLocale());
+
+                    $mappedGenres = [];
+                    foreach ($response->getGenres() as $genre) {
+                        $mappedGenres[$genre->getName()] = $genre->getId();
+                    }
+
+                    return $mappedGenres;
+                }),
+                'autocomplete' => true,
+                'multiple' => true,
+                'required' => false,
+                'label' => 'forms.movie.discover.genres.label',
             ])
-            ->setMethod('GET');
+            ->add('genreLogic', ChoiceType::class, [
+                'choices' => [
+                    'forms.movie.discover.genre_logic.choices.and' => ',',
+                    'forms.movie.discover.genre_logic.choices.or' => '|',
+                ],
+                'label' => 'forms.movie.discover.genre_logic.label',
+                'data' => ',',
+                'multiple' => false,
+                'expanded' => true,
+                'required' => true,
+            ])
+            ->add('submit', SubmitType::class, [
+                'label' => 'forms.movie.discover.button',
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'mapped' => false,
+            'method' => 'GET',
+            'csrf_protection' => false,
         ]);
     }
 }

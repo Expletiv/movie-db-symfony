@@ -6,4 +6,4 @@ templates:
         watchlist: 'All watchlists'
         watchlist_show: 'Your watchlist'
         search: 'Search movies'
-        recommendations: 'Recommendations'
+        recommendations: 'Recommended movies'
