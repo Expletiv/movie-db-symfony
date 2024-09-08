@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Frontend;
 
+use App\Dto\Tmdb\TmdbClientInterface;
 use App\Entity\MovieWatchlist;
 use App\Entity\User;
 use App\Form\Watchlist\AddToWatchlistType;
@@ -82,6 +83,22 @@ class MovieController extends AbstractController
         return $this->render('movie_details/watch_providers.html.twig', [
             'tmdbId' => $tmdbId,
             'providers' => $tmdb->findWatchProviders($tmdbId, $locale),
+        ]);
+    }
+
+    #[Route('/{_locale}/movie/{tmdbId}/videos', name: 'app_movie_videos')]
+    public function videos(
+        Request $request,
+        int $tmdbId,
+        TmdbClientInterface $tmdb,
+    ): Response {
+        if (null === $request->headers->get('Turbo-Frame')) {
+            throw $this->createNotFoundException();
+        }
+        $videos = $tmdb->movieApi()->movieVideos($tmdbId, $request->getLocale());
+
+        return $this->render('movie_details/videos.html.twig', [
+            'videos' => $videos,
         ]);
     }
 }
