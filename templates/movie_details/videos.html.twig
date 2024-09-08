@@ -1,50 +1,32 @@
-<turbo-frame id="video-{{ videos.id }}">
-    <div class="container mt-3" data-controller="video">
-        <div class="d-flex justify-content-center">
-            <div class="my-auto me-1">
-                <button class="btn bg-opacity-75 bg-body-secondary rounded-1" type="button"
-                        data-bs-target="#video-carousel-{{ videos.id }}"
-                        data-bs-slide="prev"
-                        data-action="video#stopVideos">
-                    <i class="bi bi-chevron-left fs-2"></i>
-                </button>
-            </div>
-            <div class="col carousel slide" id="video-carousel-{{ videos.id }}">
-                <div class="carousel-indicators bg-opacity-75 bg-body-secondary" style="bottom: -50px">
-                    {% for video in videos.results %}
-                        {# @var video App\Dto\Tmdb\Responses\Movie\MovieVideosResults #}
-                        <button type="button" data-bs-target="#video-carousel-{{ videos.id }}"
-                                style="background-color: var(--bs-body-color)"
-                                data-bs-slide-to="{{ loop.index0 }}"
-                                {% if loop.first %}class="active"{% endif %}
-                                data-action="video#stopVideos">
-                        </button>
-                    {% endfor %}
-                </div>
-                <div class="carousel-inner">
-                    {% for video in videos.results %}
-                        {# @var video App\Dto\Tmdb\Responses\Movie\MovieVideosResults #}
-                        <div class="carousel-item {% if loop.first %}active{% endif %} ratio ratio-16x9">
-                            <iframe class="d-block w-100"
-                                    src="https://www.youtube.com/embed/{{ video.key }}?enablejsapi=1"
-                                    title="{{ video.name }}"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowfullscreen
-                                    data-video-target="iframe">
-                            </iframe>
-                        </div>
-                    {% endfor %}
-                </div>
-            </div>
-            <div class="my-auto ms-1">
-                <button class="btn bg-opacity-75 bg-body-secondary rounded-1" type="button"
-                        data-bs-target="#video-carousel-{{ videos.id }}"
-                        data-bs-slide="next"
-                        data-action="video#stopVideos">
-                    <i class="bi bi-chevron-right fs-2"></i>
-                </button>
+<turbo-frame id="video-{{ tmdbId }}">
+    {% if groupedVideos is not empty %}
+        <div class="container mt-3" data-controller="video">
+            <nav class="nav nav-tabs nav-fill nav-underline" id="video-{{ tmdbId }}-tabs" role="tablist">
+                {% for type in groupedVideos|keys %}
+                    <button class="nav-link {% if loop.first %}active{% endif %} bg-body-secondary"
+                            id="video-{{ tmdbId }}-{{ type|lower|replace({' ': '-'}) }}-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#video-{{ tmdbId }}-{{ type|lower|replace({' ': '-'}) }}"
+                            type="button"
+                            role="tab"
+                            aria-controls="video-{{ tmdbId }}-{{ type|lower|replace({' ': '-'}) }}"
+                            aria-selected="{{ loop.first ? 'true' : 'false' }}"
+                            data-action="video#stopVideos">
+                        {{ type|capitalize }}
+                    </button>
+                {% endfor %}
+            </nav>
+            <div class="tab-content" id="video-{{ tmdbId }}-tabs-content">
+                {% for type, videos in groupedVideos %}
+                    <div class="tab-pane fade {% if loop.first %}show active{% endif %}"
+                         id="video-{{ tmdbId }}-{{ type|lower|replace({' ': '-'}) }}"
+                         role="tabpanel"
+                         aria-labelledby="video-{{ tmdbId }}-{{ type|lower|replace({' ': '-'}) }}-tab">
+                        {% include 'movie_details/videos_carousel.html.twig' with {videos: videos, tmdbId: tmdbId, type: type|lower|replace({' ': '-'})} %}
+                    </div>
+                {% endfor %}
             </div>
         </div>
-    </div>
+    {% endif %}
 </turbo-frame>
 

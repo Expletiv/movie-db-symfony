@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Frontend;
 
+use App\Dto\Tmdb\Responses\Movie\MovieVideosResults;
 use App\Dto\Tmdb\TmdbClientInterface;
 use App\Entity\MovieWatchlist;
 use App\Entity\User;
@@ -92,13 +93,23 @@ class MovieController extends AbstractController
         int $tmdbId,
         TmdbClientInterface $tmdb,
     ): Response {
-        if (null === $request->headers->get('Turbo-Frame')) {
-            throw $this->createNotFoundException();
-        }
         $videos = $tmdb->movieApi()->movieVideos($tmdbId, $request->getLocale());
 
+        // group videos by type
+        $videos = array_reduce($videos->getResults(), function (array $carry, MovieVideosResults $video) {
+            if ('youtube' !== strtolower($video->getSite())) {
+                return $carry;
+            }
+            $carry[$video->getType()][] = $video;
+
+            return $carry;
+        }, []);
+
+        krsort($videos);
+
         return $this->render('movie_details/videos.html.twig', [
-            'videos' => $videos,
+            'tmdbId' => $tmdbId,
+            'groupedVideos' => $videos,
         ]);
     }
 }
