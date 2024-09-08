@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller\Frontend;
 
+use App\Dto\Tmdb\Clients\MovieApi\MovieApiInterface;
 use App\Dto\Tmdb\Responses\Movie\MovieDetails;
+use App\Dto\Tmdb\Responses\Movie\MovieVideos;
 use App\Services\Interface\TmdbMovieInterface;
 use App\Tests\Controller\AbstractWebTestCase;
 use Mockery;
@@ -89,6 +91,51 @@ class MovieControllerTest extends AbstractWebTestCase
         $this->assertResponseStatusCodeSame(404);
 
         $client->request('GET', '/en/movie/123/watch-providers', server: ['HTTP_ACCEPT_LANGUAGE' => 'en-US', 'HTTP_Turbo-Frame' => 'watch-providers']);
+        $this->assertResponseIsSuccessful();
+        $this->assertNotEmpty($client->getResponse()->getContent());
+    }
+
+    public function testVideos(): void
+    {
+        $client = static::createClient();
+        $client->disableReboot();
+
+        $tmdb = Mockery::mock(TmdbMovieInterface::class);
+        $movieApi = Mockery::mock(MovieApiInterface::class);
+
+        $movieApi->shouldReceive('movieVideos')->andReturn(MovieVideos::fromArray([
+            'id' => 123,
+            'results' => [
+                [
+                    'id' => '346',
+                    'iso_639_1' => 'en',
+                    'iso_3166_1' => 'US',
+                    'key' => 'test',
+                    'name' => 'Test Video',
+                    'site' => 'YouTube',
+                    'size' => 1080,
+                    'type' => 'Trailer',
+                ],
+                [
+                    'id' => '567',
+                    'iso_639_1' => 'en',
+                    'iso_3166_1' => 'US',
+                    'key' => 'test',
+                    'name' => 'Test Video 2',
+                    'site' => 'YouTube',
+                    'size' => 1080,
+                    'type' => 'Trailer',
+                ],
+            ],
+        ]));
+
+        $tmdb->shouldReceive('movieApi')->andReturn($movieApi);
+        $client->getContainer()->set(TmdbMovieInterface::class, $tmdb);
+
+        $client->request('GET', '/en/movie/123/videos');
+        $this->assertResponseStatusCodeSame(404);
+
+        $client->request('GET', '/en/movie/123/videos', server: ['HTTP_Turbo-Frame' => 'videos']);
         $this->assertResponseIsSuccessful();
         $this->assertNotEmpty($client->getResponse()->getContent());
     }

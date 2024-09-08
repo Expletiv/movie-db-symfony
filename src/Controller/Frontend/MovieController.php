@@ -93,6 +93,10 @@ class MovieController extends AbstractController
         int $tmdbId,
         TmdbClientInterface $tmdb,
     ): Response {
+        if (null === $request->headers->get('Turbo-Frame')) {
+            throw $this->createNotFoundException();
+        }
+
         $videos = $tmdb->movieApi()->movieVideos($tmdbId, $request->getLocale());
 
         // group videos by type
