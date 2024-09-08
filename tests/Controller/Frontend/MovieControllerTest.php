@@ -27,7 +27,7 @@ class MovieControllerTest extends AbstractWebTestCase
             'vote_average' => 7.5,
             'backdrop_path' => '/test_backdrop.jpg',
             'genres' => [
-                ['name' => 'Test Genre'],
+                ['name' => 'Test Genre', 'id' => 1],
             ],
             'status' => 'Released',
             'budget' => 1000000,

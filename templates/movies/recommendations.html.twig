@@ -6,7 +6,10 @@
 
 {% block body %}
 
-    <turbo-frame id="movie_recommendations">
+    <turbo-frame id="movie-recommendations">
+        <div class="container d-flex">
+            <h2 class="bg-body-secondary bg-opacity-75 rounded p-2 mt-5 w-auto">{{ 'templates.movies.recommendations'|trans }}</h2>
+        </div>
         {% include('components/movie_preview_container.html.twig') %}
     </turbo-frame>
 

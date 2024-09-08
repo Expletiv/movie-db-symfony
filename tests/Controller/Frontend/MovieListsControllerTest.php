@@ -3,9 +3,12 @@
 namespace App\Tests\Controller\Frontend;
 
 use App\Dto\Tmdb\Clients\DiscoverApi\DiscoverApiInterface;
+use App\Dto\Tmdb\Clients\GenreApi\GenreApiInterface;
 use App\Dto\Tmdb\Clients\MovieApi\MovieApiInterface;
 use App\Dto\Tmdb\Clients\SearchApi\SearchApiInterface;
 use App\Dto\Tmdb\Responses\Discover\DiscoverMovie;
+use App\Dto\Tmdb\Responses\Genre\GenreMovieList;
+use App\Dto\Tmdb\Responses\Genre\GenreMovieListGenres;
 use App\Dto\Tmdb\Responses\Movie\MoviePopularList;
 use App\Dto\Tmdb\Responses\Movie\MovieRecommendations;
 use App\Dto\Tmdb\Responses\Movie\MovieTopRatedList;
@@ -53,7 +56,9 @@ class MovieListsControllerTest extends WebTestCase
     {
         $tmdb = Mockery::mock(TmdbClientInterface::class);
         $discoverApi = Mockery::mock(DiscoverApiInterface::class);
+        $genreApi = Mockery::mock(GenreApiInterface::class);
         $tmdb->allows()->discoverApi()->andReturn($discoverApi);
+        $tmdb->allows()->genreApi()->andReturn($genreApi);
 
         $discoverList = (new DiscoverMovie())
             ->setPage(12)
@@ -62,6 +67,11 @@ class MovieListsControllerTest extends WebTestCase
             ->setTotalResults(2000);
 
         $discoverApi->shouldReceive('discoverMovie')->andReturn($discoverList);
+        $genreApi->shouldReceive('genreMovieList')->andReturn(GenreMovieList::fromArray([
+            'genres' => [
+                GenreMovieListGenres::fromArray(['id' => 1, 'name' => 'Test Genre']),
+            ],
+        ]));
 
         $this->client->getContainer()->set(TmdbClientInterface::class, $tmdb);
 

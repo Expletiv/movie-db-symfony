@@ -49,12 +49,14 @@ class MovieListsController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $sortBy = $data['sortCategory'].'.'.$data['sortDirection'];
+            $withGenres = implode($data['genreLogic'], $data['genres'] ?? []);
         }
 
         $discoverMovie = $this->tmdbClient->discoverApi()->discoverMovie(
             page: $page,
             primaryReleaseYear: $data['primaryReleaseYear'] ?? null,
             language: $request->getLocale(),
+            withGenres: $withGenres ?? null,
             sortBy: $sortBy ?? null,
         );
         $discoverMovie->setTotalPages(min($discoverMovie->getTotalPages(), self::TMDB_MAX_PAGE));

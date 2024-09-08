@@ -5,8 +5,7 @@ forms:
                 label:
                     direction: 'Suchrichtung'
                     category: 'Suchkategorie'
-                    primary_release_year: 'Erscheinungsjahr'
-                direction: 
+                direction:
                     asc: 'Aufsteigend'
                     desc: 'Absteigend'
                 category:
@@ -16,4 +15,13 @@ forms:
                     vote_count: 'Anzahl Bewertungen'
                     primary_release_date: 'Erscheinungsdatum'
                     title: 'Titel'
-                button: 'Suchen'
+            primary_release_year:
+                label: 'Erscheinungsjahr'
+            genres:
+                label: 'Genre'
+            genre_logic:
+                label: 'Genre-Filter-Logik'
+                choices:
+                    and: 'Alle müssen zutreffen'
+                    or: 'Mindestens eines muss zutreffen'
+            button: 'Suchen'

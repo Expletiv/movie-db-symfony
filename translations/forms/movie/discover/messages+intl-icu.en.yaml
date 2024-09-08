@@ -5,7 +5,6 @@ forms:
                 label:
                     direction: 'Search direction'
                     category: 'Search category'
-                    primary_release_year: 'Release year'
                 direction:
                     asc: 'Ascending'
                     desc: 'Descending'
@@ -16,4 +15,13 @@ forms:
                     vote_count: 'Ratings count'
                     primary_release_date: 'Release date'
                     title: 'Title'
-                button: 'Search'
+            primary_release_year:
+                label: 'Release year'
+            genres:
+                label: 'Genres'
+            genre_logic:
+                label: 'Genre filter logic'
+                choices:
+                    and: 'All must match'
+                    or: 'At least one must match'
+            button: 'Search'

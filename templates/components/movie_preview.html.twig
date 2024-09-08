@@ -1,8 +1,8 @@
 {# @var movie App\Dto\Tmdb\Responses\Movie\MoviePopularList #}
 <div
-    class="card card-animated card-details-hover my-auto" {{ stimulus_action('helper', 'linkToUrl', 'click', {'url': movie.id|movie_details_url}) }}>
+    class="card card-preview card-preview-animated card-preview-details-hover my-auto" {{ stimulus_action('helper', 'linkToUrl', 'click', {'url': movie.id|movie_details_url}) }}>
     {% if movie.posterPath %}
-        <img id="poster" class="card-img rounded mx-auto position-relative" alt="{{ movie.title }} poster"
+        <img id="card-preview-poster" class="card-img rounded mx-auto position-relative" alt="{{ movie.title }} poster"
              src="{{ movie.posterPath|tmdb_image_url(size='w92') }}"
             {{ stimulus_controller('symfony/ux-lazy-image/lazy-image', {
                 src: movie.posterPath|tmdb_image_url
@@ -15,7 +15,7 @@
         </svg>
     {% endif %}
     {% if movie.voteAverage is defined %}
-        <div class="card-img-overlay" id="card-rating">
+        <div class="card-img-overlay" id="card-preview-rating">
             <div class="d-flex d-inline">
                 <div class="bg-dark rounded">
                     <img class="me-2" src="{{ asset('build/images/tmdb-icon.svg') }}" height="25" width="50"
@@ -27,7 +27,7 @@
             </div>
         </div>
     {% endif %}
-    <div class="card-img-overlay text-light" id="card-description">
+    <div class="card-img-overlay text-light" id="card-preview-description">
         <h5 class="card-title text-truncate">{{ movie.title }}</h5>
         <p class="card-text overflow-scroll h-75">{{ movie.overview }}</p>
         {% if movie.releaseDate is defined %}

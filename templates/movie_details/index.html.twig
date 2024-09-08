@@ -42,9 +42,11 @@
                     </div>
                     <div class="d-flex mt-2">
                         <h5>
-                            {% for category in movie.genres %}
-                                <span
-                                    class="badge rounded-pill bg-body-secondary text-body me-2">{{ category.name }}</span>
+                            {% for genre in movie.genres %}
+                                {# @var genre App\Dto\Tmdb\Responses\Movie\MovieDetailsGenres #}
+                                <a class="badge rounded-pill bg-body-secondary text-body fs-6 me-2 hover-resize link-underline link-underline-opacity-0"
+                                   href="{{ movie_discover_url(genres=[genre.id]) }}"
+                                >{{ genre.name }}</a>
                             {% endfor %}
                         </h5>
                     </div>
@@ -107,7 +109,7 @@
             </div>
         </div>
     </div>
-    <turbo-frame id="movie_recommendations" src="{{ path('app_movies_recommendations', {tmdbId: movie.id}) }}"
+    <turbo-frame id="movie-recommendations" src="{{ path('app_movies_recommendations', {tmdbId: movie.id}) }}"
                  loading="lazy">
         {% include 'components/centered_spinner.html.twig' %}
     </turbo-frame>
