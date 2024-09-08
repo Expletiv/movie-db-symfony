@@ -6,14 +6,13 @@ namespace App\Tests\Controller\Admin;
 
 use App\Dto\Tmdb\Clients\SearchApi\SearchApiInterface;
 use App\Dto\Tmdb\Responses\Search\SearchMovie;
-use App\Dto\Tmdb\Responses\Search\SearchMovieResults;
 use App\Dto\Tmdb\TmdbClientInterface;
 use App\Tests\Controller\AbstractWebTestCase;
 use Mockery;
 
 class MovieAutocompleteControllerTest extends AbstractWebTestCase
 {
-    public function testSomething(): void
+    public function testIndex(): void
     {
         $client = static::createClient();
 
@@ -23,14 +22,8 @@ class MovieAutocompleteControllerTest extends AbstractWebTestCase
 
         $results = SearchMovie::fromArray([
             'results' => [
-                SearchMovieResults::fromArray([
-                    'id' => 1,
-                    'title' => 'Hello',
-                ]),
-                SearchMovieResults::fromArray([
-                    'id' => 3,
-                    'title' => 'Hello World',
-                ]),
+                ['id' => 1, 'title' => 'Hello'],
+                ['id' => 3, 'title' => 'Hello World'],
             ],
         ]);
         $search->shouldReceive('searchMovie')->andReturn($results);

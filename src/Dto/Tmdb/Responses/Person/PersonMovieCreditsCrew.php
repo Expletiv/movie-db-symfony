@@ -2,6 +2,8 @@
 
 namespace App\Dto\Tmdb\Responses\Person;
 
+use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
+use Symfony\Component\PropertyInfo\PropertyInfoExtractor;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
@@ -54,13 +56,21 @@ class PersonMovieCreditsCrew
 
     public static function fromArray(array $data = []): self
     {
-        $serializer = new Serializer([new ObjectNormalizer(nameConverter: new CamelCaseToSnakeCaseNameConverter()), new ArrayDenormalizer()]);
+        $typeExtractor = new PropertyInfoExtractor(typeExtractors: [new PhpDocExtractor(), new PropertyInfoExtractor()]);
+        $serializer = new Serializer([new ObjectNormalizer(
+            nameConverter: new CamelCaseToSnakeCaseNameConverter(),  propertyTypeExtractor: $typeExtractor),
+            new ArrayDenormalizer()
+        ]);
         return $serializer->denormalize($data, self::class);
     }
 
     public function toArray(): array
     {
-        $serializer = new Serializer([new ObjectNormalizer(nameConverter: new CamelCaseToSnakeCaseNameConverter()), new ArrayDenormalizer()]);
+        $typeExtractor = new PropertyInfoExtractor(typeExtractors: [new PhpDocExtractor(), new PropertyInfoExtractor()]);
+        $serializer = new Serializer([new ObjectNormalizer(
+            nameConverter: new CamelCaseToSnakeCaseNameConverter(),
+            propertyTypeExtractor: $typeExtractor
+        )]);
         return $serializer->normalize($this);
     }
 

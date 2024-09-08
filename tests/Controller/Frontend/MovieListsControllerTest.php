@@ -8,7 +8,6 @@ use App\Dto\Tmdb\Clients\MovieApi\MovieApiInterface;
 use App\Dto\Tmdb\Clients\SearchApi\SearchApiInterface;
 use App\Dto\Tmdb\Responses\Discover\DiscoverMovie;
 use App\Dto\Tmdb\Responses\Genre\GenreMovieList;
-use App\Dto\Tmdb\Responses\Genre\GenreMovieListGenres;
 use App\Dto\Tmdb\Responses\Movie\MoviePopularList;
 use App\Dto\Tmdb\Responses\Movie\MovieRecommendations;
 use App\Dto\Tmdb\Responses\Movie\MovieTopRatedList;
@@ -69,7 +68,7 @@ class MovieListsControllerTest extends WebTestCase
         $discoverApi->shouldReceive('discoverMovie')->andReturn($discoverList);
         $genreApi->shouldReceive('genreMovieList')->andReturn(GenreMovieList::fromArray([
             'genres' => [
-                GenreMovieListGenres::fromArray(['id' => 1, 'name' => 'Test Genre']),
+                ['id' => 1, 'name' => 'Test Genre'],
             ],
         ]));
 
