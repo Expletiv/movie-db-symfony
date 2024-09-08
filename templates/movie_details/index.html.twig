@@ -104,14 +104,22 @@
                     </table>
                     <turbo-frame id="watch-providers-{{ movie.id }}"
                                  src="{{ path('app_movie_watch_providers', {tmdbId: movie.id}) }}" loading="lazy">
+                        {% include 'components/centered_spinner.html.twig' %}
                     </turbo-frame>
                 </div>
             </div>
         </div>
     </div>
+    <turbo-frame id="video-{{ movie.id }}" src="{{ path('app_movie_videos', {tmdbId: movie.id}) }}" loading="lazy">
+        <div class="my-5">
+            {% include 'components/centered_spinner.html.twig' %}
+        </div>
+    </turbo-frame>
     <turbo-frame id="movie-recommendations" src="{{ path('app_movies_recommendations', {tmdbId: movie.id}) }}"
                  loading="lazy">
-        {% include 'components/centered_spinner.html.twig' %}
+        <div class="my-5">
+            {% include 'components/centered_spinner.html.twig' %}
+        </div>
     </turbo-frame>
 
 {% endblock %}

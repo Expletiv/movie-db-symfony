@@ -1,0 +1,32 @@
+<turbo-frame id="video-{{ tmdbId }}">
+    {% if groupedVideos is not empty %}
+        <div class="container mt-3" data-controller="video">
+            <nav class="nav nav-tabs nav-fill nav-underline" id="video-{{ tmdbId }}-tabs" role="tablist">
+                {% for type in groupedVideos|keys %}
+                    <button class="nav-link {% if loop.first %}active{% endif %} bg-body-secondary"
+                            id="video-{{ tmdbId }}-{{ type|lower|replace({' ': '-'}) }}-tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#video-{{ tmdbId }}-{{ type|lower|replace({' ': '-'}) }}"
+                            type="button"
+                            role="tab"
+                            aria-controls="video-{{ tmdbId }}-{{ type|lower|replace({' ': '-'}) }}"
+                            aria-selected="{{ loop.first ? 'true' : 'false' }}"
+                            data-action="video#stopVideos">
+                        {{ type|capitalize }}
+                    </button>
+                {% endfor %}
+            </nav>
+            <div class="tab-content" id="video-{{ tmdbId }}-tabs-content">
+                {% for type, videos in groupedVideos %}
+                    <div class="tab-pane fade {% if loop.first %}show active{% endif %}"
+                         id="video-{{ tmdbId }}-{{ type|lower|replace({' ': '-'}) }}"
+                         role="tabpanel"
+                         aria-labelledby="video-{{ tmdbId }}-{{ type|lower|replace({' ': '-'}) }}-tab">
+                        {% include 'movie_details/videos_carousel.html.twig' with {videos: videos, tmdbId: tmdbId, type: type|lower|replace({' ': '-'})} %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+</turbo-frame>
+

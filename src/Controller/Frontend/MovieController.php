@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controller\Frontend;
 
+use App\Dto\Tmdb\Responses\Movie\MovieVideosResults;
+use App\Dto\Tmdb\TmdbClientInterface;
 use App\Entity\MovieWatchlist;
 use App\Entity\User;
 use App\Form\Watchlist\AddToWatchlistType;
@@ -82,6 +84,36 @@ class MovieController extends AbstractController
         return $this->render('movie_details/watch_providers.html.twig', [
             'tmdbId' => $tmdbId,
             'providers' => $tmdb->findWatchProviders($tmdbId, $locale),
+        ]);
+    }
+
+    #[Route('/{_locale}/movie/{tmdbId}/videos', name: 'app_movie_videos')]
+    public function videos(
+        Request $request,
+        int $tmdbId,
+        TmdbClientInterface $tmdb,
+    ): Response {
+        if (null === $request->headers->get('Turbo-Frame')) {
+            throw $this->createNotFoundException();
+        }
+
+        $videos = $tmdb->movieApi()->movieVideos($tmdbId, $request->getLocale());
+
+        // group videos by type
+        $videos = array_reduce($videos->getResults(), function (array $carry, MovieVideosResults $video) {
+            if ('youtube' !== strtolower($video->getSite())) {
+                return $carry;
+            }
+            $carry[$video->getType()][] = $video;
+
+            return $carry;
+        }, []);
+
+        krsort($videos);
+
+        return $this->render('movie_details/videos.html.twig', [
+            'tmdbId' => $tmdbId,
+            'groupedVideos' => $videos,
         ]);
     }
 }
