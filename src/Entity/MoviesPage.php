@@ -39,6 +39,7 @@ class MoviesPage
         cascade: ['persist', 'remove'],
         orphanRemoval: true
     )]
+    #[ORM\OrderBy(['position' => 'ASC'])]
     #[Assert\Valid]
     private Collection $movieLists;
 

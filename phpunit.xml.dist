@@ -29,6 +29,7 @@
         </include>
         <exclude>
             <directory>src/Dto/Tmdb</directory>
+            <directory>src/DataFixtures</directory>
         </exclude>
     </coverage>
 

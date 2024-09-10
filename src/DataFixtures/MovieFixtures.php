@@ -3,20 +3,16 @@
 namespace App\DataFixtures;
 
 use App\Entity\Movie;
-use App\Entity\MovieWatchlist;
 use DateTimeImmutable;
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\ORM\Id\AssignedGenerator;
-use Doctrine\ORM\Mapping\ClassMetadata;
-use Doctrine\Persistence\ObjectManager;
+use Generator;
 
-class MovieFixtures extends Fixture
+class MovieFixtures extends DataFixture
 {
     public const string MOVIE_REFERENCE = 'test_movie';
     public const int MOVIE_ID = 1;
     public const int MOVIE_TMDB_ID = 1;
 
-    public function load(ObjectManager $manager): void
+    public function provideEntities(): Generator
     {
         $movie = new Movie();
         $movie->setId(self::MOVIE_ID);
@@ -27,12 +23,6 @@ class MovieFixtures extends Fixture
 
         $this->addReference(self::MOVIE_REFERENCE, $movie);
 
-        /** @var ClassMetadata<MovieWatchlist> $metadata */
-        $metadata = $manager->getClassMetaData(Movie::class);
-        $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
-        $metadata->setIdGenerator(new AssignedGenerator());
-
-        $manager->persist($movie);
-        $manager->flush();
+        yield $movie;
     }
 }

@@ -3,11 +3,10 @@
 namespace App\DataFixtures;
 
 use App\Entity\User;
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Persistence\ObjectManager;
+use Generator;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class UserFixtures extends Fixture
+class UserFixtures extends DataFixture
 {
     public const string TEST_USER_REFERENCE = 'test_user';
     public const int TEST_USER_ID = 1;
@@ -19,7 +18,7 @@ class UserFixtures extends Fixture
     ) {
     }
 
-    public function load(ObjectManager $manager): void
+    protected function provideEntities(): Generator
     {
         $user = new User();
         $user->setId(self::TEST_USER_ID);
@@ -29,9 +28,9 @@ class UserFixtures extends Fixture
             'password'
         ));
         $user->setVerified(true);
-
         $this->addReference(self::TEST_USER_REFERENCE, $user);
-        $manager->persist($user);
+
+        yield $user;
 
         $admin = new User();
         $admin->setId(self::TEST_ADMIN_ID);
@@ -42,10 +41,8 @@ class UserFixtures extends Fixture
         ));
         $admin->setRoles(['ROLE_ADMIN']);
         $admin->setVerified(true);
-
         $this->addReference(self::TEST_ADMIN_REFERENCE, $admin);
-        $manager->persist($admin);
 
-        $manager->flush();
+        yield $admin;
     }
 }

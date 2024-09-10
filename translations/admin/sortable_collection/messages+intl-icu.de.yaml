@@ -3,3 +3,5 @@ admin:
         actions:
             move_up: 'Nach oben bewegen'
             move_down: 'Nach unten bewegen'
+        
+        position_help: 'Setze die Position auf -1, um am Ende der Liste einzufügen.'

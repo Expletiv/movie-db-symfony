@@ -21,13 +21,12 @@ trait SortableCollectionTrait
                     ->setLabel(false)
                     ->setHtmlAttributes([
                         'title' => $this->translator->trans('admin.sortable_collection.actions.move_up'),
-                        'onclick' => 'this.disabled = true; this.querySelector("i").classList.add("fa-spinner", "fa-spin");',
                     ])
                     ->addCssClass('btn btn-secondary')
                     ->setIcon('fa fa-arrow-up')
                     ->linkToCrudAction('moveUp')
-                    ->displayIf(fn (Sortable $entity) => $entity->getPosition() > 1)
-                    ->displayAsLink()
+                    ->displayIf(fn (Sortable $entity) => $entity->getPosition() > 0)
+                    ->setTemplatePath('admin/util/turbo_form.html.twig')
             )
             ->add(
                 Crud::PAGE_INDEX,
@@ -35,13 +34,12 @@ trait SortableCollectionTrait
                     ->setLabel(false)
                     ->setHtmlAttributes([
                         'title' => $this->translator->trans('admin.sortable_collection.actions.move_down'),
-                        'onclick' => 'this.disabled = true; this.querySelector("i").classList.add("fa-spinner", "fa-spin");',
                     ])
                     ->addCssClass('btn btn-secondary')
                     ->setIcon('fa fa-arrow-down')
                     ->linkToCrudAction('moveDown')
                     ->displayIf(fn (Sortable $entity) => !$this->isLastItem($entity))
-                    ->displayAsLink()
+                    ->setTemplatePath('admin/util/turbo_form.html.twig')
             );
     }
 
@@ -87,6 +85,6 @@ trait SortableCollectionTrait
             return false;
         }
 
-        return $item->getPosition() >= $repository->count([$groupName => $group]);
+        return $item->getPosition() >= $repository->count([$groupName => $group]) - 1;
     }
 }

@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Entity\Interface\Sortable;
 use App\Repository\MoviesPageListRepository;
 use App\Trait\SortableTrait;
+use App\Validator\Constraints\HasValidPosition;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -13,6 +14,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[ORM\Index(columns: ['position'])]
 #[ORM\UniqueConstraint(columns: ['page_id', 'list_id'])]
 #[UniqueEntity(fields: ['list', 'page'])]
+#[HasValidPosition]
 class MoviesPageList implements Sortable
 {
     use SortableTrait;

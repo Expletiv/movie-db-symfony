@@ -25,7 +25,8 @@ class MoviesPageCrudController extends AbstractCrudController
         return $crud
             ->addFormTheme('admin/form_theme/embedded_collection.html.twig')
             ->setEntityLabelInSingular('entity.movies_page.label.singular')
-            ->setEntityLabelInPlural('entity.movies_page.label.plural');
+            ->setEntityLabelInPlural('entity.movies_page.label.plural')
+            ->setDefaultSort(['id' => 'ASC']);
     }
 
     /**
