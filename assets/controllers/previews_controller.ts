@@ -8,7 +8,7 @@ export default class extends Controller {
 
   private previews: HTMLElement[] = [];
 
-  private animationClasses: string[] = ['card-animated', 'card-details-hover'];
+  private animationClasses: string[] = ['card-preview-animated', 'card-preview-details-hover'];
 
   declare private editButtonTarget: HTMLButtonElement;
   declare private cancelButtonTarget: HTMLButtonElement;
