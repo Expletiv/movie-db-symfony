@@ -1,0 +1,2 @@
+has_valid_position:
+    message: 'The position must be between {min} and {max}, "{value}" given.'

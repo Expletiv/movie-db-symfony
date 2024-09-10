@@ -48,7 +48,8 @@ class MovieListItemCrudController extends EmbeddedCollectionCrudController
 
         yield IntegerField::new('position')
             ->setLabel('entity.movie_list_item.attributes.position')
-            ->setEmptyData(1)
+            ->setEmptyData(0)
+            ->setHelp('admin.sortable_collection.position_help')
             ->setRequired(false);
 
         yield AssociationField::new('movieList')

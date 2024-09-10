@@ -3,3 +3,5 @@ admin:
         actions:
             move_up: 'Move up'
             move_down: 'Move down'
+
+        position_help: 'Set the position to -1 to insert at the end of the list.'

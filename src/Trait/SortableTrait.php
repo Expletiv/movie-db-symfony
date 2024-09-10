@@ -5,14 +5,12 @@ namespace App\Trait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use ReflectionClass;
-use Symfony\Component\Validator\Constraints as Assert;
 
 trait SortableTrait
 {
     #[Gedmo\SortablePosition]
     #[ORM\Column]
-    #[Assert\Positive]
-    private int $position = 1;
+    private int $position = 0;
 
     public function getPosition(): int
     {
@@ -28,7 +26,7 @@ trait SortableTrait
 
     public function positionUp(): static
     {
-        if (1 === $this->position) {
+        if (0 === $this->position) {
             return $this;
         }
         --$this->position;

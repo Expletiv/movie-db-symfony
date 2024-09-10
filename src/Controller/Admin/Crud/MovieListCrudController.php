@@ -23,7 +23,8 @@ class MovieListCrudController extends AbstractCrudController
         return $crud
             ->addFormTheme('admin/form_theme/embedded_collection.html.twig')
             ->setEntityLabelInSingular('entity.movie_list.label.singular')
-            ->setEntityLabelInPlural('entity.movie_list.label.plural');
+            ->setEntityLabelInPlural('entity.movie_list.label.plural')
+            ->setDefaultSort(['id' => 'ASC']);
     }
 
     /**

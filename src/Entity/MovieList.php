@@ -32,6 +32,7 @@ class MovieList
         cascade: ['persist', 'remove'],
         orphanRemoval: true,
     )]
+    #[ORM\OrderBy(['position' => 'ASC'])]
     #[Assert\Valid]
     private Collection $movies;
 
